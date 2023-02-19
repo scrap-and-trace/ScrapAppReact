@@ -1,69 +1,23 @@
+/*
+  This component is used to display a post
+  Arguments to the component:
+    - title: the title of the post
+    - description: the description of the post
+    - image: the image to display in the post
+    - author: the author of the post
+*/
+
 import * as React from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  RefreshControl,
-} from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 
-const GetCurrentDate = () => {
-  let date = new Date().getDate();
-  let month = new Date().getMonth() + 1;
-  let year = new Date().getFullYear();
-
-  return date + "/" + month + "/" + year;
-};
-
-const PostContainer = () => {
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  }, []);
-
+const PostContainer = ({ title, description, image, author }) => {
   return (
-    <SafeAreaView>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <View style={styles.container}>
-          <Image
-            style={styles.image}
-            source={{
-              uri: "https://picsum.photos/200/300",
-            }}
-          />
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-            This is a post
-          </Text>
-          <Text style={{ fontSize: 15, color: "grey" }}>
-            Date: {GetCurrentDate()}
-          </Text>
-        </View>
-        <View style={styles.container}>
-          <Image
-            style={styles.image}
-            source={{
-              uri: "https://picsum.photos/200/300",
-            }}
-          />
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-            This is a post
-          </Text>
-          <Text style={{ fontSize: 15, color: "grey" }}>
-            Date: {GetCurrentDate()}
-          </Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Image source={image} style={styles.image} />
+      <Text>{title}</Text>
+      <Text>{description}</Text>
+      <Text>{author}</Text>
+    </View>
   );
 };
 

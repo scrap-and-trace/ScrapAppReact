@@ -1,12 +1,45 @@
 import React from "react";
-import { Button, View, Text, StyleSheet } from "react-native";
+import {
+  Button,
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import NotificationContainer from "../components/NotificationContainer";
 
 const NotificationsScreen = () => {
   return (
-    <View style={styles.container}>
-      <NotificationContainer />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <Pressable onPress={() => alert("Notification Pressed")}>
+          <NotificationContainer
+            title="Notification Title"
+            description="Notification Description"
+            image={{ uri: "https://picsum.photos/200/300" }}
+            author="Notification Author"
+          />
+        </Pressable>
+        <Pressable onPress={() => alert("Notification Pressed")}>
+          <NotificationContainer
+            title="Notification Title"
+            description="Notification Description"
+            image={{ uri: "https://picsum.photos/200/300" }}
+            author="Notification Author"
+          />
+        </Pressable>
+        <Pressable onPress={() => alert("Notification Pressed")}>
+          <NotificationContainer
+            title="Notification Title"
+            description="Notification Description"
+            image={{ uri: "https://picsum.photos/200/300" }}
+            author="Notification Author"
+          />
+        </Pressable>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

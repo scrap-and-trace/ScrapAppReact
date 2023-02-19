@@ -1,61 +1,49 @@
+/*
+  This component is used to display a notification in the NotificationsScreen.js
+  Arguments to the component:
+    - title: the title of the notification
+    - date: the date of the notification
+    - body: the body of the notification
+    - image: the image to display in the notification
+    - onPress: the function to call when the notification is pressed
+*/
+
 import * as React from "react";
 import {
   View,
   Text,
   Image,
   StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  RefreshControl,
   Dimensions,
   Pressable,
 } from "react-native";
 
-const NotificationContainer = () => {
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 500);
-  }, []);
-
+const NotificationContainer = ({ title, date, body, image, onPress }) => {
   return (
-    <SafeAreaView>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
+    <Pressable onPress={onPress}>
+      <View>
+        <Image source={image} style={styles.image} />
         <View style={styles.container}>
-          <Pressable>
-            <Text
-              style={{
-                fontSize: 15,
-                color: "black",
-                fontWeight: "bold",
-                textAlign: "left",
-              }}
-            >
-              This is a notification
-            </Text>
-          </Pressable>
+          <Text>{title}</Text>
+          <Text>{date}</Text>
+          <Text>{body}</Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
+  // start with a container that is 100% of the screen width at the top of the screen
   container: {
     width: Dimensions.get("window").width - 20,
-    backgroundColor: "white",
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 10,
+    backgroundColor: "#fff",
     padding: 10,
     margin: 10,
+    borderRadius: 10,
   },
 });
 
