@@ -1,19 +1,17 @@
 import * as React from "react";
 import { StyleSheet } from "react-native";
-import { useColorScheme } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeScreen from "../screens/HomeScreen";
-import SearchScreen from "../screens/SearchScreen";
 import PostScreen from "../screens/PostScreen";
-import MapScreen from "../screens/MapScreen";
+import NotificationsScreen from "../screens/NotificationsScreen";
 import AccountScreen from "../screens/AccountScreen";
+import MapScreen from "../screens/MapScreen";
+
 const Tab = createBottomTabNavigator();
 
-const Navbar = () => {
-  const scheme = useColorScheme();
-
+const NavBar = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator screenOptions={styles.tabBar}>
@@ -29,7 +27,7 @@ const Navbar = () => {
         />
         <Tab.Screen
           name="Search"
-          component={SearchScreen}
+          component={MapScreen}
           options={{
             tabBarLabel: "Search",
             tabBarIcon: ({ color, size }) => (
@@ -41,19 +39,19 @@ const Navbar = () => {
           name="Post"
           component={PostScreen}
           options={{
-            tabBarLabel: "Post",
+            tabBarLabel: "New Post",
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="camera" color={color} size={size} />
+              <Ionicons name="add-circle" color={color} size={size} />
             ),
           }}
         />
         <Tab.Screen
-          name="Map"
-          component={MapScreen}
+          name="Notifications"
+          component={NotificationsScreen}
           options={{
-            tabBarLabel: "Map",
+            tabBarLabel: "Notifications",
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="map" color={color} size={size} />
+              <Ionicons name="notifications" color={color} size={size} />
             ),
           }}
         />
@@ -80,4 +78,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Navbar;
+export default NavBar;

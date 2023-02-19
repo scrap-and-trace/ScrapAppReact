@@ -1,11 +1,11 @@
 import * as React from "react";
-import { Button, View, Text, StyleSheet } from "react-native";
-import Navbar from "./app/components/Navbar";
+import { View, StyleSheet } from "react-native";
+import NavBar from "./app/components/NavBar";
 
 const App = () => {
   return (
     <View style={styles.container}>
-      <Navbar />
+      <NavBar />
     </View>
   );
 };

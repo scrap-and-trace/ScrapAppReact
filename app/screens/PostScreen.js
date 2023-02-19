@@ -1,9 +1,9 @@
 import React from "react";
 import { Camera, CameraType } from "expo-camera";
 import { useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-function PostScreen() {
+const PostScreen = () => {
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
 
@@ -33,15 +33,16 @@ function PostScreen() {
   return (
     <View style={styles.container}>
       <Camera style={styles.camera} type={type}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-            <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity>
+        <View>
+          {/* take a picture */}
+          <Pressable style={styles.button} onPress={toggleCameraType}>
+            <Text style={{ color: "white" }}>Take a picture</Text>
+          </Pressable>
         </View>
       </Camera>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -50,8 +51,10 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
-  buttonContainer: {
-    flex: 1,
+  button: {
+    backgroundColor: "blue",
+    padding: 20,
+    borderRadius: 5,
   },
 });
 

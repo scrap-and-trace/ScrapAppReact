@@ -1,12 +1,11 @@
 import React from "react";
 import { Button, View, Text, StyleSheet } from "react-native";
-import { SearchBar } from "react-native-screens";
+import NotificationContainer from "../components/NotificationContainer";
 
-const SearchScreen = () => {
+const NotificationsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>Search Screen</Text>
-      <SearchBar />
+      <NotificationContainer />
     </View>
   );
 };
@@ -19,4 +18,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchScreen;
+export default NotificationsScreen;
