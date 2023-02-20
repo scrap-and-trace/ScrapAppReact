@@ -14,7 +14,7 @@ const PostContainer = ({ title, description, image, author }) => {
   return (
     <View style={styles.container}>
       <Image source={image} style={styles.image} />
-      <Text>{title}</Text>
+      <Text style={styles.title}>{title}</Text>
       <Text>{description}</Text>
       <Text>{author}</Text>
     </View>
@@ -23,27 +23,21 @@ const PostContainer = ({ title, description, image, author }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",
     padding: 10,
-    margin: 10,
+    margin: 5,
     borderRadius: 10,
-    // add shadow
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   image: {
     width: 350,
     height: 350,
     borderRadius: 10,
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 20,
   },
 });
 

@@ -34,7 +34,6 @@ const PostScreen = () => {
     <View style={styles.container}>
       <Camera style={styles.camera} type={type}>
         <View>
-          {/* take a picture */}
           <Pressable style={styles.button} onPress={toggleCameraType}>
             <Text style={{ color: "white" }}>Take a picture</Text>
           </Pressable>

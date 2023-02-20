@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, StyleSheet } from "react-native";
-import NavBar from "./app/components/NavBar";
+import NavBar from "./app/navigation/NavBar";
 
 const App = () => {
   return (

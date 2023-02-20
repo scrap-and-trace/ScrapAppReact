@@ -34,16 +34,16 @@ const NotificationContainer = ({ title, date, body, image, onPress }) => {
 };
 
 const styles = StyleSheet.create({
-  // start with a container that is 100% of the screen width at the top of the screen
   container: {
-    width: Dimensions.get("window").width - 20,
+    width: Dimensions.get("window").width,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#fff",
-    padding: 10,
-    margin: 10,
-    borderRadius: 10,
+    padding: 0,
+    margin: 0,
+    borderBottomColor: "#f0f0f0",
+    borderBottomWidth: 1,
   },
 });
 
