@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 
 const NavBar = () => {
   return (
-    <NavigationContainer>
+    
       <Tab.Navigator screenOptions={styles.tabBar}>
         <Tab.Screen
           name="Home"
@@ -66,7 +66,7 @@ const NavBar = () => {
           }}
         />
       </Tab.Navigator>
-    </NavigationContainer>
+    
   );
 };
 
