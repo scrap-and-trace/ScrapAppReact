@@ -1,7 +1,7 @@
 import React from "react";
 import { Camera, CameraType } from "expo-camera";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View, Button } from "react-native";
 
 const PostScreen = () => {
   const [type, setType] = useState(CameraType.back);
