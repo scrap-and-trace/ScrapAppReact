@@ -1,3 +1,6 @@
+import * as React from "react";
+import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
+
 /*
  * This component is used to display the comments for a post
  * Arguments for the component:
@@ -7,10 +10,6 @@
  *
  * Author: Kieran Gordon <kjg2000@hw.ac.uk>
  */
-
-import * as React from "react";
-import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
-
 export default function CommentsContainer({ author, comment, email, image }) {
   return (
     <View style={styles.container}>
