@@ -2,7 +2,19 @@
   "expo": {
     "slug": "scrapappreact",
     "name": "scrapappreact",
-    "sdkVersion": "47.0.0"
+    "sdkVersion": "47.0.0",
+    "userInterfaceStyle": "automatic",
+    "extra": {
+      "eas": {
+        "projectId": "447ca9b4-5c0c-48a5-85de-ba1739e5bb65"
+      }
+    },
+    "android": {
+      "package": "com.scrapandtrace.scrapappreact"
+    },
+    "ios": {
+      "bundleIdentifier": "com.scrapandtrace.scrapappreact"
+    }
   },
   "name": "scrapappreact"
 }
