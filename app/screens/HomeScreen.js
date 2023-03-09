@@ -1,6 +1,7 @@
 /*
  * This is the Home Screen of the App.
  * It displays a list of posts from the Scrap & Trace API.
+ * The user should be able to tap a post to view it in more detail by navigating to the ScrapbookViewScreen.
  *
  * Author: Kieran Gordon <kjg2000@hw.ac.uk>
  */
@@ -14,26 +15,25 @@ import {
 } from "react-native";
 import PostContainer from "../components/PostContainer";
 import PostAPI from "../api/PostAPI";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useFocusEffect } from "@react-navigation/native";
 
-const Stack = createNativeStackNavigator();
-
-const HomeScreen = ({ navigation }) => {
+export default function HomeScreen({ navigation }) {
   const [posts, setPosts] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
 
+  // When first loading the screen, fetch the posts from the API.
+  React.useEffect(() => {
+    PostAPI.getPosts().then((posts) => {
+      setPosts(posts);
+    });
+  }, []);
+
+  // When the screen is focused, fetch the posts from the API.
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     PostAPI.getPosts().then((posts) => {
       setPosts(posts);
       setRefreshing(false);
-    });
-  }, []);
-
-  React.useEffect(() => {
-    PostAPI.getPosts().then((posts) => {
-      setPosts(posts);
     });
   }, []);
 
@@ -44,29 +44,26 @@ const HomeScreen = ({ navigation }) => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {posts.map((post) => {
-          return (
-            <PostContainer
-              key={post.id}
-              title={post.title}
-              description={post.body}
-              // get random image size from 400x400 to 800x800
-              image={{
-                uri:
-                  "https://picsum.photos/" +
-                  (400 + Math.floor(Math.random() * 400)) +
-                  "/" +
-                  (400 + Math.floor(Math.random() * 400)),
-              }}
-              author="Kieran Gordon"
-              onPress={() => navigation.push("MapScreen")}
-            />
-          );
-        })}
+        {posts.map((post) => (
+          <PostContainer
+            key={post.id}
+            title={post.title}
+            description={post.body}
+            image={{
+              uri:
+                "https://picsum.photos/" +
+                (400 + Math.floor(Math.random() * 400)) +
+                "/" +
+                (400 + Math.floor(Math.random() * 400)),
+            }}
+            author="Kieran Gordon"
+            onPress={() => navigation.navigate("PostView", { id: post.id })}
+          />
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -75,5 +72,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-export default HomeScreen;

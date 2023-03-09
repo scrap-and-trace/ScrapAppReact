@@ -1,7 +1,7 @@
 import * as React from "react";
 import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
 
-/*
+/**
  * This component is used to display the comments for a post
  * Arguments for the component:
  * - author: the author of the comment

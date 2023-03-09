@@ -1,7 +1,7 @@
 import * as React from "react";
 import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 
-/*
+/**
  * This component is used to display a post
  * Arguments for the component:
  *   - title: the title of the post

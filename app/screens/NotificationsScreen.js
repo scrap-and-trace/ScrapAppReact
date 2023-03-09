@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import NotificationContainer from "../components/NotificationContainer";
 
-const NotificationsScreen = () => {
+export default function NotificationsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -46,7 +46,7 @@ const NotificationsScreen = () => {
       </ScrollView>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -54,5 +54,3 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
 });
-
-export default NotificationsScreen;

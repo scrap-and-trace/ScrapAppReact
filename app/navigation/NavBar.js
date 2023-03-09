@@ -14,16 +14,16 @@ import PostScreen from "../screens/PostScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import AccountScreen from "../screens/AccountScreen";
 import MapScreen from "../screens/MapScreen";
-import CanvasScreen from "../screens/CanvasScreen";
+import PostViewScreen from "../screens/PostViewScreen";
 
 const Tab = createBottomTabNavigator();
 
-const NavBar = () => {
+export default function NavBar() {
   return (
     <Tab.Navigator screenOptions={styles.tabBar}>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeScreen} 
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (
@@ -42,7 +42,7 @@ const NavBar = () => {
         }}
       />
       <Tab.Screen
-        name="Camera"
+        name="Upload an Image"
         component={PostScreen}
         options={{
           tabBarLabel: "New Post",
@@ -71,16 +71,21 @@ const NavBar = () => {
           ),
         }}
       />
+      <Tab.Screen
+        name="PostView"
+        component={PostViewScreen}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
     </Tab.Navigator>
   );
-};
+}
 
 const styles = StyleSheet.create({
   tabBar: {
     tabBarShowLabel: false,
-    tabBarActiveTintColor: "red",
+    tabBarActiveTintColor: "#e96b37",
     tabBarInactiveTintColor: "gray",
   },
 });
-
-export default NavBar;

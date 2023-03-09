@@ -9,7 +9,7 @@ import {
   Pressable,
 } from "react-native";
 
-const CanvasScreen = () => {
+export default function CanvasScreen() {
   const pan = useRef(new Animated.ValueXY()).current;
 
   const panResponder = useRef(
@@ -53,7 +53,7 @@ const CanvasScreen = () => {
       ))}
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -73,5 +73,3 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
-
-export default CanvasScreen;

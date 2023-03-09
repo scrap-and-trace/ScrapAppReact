@@ -1,13 +1,13 @@
 import React from "react";
 import { Button, View, Text, StyleSheet } from "react-native";
 
-const AccountScreen = () => {
+export default function AccountScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text>Account Screen</Text>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -16,5 +16,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
-export default AccountScreen;
