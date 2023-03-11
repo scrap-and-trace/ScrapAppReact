@@ -13,8 +13,31 @@ interface RegisScreenProps {
 }
 
     const Regis = (props: RegisScreenProps) => {
+        const [FirstName,setFirstName] = useState("");
+        const [LastName,setLastName] = useState("");
+        const [Email,setEmail] = useState("");
+        const [Password,setPassword] = useState("");
+        const [Password2,setPassword2] = useState("");
+        const [Dob,setDob] = useState("");
+        const [PhoneNum,setPhoneNum] = useState("");
+        const [UserName,setUserName] = useState("");
 
-        const  Regis = () => props.navigation.navigate("Login");
+        const RegisterAcc = () => { if(Password.valueOf()===Password2){
+            const CreateProfile= JSON.stringify({ 'username': UserName,
+            'first_name' : FirstName ,
+            'last_name' : LastName ,
+            'email': Email,
+            'dob' : Dob,
+            'phone' : PhoneNum,
+            'password' : Password})
+
+            alert(CreateProfile);
+        }else{
+            alert("password does not match");
+
+        }}
+        
+        //const  Regis = () => props.navigation.navigate("Login");
 
         return (
         <View style={styles.container}>
@@ -28,25 +51,45 @@ interface RegisScreenProps {
             
             <TextInput
                 style={styles.input}
+                placeholder=" User Name"
+                onChangeText= {setUserName}
+                
+            >
+            </TextInput>
+
+            <TextInput
+                style={styles.input}
                 placeholder=" First Name"
+                onChangeText= {setFirstName}
+                
             >
             </TextInput>
 
             <TextInput
                 style={styles.input}
                 placeholder=" Second Name"
+                onChangeText= {setLastName}
             >
             </TextInput>
 
             <TextInput
                 style={styles.input}
                 placeholder=" Birthday"
+                onChangeText= {setDob}
             >
             </TextInput>
 
             <TextInput
                 style={styles.input}
                 placeholder=" Email"
+                onChangeText= {setEmail}
+            >
+            </TextInput>
+
+            <TextInput
+                style={styles.input}
+                placeholder=" Phone Number"
+                onChangeText= {setPhoneNum}
             >
             </TextInput>
 
@@ -54,17 +97,20 @@ interface RegisScreenProps {
             <TextInput
                 style={styles.input}
                 placeholder=" Set Your Password"
+                onChangeText= {setPassword}
             >
             </TextInput>
             <TextInput
                 style={styles.input}
                 placeholder=" Enter Your Password Again"
+                onChangeText= {setPassword2}
             >
             </TextInput>
 
-            <TouchableOpacity onPress={Regis}>
+            <TouchableOpacity onPress={RegisterAcc}>
                 <View style={styles.button}>
-                    <Text style={styles.buttonText}>Registrate</Text>
+
+                    <Text style={styles.buttonText}>Register</Text>
                 </View>
             </TouchableOpacity>
         </View>
