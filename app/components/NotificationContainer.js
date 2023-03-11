@@ -1,13 +1,3 @@
-/*
-  This component is used to display a notification in the NotificationsScreen.js
-  Arguments to the component:
-    - title: the title of the notification
-    - date: the date of the notification
-    - body: the body of the notification
-    - image: the image to display in the notification
-    - onPress: the function to call when the notification is pressed
-*/
-
 import * as React from "react";
 import {
   View,
@@ -18,33 +8,55 @@ import {
   Pressable,
 } from "react-native";
 
-const NotificationContainer = ({ title, date, body, image, onPress }) => {
+/**
+ * This component is used to display a notification in the NotificationsScreen.js
+ * Arguments for the component:
+ * - title: the title of the notification
+ * - body: the body of the notification
+ * - authorImage: the image of the author of the notification
+ * - onPress: the function to call when the notification is pressed
+ * - author: the author of the notification
+ *
+ * Author: Kieran Gordon <kjg2000@hw.ac.uk>
+ */
+export default function NotificationContainer({
+  title,
+  body,
+  authorImage,
+  onPress,
+  author,
+}) {
   return (
     <Pressable onPress={onPress}>
-      <View>
-        <Image source={image} style={styles.image} />
-        <View style={styles.container}>
-          <Text>{title}</Text>
-          <Text>{date}</Text>
+      <View style={styles.container}>
+        <Image source={authorImage} style={styles.image} />
+        <View>
+          <Text style={styles.title}>
+            {title} from {author}
+          </Text>
           <Text>{body}</Text>
         </View>
       </View>
     </Pressable>
   );
-};
+}
 
 const styles = StyleSheet.create({
+  image: {
+    width: Dimensions.get("window").width * 0.15,
+    height: Dimensions.get("window").width * 0.15,
+    borderRadius: Dimensions.get("window").width * 0.1,
+    marginRight: 10,
+  },
   container: {
-    width: Dimensions.get("window").width,
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "#fff",
-    padding: 0,
-    margin: 0,
-    borderBottomColor: "#f0f0f0",
-    borderBottomWidth: 1,
+    padding: 10,
+    margin: 5,
+    borderRadius: 10,
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  title: {
+    fontWeight: "bold",
   },
 });
-
-export default NotificationContainer;

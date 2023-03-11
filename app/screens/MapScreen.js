@@ -1,14 +1,33 @@
+/*
+ * This screen shows a map with markers for each post.
+ * When the user taps a marker, they should be navigated to the PostViewScreen.
+ *
+ * Author: Kieran Gordon <kjg2000@hw.ac.uk>
+ */
+
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import MapView from "react-native-maps";
+import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import { Searchbar } from "react-native-paper";
 
-const MapScreen = (props) => {
+export default function MapScreen({ navigation }) {
   const [region, setRegion] = React.useState(null);
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const onChangeSearch = (query) => setSearchQuery(query);
+  const [posts, setPosts] = React.useState([]);
 
+  // When first loading the screen, fetch the posts from the API.
+  const fetchPosts = async () => {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+    const data = await response.json();
+    setPosts(data);
+  };
+
+  // Call fetchPosts when the screen is focused.
+  React.useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  // Get the user's location.
   React.useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -27,40 +46,34 @@ const MapScreen = (props) => {
     })();
   }, []);
 
-  // When the user presses the search button, we want to navigate to that location on the map
-  React.useEffect(() => {
-    if (searchQuery === "") return;
-    (async () => {
-      let location = await Location.geocodeAsync(searchQuery);
-      setRegion({
-        latitude: location[0].latitude,
-        longitude: location[0].longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      });
-    })();
-  }, [searchQuery]);
-
+  // If the region is null, don't render the map.
   if (region === null) return null;
 
   return (
     <View style={styles.container}>
-      <Searchbar
-        placeholder="Search"
-        onChangeText={onChangeSearch}
-        value={searchQuery}
-        style={styles.search}
-      />
       <MapView
         style={styles.container}
         initialRegion={region}
         showsUserLocation={true}
-        showsMyLocationButton={false}
+        showsMyLocationButton={true}
         followsUserLocation={true}
-      />
+      >
+        {posts.map((post) => (
+          <Marker
+            key={post.id}
+            coordinate={{
+              latitude: region.latitude + Math.random() / 100,
+              longitude: region.longitude + Math.random() / 100,
+            }}
+            title={post.title.substring(0, 20)}
+            description={post.body.substring(0, 50)}
+            onPress={() => navigation.navigate("PostView", { id: post.id })}
+          />
+        ))}
+      </MapView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -77,5 +90,3 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 });
-
-export default MapScreen;
