@@ -17,100 +17,52 @@ import {
   ScrollView,
   RefreshControl,
 } from "react-native";
-import ScrapbookSelectContainer from "../components/ScrapbookSelectContainer";
+import ScrapbookContainer from "../components/ScrapbookContainer";
+import ScrapbookAPI from "../api/ScrapbookAPI";
 import AccountsAPI from "../api/AccountsAPI";
 
 export default function UserAccountScreen() {
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
+  const [scrapbook, setScrapbook] = React.useState([]);
+  const [title, setTitle] = React.useState("");
+  const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
 
   React.useEffect(() => {
     const fetchUser = async () => {
       const user = await AccountsAPI.getAccount();
       console.log(user);
-      setFirstName(user.first_name);
-      setLastName(user.last_name);
+      setUsername(user.username);
+      setTitle(user.title);
       setEmail(user.email);
     };
     fetchUser();
+  }, []);
+
+  // Fetch scrapbooks from API
+  React.useEffect(() => {
+    const fetchScrapbooks = async () => {
+      const scrapbooks = await ScrapbookAPI.getScrapbooks();
+      setScrapbook(scrapbooks);
+    };
+    fetchScrapbooks();
   }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.accountDetails}>
         {/* Use Account API to get user's first and last name + email */}
-        <Text>{firstName + " " + lastName}</Text>
+        <Text>{username}</Text>
         <Text>{email}</Text>
       </View>
       <FlatList
-        data={[
-          {
-            id: "1",
-            title: "Scrapbook Title",
-            author: "Author Nae Nae",
-            pages: 10,
-            image: { uri: "https://picsum.photos/200/300" },
-          },
-          {
-            id: "2",
-            title: "Scrapbook Title",
-            author: "Author Name",
-            pages: 10,
-            image: { uri: "https://picsum.photos/200/300" },
-          },
-          {
-            id: "3",
-            title: "Scrapbook Title",
-            author: "Author Name",
-            pages: 10,
-            image: { uri: "https://picsum.photos/200/300" },
-          },
-          {
-            id: "4",
-            title: "Scrapbook Title",
-            author: "Author Name",
-            pages: 10,
-            image: { uri: "https://picsum.photos/200/300" },
-          },
-          {
-            id: "5",
-            title: "Scrapbook Title",
-            author: "Author Name",
-            pages: 10,
-            image: { uri: "https://picsum.photos/200/300" },
-          },
-          {
-            title: "Scrapbook Title",
-            author: "Author Name",
-            pages: 10,
-            image: { uri: "https://picsum.photos/200/300" },
-          },
-          {
-            id: "6",
-            title: "Scrapbook Title",
-            author: "Author Name",
-            pages: 10,
-            image: { uri: "https://picsum.photos/200/300" },
-          },
-          {
-            id: "7",
-            title: "Scrapbook Title",
-            author: "Author Name",
-            pages: 10,
-            image: { uri: "https://picsum.photos/200/300" },
-          },
-        ]}
+        data={scrapbook}
         // Reverse the order of the list
-        inverted
         renderItem={({ item }) => (
-          <ScrapbookSelectContainer
+          <ScrapbookContainer
             title={item.title}
-            author={item.author}
-            pages={item.pages}
-            image={item.image}
-            onPress={() => console.log("Scrapbook pressed")}
-            q
+            image={{ uri: "https://picsum.photos/200/300" }}
+            username={item.username}
+            onPress={() => console.log("Scrapbook selected")}
           />
         )}
         keyExtractor={(item) => item.id}

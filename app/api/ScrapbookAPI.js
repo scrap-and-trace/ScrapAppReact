@@ -1,143 +1,50 @@
-import PostAPI from "./PostAPI";
+/*
+ * This file contains the API for the scrapbook model.
+ * It contains functions to get, create, and delete scrapbooks.
+ * API Link: http://94.173.211.21:8000/api/auth/scrapbooks/
+ *
+ * Author: Kieran Gordon <kjg2000@hw.ac.uk>
+ */
+
 import axios from "axios";
 
 export default class ScrapbookAPI {
-  constructor(id, title, author, email, pages, postIds, image) {
+  constructor(id, title, username, pages, date_created, author, friends_only) {
     this.id = id;
     this.title = title;
-    this.author = author;
-    this.email = email;
+    this.username = username;
     this.pages = pages;
-    this.postIds = postIds;
-    this.image = image;
-  }
-
-  static fromJson(json) {
-    try {
-      return new ScrapbookAPI(
-        json.id,
-        json.title,
-        json.author,
-        json.email,
-        json.pages,
-        json.postIds,
-        json.image
-      );
-    } catch (error) {
-      throw new Error("Invalid JSON data" + error);
-    }
-  }
-
-  static fromJsonArray(jsonArray) {
-    return jsonArray.map(ScrapbookAPI.fromJson);
+    this.date_created = date_created;
+    this.author = author;
+    this.friends_only = friends_only;
   }
 
   static async getScrapbooks() {
-    try {
-      let response = await fetch("http://localhost:3000/scrapbooks");
-      let responseJson = await response.json();
-      return ScrapbookAPI.fromJsonArray(responseJson);
-    } catch (error) {
-      console.error(error);
-    }
+    const response = await axios.get(
+      "http://94.173.211.21:8000/api/auth/scrapbooks/"
+    );
+    return response.data.map(
+      (scrapbook) =>
+        new ScrapbookAPI(
+          scrapbook.id,
+          scrapbook.title,
+          scrapbook.username,
+          scrapbook.pages,
+          scrapbook.date_created,
+          scrapbook.author,
+          scrapbook.friends_only
+        )
+    );
   }
 
-  static async getScrapbook(id) {
-    try {
-      let response = await fetch("http://localhost:3000/scrapbooks/" + id);
-      let responseJson = await response.json();
-      return ScrapbookAPI.fromJson(responseJson);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  static async getScrapbookPosts(id) {
-    try {
-      let response = await fetch(
-        "http://localhost:3000/scrapbooks/" + id + "/posts"
-      );
-      let responseJson = await response.json();
-      return responseJson.map((post) => PostAPI.fromJson(post));
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  static async createScrapbook(scrapbook) {
-    try {
-      let response = await fetch("http://localhost:3000/scrapbooks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(scrapbook),
-      });
-      let responseJson = await response.json();
-      return ScrapbookAPI.fromJson(responseJson);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  static async updateScrapbook(scrapbook) {
-    try {
-      let response = await fetch(
-        "http://localhost:3000/scrapbooks/" + scrapbook.id,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(scrapbook),
-        }
-      );
-      let responseJson = await response.json();
-      return ScrapbookAPI.fromJson(responseJson);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  static async deleteScrapbook(id) {
-    try {
-      let response = await fetch("http://localhost:3000/scrapbooks/" + id, {
-        method: "DELETE",
-      });
-      let responseJson = await response.json();
-      return ScrapbookAPI.fromJson(responseJson);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  static async addPostToScrapbook(scrapbookId, postId) {
-    try {
-      let response = await fetch(
-        "http://localhost:3000/scrapbooks/" + scrapbookId + "/posts/" + postId,
-        {
-          method: "POST",
-        }
-      );
-      let responseJson = await response.json();
-      return ScrapbookAPI.fromJson(responseJson);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  static async removePostFromScrapbook(scrapbookId, postId) {
-    try {
-      let response = await fetch(
-        "http://localhost:3000/scrapbooks/" + scrapbookId + "/posts/" + postId,
-        {
-          method: "DELETE",
-        }
-      );
-      let responseJson = await response.json();
-      return ScrapbookAPI.fromJson(responseJson);
-    } catch (error) {
-      console.error(error);
-    }
+  static async createScrapbook(title, friends_only) {
+    const response = await axios.post(
+      "http://94.173.211.21:8000/api/auth/scrapbooks/",
+      {
+        title: title,
+        friends_only: friends_only,
+      }
+    );
+    return response.data;
   }
 }

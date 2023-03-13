@@ -2,7 +2,7 @@
  * This component is used to display a list of scrapbooks and their details, including the number of posts in the scrapbook and a thumbnail of the most recent post.
  * User should be able to search for individual scrapbooks.
  * Scrapbooks should be displayed in a grid format.
- * The scrapbooks themselves should be brown, contain the title of the scrapbook, the number of posts in the scrapbook and a thumbnail of the most recent post.
+ * The scrapbooks themselves should be brown, contain the name of the scrapbook, the number of posts in the scrapbook and a thumbnail of the most recent post.
  *
  * Author: Kieran Gordon <kjg2000@hw.ac.uk>
  */
@@ -17,20 +17,18 @@ import {
   Dimensions,
 } from "react-native";
 
-export default function ScrapbookSelectContainer({
+export default function ScrapbookContainer({
   title,
-  pages,
   image,
-  author,
+  username,
   onPress,
 }) {
   return (
     <Pressable onPress={onPress}>
       <View style={styles.container}>
         <Image style={styles.image} source={image} />
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.pages}>{author}</Text>
-        <Text style={styles.pages}>{pages} pages</Text>
+        <Text style={styles.name}>{title}</Text>
+        <Text style={styles.author}>{username}</Text>
       </View>
     </Pressable>
   );
@@ -52,7 +50,7 @@ const styles = StyleSheet.create({
     width: "85%",
     height: "85%",
   },
-  title: {
+  name: {
     fontSize: 20,
     color: "#fff",
     fontWeight: "bold",

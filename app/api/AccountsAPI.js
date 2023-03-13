@@ -11,7 +11,9 @@ export default class AccountsAPI {
     email,
     dob,
     phone,
-    password
+    password,
+    following,
+    scrapbooks
   ) {
     const response = await axios.post(
       "http://94.173.211.21:8000/api/auth/register/",
@@ -23,6 +25,8 @@ export default class AccountsAPI {
         dob: dob,
         phone: phone,
         password: password,
+        following: following,
+        scrapbooks: scrapbooks,
       }
     );
     return response.data;

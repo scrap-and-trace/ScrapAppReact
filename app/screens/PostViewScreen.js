@@ -13,6 +13,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import PostContainer from "../components/PostContainer";
 import PostAPI from "../api/PostAPI";
 import CommentsAPI from "../api/CommentsAPI";
+import AccountsAPI from "../api/AccountsAPI";
 import CommentsContainer from "../components/CommentsContainer";
 import { Button } from "react-native-paper";
 
@@ -90,6 +91,7 @@ export default function PostViewScreen({ route }) {
             style={styles.button}
             mode="contained"
             onPress={() => {
+              // Get account details
               CommentsAPI.createComment({
                 postId: post.id,
                 name: "Kieran Gordon",
