@@ -13,6 +13,7 @@ import {
   RefreshControl,
 } from "react-native";
 import NotificationContainer from "../components/NotificationContainer";
+import ScrapbookSelectContainer from "../components/ScrapbookSelectContainer";
 
 export default function NotificationsScreen() {
   return (

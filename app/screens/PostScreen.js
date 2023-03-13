@@ -1,7 +1,7 @@
 /*
  * This is the screen that allows the user to post a new image to the app.
  * It should allow the user to take a photo or select one from their gallery.
- * Additionally, the user should be able to add a title and description to the post.
+ * Additionally, the user should be able to add a title and body to the post.
  *
  * Author: Kieran Gordon <kjg2000@hw.ac.uk>
  */
@@ -15,18 +15,27 @@ import {
   TextInput,
   Image,
   Pressable,
+  ToastAndroid,
 } from "react-native";
 import { Button } from "react-native-paper";
 import PostAPI from "../api/PostAPI";
 import { useFocusEffect } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import * as Location from "expo-location";
 
 export default function PostScreen({ navigation }) {
   const [hasGalleryPermission, setHasGalleryPermission] = React.useState(null);
   const [hasCameraPermission, setHasCameraPermission] = React.useState(null);
+  const [hasLocationPermission, setHasLocationPermission] =
+    React.useState(null);
   const [image, setImage] = React.useState(null);
   const [title, setTitle] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [body, setBody] = React.useState("");
+  const [author, setAuthor] = React.useState("Kieran Gordon");
+  const [email, setEmail] = React.useState("kjg2000@hw.ac.uk");
+  const [latitude, setLatitude] = React.useState(null);
+  const [longitude, setLongitude] = React.useState(null);
+  const [scrapbookId, setScrapbookId] = React.useState(1);
 
   // Request permissions for the camera and gallery.
   useFocusEffect(
@@ -49,12 +58,39 @@ export default function PostScreen({ navigation }) {
     }, [])
   );
 
+  // Request permissions for geolocation.
+  useFocusEffect(
+    React.useCallback(() => {
+      (async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        setHasLocationPermission(status === "granted");
+      })();
+    }, [])
+  );
+
+  // Get the user's current location.
+  const getLocation = async () => {
+    if (hasLocationPermission === null) {
+      alert("Requesting location permissions");
+    } else if (hasLocationPermission === false) {
+      alert(
+        "No access to location. You can fix this by going to Settings > Location > Allow Location Access > Allow"
+      );
+    } else {
+      let location = await Location.getCurrentPositionAsync({});
+      setLatitude(location.coords.latitude);
+      setLongitude(location.coords.longitude);
+    }
+  };
+
   // Take a photo with the camera.
   const takePhoto = async () => {
     if (hasCameraPermission === null) {
       alert("Requesting camera permissions");
     } else if (hasCameraPermission === false) {
-      alert("No access to camera");
+      alert(
+        "No access to camera. You can fix this by going to Settings > Camera > Allow Camera Access > Allow"
+      );
     } else {
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -77,7 +113,9 @@ export default function PostScreen({ navigation }) {
     if (hasGalleryPermission === null) {
       alert("Requesting gallery permissions");
     } else if (hasGalleryPermission === false) {
-      alert("No access to gallery");
+      alert(
+        "No access to gallery. You can fix this by going to Settings > Gallery > Allow Gallery Access > Allow"
+      );
     } else {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -97,21 +135,42 @@ export default function PostScreen({ navigation }) {
 
   // Upload the post to the database.
   const uploadPost = async () => {
-    if (image && title && description) {
-      const response = PostAPI.createPost(image, title, description);
-      if (response) {
-        alert("Post uploaded successfully!");
-        navigation.navigate("Home");
-      } else if (response === false) {
-        alert("Post failed to upload. Please try again.");
-      }
-    } else {
-      alert("Please fill in all fields");
+    getLocation();
+    const post = {
+      title: title,
+      body: body,
+      author: author,
+      email: email,
+      image: image,
+      latitude: latitude,
+      longitude: longitude,
+      scrapbookId: scrapbookId,
+    };
+    if (title && body && image && latitude && longitude !== null) {
+      PostAPI.createPost(post);
+      ToastAndroid.show("Post uploaded!", ToastAndroid.SHORT);
+      removeImageFromState();
+      removeTitleFromState();
+      removeBodyFromState();
+      navigation.navigate("Home");
+    } else if (latitude && longitude === null) {
+      alert("Please enable location services.");
     }
   };
 
+  // Remove the image from the state.
   const removeImageFromState = () => {
     setImage(null);
+  };
+
+  // Remove the title from the state.
+  const removeTitleFromState = () => {
+    setTitle("");
+  };
+
+  // Remove the body from the state.
+  const removeBodyFromState = () => {
+    setBody("");
   };
 
   return (
@@ -143,10 +202,10 @@ export default function PostScreen({ navigation }) {
             placeholder="Title"
           />
           <TextInput
-            style={styles.textInputDescription}
-            onChangeText={(text) => setDescription(text)}
-            value={description}
-            placeholder="Description"
+            style={styles.textInputBody}
+            onChangeText={(text) => setBody(text)}
+            value={body}
+            placeholder="Body"
           />
         </SafeAreaView>
         <SafeAreaView style={styles.container}>
@@ -223,7 +282,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     textAlign: "center",
   },
-  textInputDescription: {
+  textInputBody: {
     flexWrap: "wrap",
     textAlign: "center",
   },

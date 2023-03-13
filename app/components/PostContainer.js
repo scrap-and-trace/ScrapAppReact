@@ -1,24 +1,25 @@
 import * as React from "react";
-import { View, Text, Image, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Pressable,
+  Dimensions,
+} from "react-native";
 
 /**
  * This component is used to display a post
  * Arguments for the component:
  *   - title: the title of the post
- *   - description: the description of the post
+ *   - body: the body of the post
  *   - image: the image to display in the post
  *   - author: the author of the post
  *   - onPress: the function to call when the post is pressed (usually to navigate to the post screen)
  *
  * Author: Kieran Gordon <kjg2000@hw.ac.uk>
  */
-export default function PostContainer({
-  title,
-  description,
-  image,
-  author,
-  onPress,
-}) {
+export default function PostContainer({ title, body, image, author, onPress }) {
   return (
     <Pressable onPress={onPress}>
       <View style={styles.container}>
@@ -26,10 +27,8 @@ export default function PostContainer({
         <Text style={styles.title}>
           {title.length > 50 ? title.substring(0, 50) + "..." : title}
         </Text>
-        <Text style={styles.description}>
-          {description.length > 50
-            ? description.substring(0, 50) + "..."
-            : description}
+        <Text style={styles.body}>
+          {body.length > 50 ? body.substring(0, 50) + "..." : body}
         </Text>
         <Text style={styles.postAuthor}>{author}</Text>
       </View>
@@ -55,10 +54,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   image: {
-    width: 350,
-    height: 350,
+    width: Dimensions.get("window").width - 30,
+    height: Dimensions.get("window").width - 30,
     resizeMode: "cover",
-    // add some padding at the top to make the image look like a polaroid photo
     paddingTop: 20,
   },
   title: {
@@ -68,8 +66,7 @@ const styles = StyleSheet.create({
     margin: 5,
     textAlign: "center",
   },
-  description: {
-    // make the description text wrap
+  body: {
     flexWrap: "wrap",
     textAlign: "center",
   },

@@ -12,7 +12,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeScreen from "../screens/HomeScreen";
 import PostScreen from "../screens/PostScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
-import AccountScreen from "../screens/AccountScreen";
+import UserAccountScreen from "../screens/UserAccountScreen";
 import MapScreen from "../screens/MapScreen";
 import PostViewScreen from "../screens/PostViewScreen";
 
@@ -23,7 +23,7 @@ export default function NavBar() {
     <Tab.Navigator screenOptions={styles.tabBar}>
       <Tab.Screen
         name="Home"
-        component={HomeScreen} 
+        component={HomeScreen}
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (
@@ -63,7 +63,7 @@ export default function NavBar() {
       />
       <Tab.Screen
         name="Account"
-        component={AccountScreen}
+        component={UserAccountScreen}
         options={{
           tabBarLabel: "Account",
           tabBarIcon: ({ color, size }) => (
@@ -84,7 +84,6 @@ export default function NavBar() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    tabBarShowLabel: false,
     tabBarActiveTintColor: "#e96b37",
     tabBarInactiveTintColor: "gray",
   },

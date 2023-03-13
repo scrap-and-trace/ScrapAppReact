@@ -12,10 +12,11 @@ import {
   SafeAreaView,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
+  View,
 } from "react-native";
 import PostContainer from "../components/PostContainer";
 import PostAPI from "../api/PostAPI";
-import { useFocusEffect } from "@react-navigation/native";
 
 export default function HomeScreen({ navigation }) {
   const [posts, setPosts] = React.useState([]);
@@ -37,6 +38,19 @@ export default function HomeScreen({ navigation }) {
     });
   }, []);
 
+  // Show a loading indicator while the posts are being fetched.
+  if (posts.length === 0) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator
+          size="large"
+          color="#0000ff"
+          style={styles.loading}
+        />
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -48,7 +62,7 @@ export default function HomeScreen({ navigation }) {
           <PostContainer
             key={post.id}
             title={post.title}
-            description={post.body}
+            body={post.body}
             image={{
               uri:
                 "https://picsum.photos/" +
@@ -67,6 +81,11 @@ export default function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loading: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",

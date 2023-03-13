@@ -5,6 +5,8 @@
  * Author: Kieran Gordon <kjg2000@hw.ac.uk>
  */
 
+import AccountsAPI from "./AccountsAPI";
+
 export default class PostAPI {
   /**
    * Create a new post object.
@@ -13,15 +15,31 @@ export default class PostAPI {
    * @param {string} body - The body of the post.
    * @param {string} image - The image of the post.
    * @param {string} author - The author of the post.
+   * @param {string} email - The email of the author of the post. Acts as a unique identifier.
    * @param {number} scrapbookId - The ID of the scrapbook that the post belongs to.
+   * @param {number} latitude - The latitude of the post.
+   * @param {number} longitude - The longitude of the post.
    */
-  constructor(id, title, body, image, author, scrapbookId) {
+  constructor(
+    id,
+    title,
+    body,
+    image,
+    author,
+    email,
+    scrapbookId,
+    latitude,
+    longitude
+  ) {
     this.id = id;
     this.title = title;
     this.body = body;
     this.image = image;
     this.author = author;
+    this.email = email;
     this.scrapbookId = scrapbookId;
+    this.latitude = latitude;
+    this.longitude = longitude;
   }
 
   /**
@@ -38,7 +56,10 @@ export default class PostAPI {
         json.body,
         json.image,
         json.author,
-        json.scrapbookId
+        json.email,
+        json.scrapbookId,
+        json.latitude,
+        json.longitude
       );
     } catch (error) {
       throw new Error("Invalid JSON data" + error);
@@ -96,11 +117,23 @@ export default class PostAPI {
    * @param {string} body - The body of the post.
    * @param {string} image - The image of the post.
    * @param {string} author - The author of the post.
+   * @param {string} email - The email of the author of the post. Acts as a unique identifier.
    * @param {number} scrapbookId - The ID of the scrapbook that the post belongs to.
+   * @param {number} latitude - The latitude of the post.
+   * @param {number} longitude - The longitude of the post.
    * @returns {PostAPI} - A post object.
    * @throws {Error} - If the API returns an error.
    */
-  static async createPost(title, body, image, author, scrapbookId) {
+  static async createPost(
+    title,
+    body,
+    image,
+    author,
+    email,
+    scrapbookId,
+    latitude,
+    longitude
+  ) {
     try {
       const response = await fetch(
         "https://jsonplaceholder.typicode.com/posts",
@@ -115,7 +148,10 @@ export default class PostAPI {
             body: body,
             image: image,
             author: author,
+            email: email,
             scrapbookId: scrapbookId,
+            latitude: latitude,
+            longitude: longitude,
           }),
         }
       );
@@ -155,11 +191,24 @@ export default class PostAPI {
    * @param {string} body - The body of the post.
    * @param {string} image - The image of the post.
    * @param {string} author - The author of the post.
+   * @param {string} email - The email of the author of the post. Acts as a unique identifier.
    * @param {number} scrapbookId - The ID of the scrapbook that the post belongs to.
+   * @param {number} latitude - The latitude of the post.
+   * @param {number} longitude - The longitude of the post.
    * @returns {PostAPI} - A post object.
    * @throws {Error} - If the API returns an error.
    */
-  static async putPost(id, title, body, image, author, scrapbookId) {
+  static async putPost(
+    id,
+    title,
+    body,
+    image,
+    author,
+    email,
+    scrapbookId,
+    latitude,
+    longitude
+  ) {
     try {
       const response = await fetch(
         "https://jsonplaceholder.typicode.com/posts/" + id,
@@ -174,7 +223,10 @@ export default class PostAPI {
             body: body,
             image: image,
             author: author,
+            email: email,
             scrapbookId: scrapbookId,
+            latitude: latitude,
+            longitude: longitude,
           }),
         }
       );
@@ -192,11 +244,24 @@ export default class PostAPI {
    * @param {string} body - The body of the post.
    * @param {string} image - The image of the post.
    * @param {string} author - The author of the post.
+   * @param {string} email - The email of the author of the post. Acts as a unique identifier.
    * @param {number} scrapbookId - The ID of the scrapbook that the post belongs to.
+   * @param {number} latitude - The latitude of the post.
+   * @param {number} longitude - The longitude of the post.
    * @returns {PostAPI} - A post object.
    * @throws {Error} - If the API returns an error.
    */
-  static async patchPost(id, title, body, image, author, scrapbookId) {
+  static async patchPost(
+    id,
+    title,
+    body,
+    image,
+    author,
+    email,
+    scrapbookId,
+    latitude,
+    longitude
+  ) {
     try {
       const response = await fetch(
         "https://jsonplaceholder.typicode.com/posts/" + id,
@@ -211,7 +276,10 @@ export default class PostAPI {
             body: body,
             image: image,
             author: author,
+            email: email,
             scrapbookId: scrapbookId,
+            latitude: latitude,
+            longitude: longitude,
           }),
         }
       );

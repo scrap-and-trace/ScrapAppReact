@@ -8,8 +8,19 @@ import Main from "./app/login/Main";
 import Regis from "./app/login/Regis";
 import CanvasScreen from "./app/screens/CanvasScreen";
 import PostViewScreen from "./app/screens/PostViewScreen";
+import AccountsAPI from "./app/api/AccountsAPI";
 
 const { Navigator, Screen } = createStackNavigator();
+
+const isAuthenicated = () => {
+  AccountsAPI.getIsAuthenticated()
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
 const App = () => {
   return (
@@ -19,12 +30,15 @@ const App = () => {
         initialRouteName="Main"
         style={styles.container}
       >
-        <Screen name="Login" component={Login}></Screen>
-        <Screen name="Main" component={Main}></Screen>
-        <Screen name="NavBar" component={NavBar} independent={true}></Screen>
-        <Screen name="Regis" component={Regis}></Screen>
-        <Screen name="PostView" component={PostViewScreen}></Screen>
-        <Screen name="Canvas" component={CanvasScreen}></Screen>
+        {/* Keep registration, login and main screen in a separate view so that user's cant access the main app without an account */}
+        <Screen name="Main" component={Main} />
+        <Screen name="Login" component={Login} />
+        <Screen name="Regis" component={Regis} />
+
+        {/* Main app view */}
+        <Screen name="NavBar" component={NavBar} />
+        <Screen name="CanvasScreen" component={CanvasScreen} />
+        <Screen name="PostViewScreen" component={PostViewScreen} />
       </Navigator>
     </NavigationContainer>
   );

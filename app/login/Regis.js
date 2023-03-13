@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import {
   Alert,
   StyleSheet,
@@ -9,11 +9,7 @@ import {
 } from "react-native";
 import AccountsAPI from "../api/AccountsAPI";
 
-interface RegisScreenProps {
-  navigation: any;
-}
-
-const Regis = (props: RegisScreenProps) => {
+export default function RegisScreen(props) {
   const [FirstName, setFirstName] = useState("");
   const [LastName, setLastName] = useState("");
   const [Email, setEmail] = useState("");
@@ -23,59 +19,40 @@ const Regis = (props: RegisScreenProps) => {
   const [PhoneNum, setPhoneNum] = useState("");
   const [UserName, setUserName] = useState("");
 
-  /*
-  {
-    "username": "",
-    "first_name": "",
-    "last_name": "",
-    "email": "",
-    "dob": null,
-    "phone": "",
-    "password": ""
-}
-*/
-  const data = {
-    username: UserName,
-    first_name: FirstName,
-    last_name: LastName,
-    email: Email,
-    dob: Dob,
-    phone: PhoneNum,
-    password: Password,
-  };
-
   const RegisterAcc = () => {
     if (Password != Password2) {
       Alert.alert("Passwords do not match");
     } else {
-      AccountsAPI.register(data)
+      AccountsAPI.register(
+        UserName,
+        FirstName,
+        LastName,
+        Email,
+        Dob,
+        PhoneNum,
+        Password
+      )
         .then((response) => {
           console.log(response);
-          if (response.status == 201) {
-            Alert.alert("Account Created");
-            props.navigation.navigate("Login");
-          } else {
-            Alert.alert("Account Creation Failed");
-          }
+          Alert.alert("Account Created");
+          props.navigation.navigate("Login");
         })
         .catch((error) => {
           console.log(error);
-          console.log(data);
+          Alert.alert("Account Creation Failed");
         });
     }
   };
 
-  //const  Regis = () => props.navigation.navigate("Login");
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+      <Text style={styles.title}>Create your account</Text>
 
-      <Text style={styles.subtitle}>Welcome to Scrap</Text>
+      <Text style={styles.subtitle}>Welcome to Scrap & Trace</Text>
 
       <TextInput
         style={styles.input}
-        placeholder=" User Name"
+        placeholder=" Username"
         onChangeText={setUserName}
       ></TextInput>
 
@@ -87,37 +64,39 @@ const Regis = (props: RegisScreenProps) => {
 
       <TextInput
         style={styles.input}
-        placeholder=" Second Name"
+        placeholder=" Last Name"
         onChangeText={setLastName}
       ></TextInput>
 
       <TextInput
         style={styles.input}
-        placeholder=" Birthday"
+        placeholder=" Birthday (YYYY-MM-DD)"
         onChangeText={setDob}
       ></TextInput>
 
       <TextInput
         style={styles.input}
-        placeholder=" Email"
+        placeholder=" Email (john@mail.com)"
         onChangeText={setEmail}
       ></TextInput>
 
       <TextInput
         style={styles.input}
-        placeholder=" Phone Number"
+        placeholder=" Phone Number (International format)"
         onChangeText={setPhoneNum}
       ></TextInput>
 
       <TextInput
         style={styles.input}
-        placeholder=" Set Your Password"
+        placeholder=" Set your password"
         onChangeText={setPassword}
+        secureTextEntry={true}
       ></TextInput>
       <TextInput
         style={styles.input}
-        placeholder=" Enter Your Password Again"
+        placeholder=" Enter your password again"
         onChangeText={setPassword2}
+        secureTextEntry={true}
       ></TextInput>
 
       <TouchableOpacity onPress={RegisterAcc}>
@@ -127,7 +106,7 @@ const Regis = (props: RegisScreenProps) => {
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -141,9 +120,10 @@ const styles = StyleSheet.create({
   title: {
     color: "#975305",
     fontWeight: "bold",
-    fontSize: 40,
+    fontSize: 30,
     marginBottom: "4%",
     marginTop: "20%",
+    textAlign: "center",
   },
   subtitle: {
     color: "#975305",
@@ -185,5 +165,3 @@ const styles = StyleSheet.create({
     color: "white",
   },
 });
-
-export default Regis;

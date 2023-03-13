@@ -1,10 +1,3 @@
-/*
- * This screen displays a post and its comments.
- * The user should be able to add a comment to the post.
- *
- * Author: Kieran Gordon <kjg2000@hw.ac.uk>
- */
-
 import React from "react";
 import {
   SafeAreaView,
@@ -12,52 +5,56 @@ import {
   StyleSheet,
   RefreshControl,
   TextInput,
+  ActivityIndicator,
+  View,
+  ToastAndroid,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import PostContainer from "../components/PostContainer";
 import PostAPI from "../api/PostAPI";
 import CommentsAPI from "../api/CommentsAPI";
 import CommentsContainer from "../components/CommentsContainer";
+import { Button } from "react-native-paper";
 
-export default function PostViewScreen({ navigation, route }) {
+export default function PostViewScreen({ route }) {
   const [post, setPost] = React.useState(null);
+  const [comment, setComment] = React.useState("");
   const [comments, setComments] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
 
-  // When the page is focused, fetch the post and comments from the API.
-  React.useEffect(() => {
+  const fetchPostAndComments = React.useCallback(() => {
     PostAPI.getPost(route.params.id).then((post) => {
       setPost(post);
     });
     CommentsAPI.getCommentsByPostId(route.params.id).then((comments) => {
       setComments(comments);
     });
-  }, []);
+  }, [route.params.id]);
 
-  // When the page is first loaded, fetch the post and comments from the API.
-  useFocusEffect(
-    React.useCallback(() => {
-      PostAPI.getPost(route.params.id).then((post) => {
-        setPost(post);
-      });
-      CommentsAPI.getCommentsByPostId(route.params.id).then((comments) => {
-        setComments(comments);
-      });
-    }, [])
-  );
+  // When the page is focused, fetch the post and comments from the API.
+  React.useEffect(() => {
+    fetchPostAndComments();
+  }, [fetchPostAndComments]);
 
   // When the user pulls down to refresh, fetch the post and comments from the API.
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    PostAPI.getPost(route.params.id).then((post) => {
-      setPost(post);
-      setRefreshing(false);
-    });
-    CommentsAPI.getCommentsByPostId(route.params.id).then((comments) => {
-      setComments(comments);
-      setRefreshing(false);
-    });
-  }, []);
+    fetchPostAndComments();
+    setRefreshing(false);
+  }, [fetchPostAndComments]);
+
+  // Show a loading indicator while the post and comments are being fetched.
+  if (post === null) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator
+          size="large"
+          color="#0000ff"
+          style={styles.loading}
+        />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -69,7 +66,7 @@ export default function PostViewScreen({ navigation, route }) {
         {post && (
           <PostContainer
             title={post.title}
-            description={post.body}
+            body={post.body}
             image={{
               uri:
                 "https://picsum.photos/" +
@@ -82,7 +79,30 @@ export default function PostViewScreen({ navigation, route }) {
           />
         )}
         <SafeAreaView style={styles.container}>
-          <TextInput style={styles.commentBox} placeholder="Add a comment..." />
+          <TextInput
+            style={styles.commentBox}
+            placeholder="Add a comment..."
+            value={comment}
+            onChangeText={setComment}
+          />
+          <Button
+            icon={"plus"}
+            style={styles.button}
+            mode="contained"
+            onPress={() => {
+              CommentsAPI.createComment({
+                postId: post.id,
+                name: "Kieran Gordon",
+                body: comment,
+                email: "kjg2000@hw.ac.uk",
+              });
+              setComment("");
+              fetchPostAndComments();
+              ToastAndroid.show("Comment Added", ToastAndroid.SHORT);
+            }}
+          >
+            Add Comment
+          </Button>
           {post &&
             comments.map((comment) => (
               <CommentsContainer
@@ -123,5 +143,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
     elevation: 3,
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  button: {
+    margin: 5,
+    padding: 5,
+    backgroundColor: "#e96b37",
   },
 });
