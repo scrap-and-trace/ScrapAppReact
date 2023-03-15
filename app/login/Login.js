@@ -17,7 +17,6 @@ export default function LoginScreen(props) {
     AccountsAPI.login(Email, Password)
       .then((response) => {
         props.navigation.navigate("NavBar");
-        console.log(response);
       })
       .catch((error) => {
         Alert.alert(
@@ -34,13 +33,13 @@ export default function LoginScreen(props) {
 
       <TextInput
         style={styles.input}
-        placeholder=" Email (john@mail.com)"
+        placeholder="Email (user@mail.com)"
         onChangeText={setEmail}
       ></TextInput>
 
       <TextInput
         style={styles.input}
-        placeholder=" Password"
+        placeholder="Password"
         onChangeText={setPassword}
         secureTextEntry={true}
       ></TextInput>

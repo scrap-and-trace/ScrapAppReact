@@ -71,7 +71,8 @@ export default function HomeScreen({ navigation }) {
                 (400 + Math.floor(Math.random() * 400)),
             }}
             author="Kieran Gordon"
-            onPress={() => navigation.navigate("PostView", { id: post.id })}
+            // Navigate to post title screen when the post is tapped.
+            onPress={() => navigation.navigate("Post View", { id: post.id })}
           />
         ))}
       </ScrollView>

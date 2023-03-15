@@ -1,11 +1,11 @@
 /*
- * This component is used to display a notification in the NotificationsScreen.js
+ * This component is used to display a user search result in the UserSearchScreen.js
  * Arguments for the component:
- * - title: the title of the notification
- * - body: the body of the notification
+ * - first_name: the first name of the user
+ * - last_name: the last name of the user
+ * - username: the username of the user
  * - authorImage: the image of the author of the notification
  * - onPress: the function to call when the notification is pressed
- * - author: the author of the notification
  *
  * Author: Kieran Gordon <kjg2000@hw.ac.uk>
  */
@@ -20,22 +20,22 @@ import {
   Pressable,
 } from "react-native";
 
-export default function NotificationContainer({
-  title,
-  body,
+export default function UserSearchContainer({
+  first_name,
+  last_name,
+  username,
   authorImage,
   onPress,
-  author,
 }) {
   return (
     <Pressable onPress={onPress}>
       <View style={styles.container}>
-        <Image source={authorImage} style={styles.image} />
-        <View>
-          <Text style={styles.title}>
-            {title} from {author}
-          </Text>
-          <Text>{body}</Text>
+        <View style={styles.usernameAndImage}>
+          <Image source={authorImage} style={styles.image} />
+          <View>
+            <Text style={styles.title}>{first_name + " " + last_name}</Text>
+            <Text>@{username}</Text>
+          </View>
         </View>
       </View>
     </Pressable>
@@ -48,6 +48,8 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").width * 0.15,
     borderRadius: Dimensions.get("window").width * 0.1,
     marginRight: 10,
+    borderWidth: 1,
+    borderColor: "grey",
   },
   container: {
     backgroundColor: "#fff",
@@ -59,5 +61,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
+  },
+
+  usernameAndImage: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    // make sure the username and image are on the same line
+    alignItems: "center",
+    marginBottom: 5,
   },
 });

@@ -1,21 +1,28 @@
+/*
+ * This component is used to display the comments for a post
+ * Arguments for the component:
+ * - username: the username of the comment
+ * - comment: the comment
+ * - image: profile image of the username
+ *
+ * username: Kieran Gordon <kjg2000@hw.ac.uk>
+ */
+
 import * as React from "react";
 import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
 
-/**
- * This component is used to display the comments for a post
- * Arguments for the component:
- * - author: the author of the comment
- * - comment: the comment
- * - image: profile image of the author
- *
- * Author: Kieran Gordon <kjg2000@hw.ac.uk>
- */
-export default function CommentsContainer({ author, comment, email, image }) {
+export default function CommentsContainer({
+  first_name,
+  last_name,
+  username,
+  comment,
+  image,
+}) {
   return (
     <View style={styles.container}>
-      <View style={styles.authorAndImage}>
+      <View style={styles.usernameAndImage}>
         <Image source={image} style={styles.image} />
-        <Text style={styles.commentAuthor}>{author}</Text>
+        <Text style={styles.commentUsername}>{username}</Text>
       </View>
       <View>
         <Text>{comment}</Text>
@@ -47,13 +54,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "grey",
   },
-  commentAuthor: {
+  commentUsername: {
     fontWeight: "bold",
   },
-  authorAndImage: {
+  usernameAndImage: {
     flexDirection: "row",
     flexWrap: "wrap",
-    // make sure the author and image are on the same line
+    // make sure the username and image are on the same line
     alignItems: "center",
     marginBottom: 5,
   },

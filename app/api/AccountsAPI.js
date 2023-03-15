@@ -47,6 +47,18 @@ export default class AccountsAPI {
     return await AsyncStorage.getItem("token");
   }
 
+  static async getIsAuthenticated() {
+    const response = await axios.get(
+      "http://94.173.211.21:8000/api/auth/user/",
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
+    );
+    return response.ok;
+  }
+
   static async getAccount() {
     const response = await axios.get(
       "http://94.173.211.21:8000/api/auth/user/",
@@ -59,15 +71,84 @@ export default class AccountsAPI {
     return response.data;
   }
 
-  static async getIsAuthenticated() {
+  static async getAccountById(id) {
     const response = await axios.get(
-      "http://94.173.211.21:8000/api/auth/user/",
+      "http://94.173.211.21:8000/api/auth/user/" + id,
       {
         headers: {
           Authorization: `Token ${await this.getToken()}`,
         },
       }
     );
-    return response.ok;
+    return response.data;
+  }
+
+  static async getFollowing(id) {
+    const response = await axios.get(
+      "http://94.173.211.21:8000/api/auth/followlist/" + id,
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
+    );
+    return response.data;
+  }
+
+  static async getScrapbooks(id) {
+    const response = await axios.get(
+      "http://94.173.211.21:8000/user/?id__in=&id=" + id,
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
+    );
+    return response.data;
+  }
+
+  static async getAllUsers() {
+    const response = await axios.get(
+      "http://94.173.211.21:8000/api/auth/searchUsers/"
+    );
+    return response.data.results;
+  }
+
+  static async searchUsers(query) {
+    const response = await axios.get(
+      "http://94.173.211.21:8000/api/auth/searchUsers/?search=" + query,
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
+    );
+    return response.data.results;
+  }
+
+  static async;
+
+  static async followUser(id) {
+    const response = await axios.post(
+      "http://94.173.211.21:8000/api/auth/followlist/" + id,
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
+    );
+    return response.data;
+  }
+
+  static async unfollowUser(id) {
+    const response = await axios.delete(
+      "http://94.173.211.21:8000/api/auth/deletefollow/" + id,
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
+    );
+    return response.data;
   }
 }

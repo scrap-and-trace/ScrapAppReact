@@ -28,7 +28,7 @@ export default function ScrapbookContainer({
       <View style={styles.container}>
         <Image style={styles.image} source={image} />
         <Text style={styles.name}>{title}</Text>
-        <Text style={styles.author}>{username}</Text>
+        <Text style={styles.author}>By {username}</Text>
       </View>
     </Pressable>
   );

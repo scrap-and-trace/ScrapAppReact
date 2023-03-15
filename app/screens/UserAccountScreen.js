@@ -16,60 +16,115 @@ import {
   SafeAreaView,
   ScrollView,
   RefreshControl,
+  Image,
 } from "react-native";
 import ScrapbookContainer from "../components/ScrapbookContainer";
-import ScrapbookAPI from "../api/ScrapbookAPI";
+import AccountDetailContainer from "../components/AccountDetailContainer";
 import AccountsAPI from "../api/AccountsAPI";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+
+const Tab = createMaterialTopTabNavigator();
 
 export default function UserAccountScreen() {
-  const [scrapbook, setScrapbook] = React.useState([]);
-  const [title, setTitle] = React.useState("");
+  const [first_name, setFirstName] = React.useState("");
+  const [last_name, setLastName] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [id, setId] = React.useState("");
+  const [followedScrapbooks, setFollowedScrapbooks] = React.useState([]);
+  const [scrapbooks, setScrapbooks] = React.useState([]);
 
   React.useEffect(() => {
     const fetchUser = async () => {
       const user = await AccountsAPI.getAccount();
-      console.log(user);
+      setFirstName(user.first_name);
+      setLastName(user.last_name);
       setUsername(user.username);
-      setTitle(user.title);
       setEmail(user.email);
+      setId(user.id);
+      setScrapbooks(user.scrapbooks);
+      setFollowedScrapbooks(user.following);
     };
     fetchUser();
   }, []);
 
-  // Fetch scrapbooks from API
-  React.useEffect(() => {
-    const fetchScrapbooks = async () => {
-      const scrapbooks = await ScrapbookAPI.getScrapbooks();
-      setScrapbook(scrapbooks);
+  const onRefresh = React.useCallback(() => {
+    const fetchUser = async () => {
+      const user = await AccountsAPI.getAccount();
+      setUsername(user.username);
+      setEmail(user.email);
+      setId(user.id);
+      setScrapbooks(user.scrapbooks);
+      console.log(user.following);
     };
-    fetchScrapbooks();
+    fetchUser();
   }, []);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.accountDetails}>
-        {/* Use Account API to get user's first and last name + email */}
-        <Text>{username}</Text>
-        <Text>{email}</Text>
-      </View>
-      <FlatList
-        data={scrapbook}
-        // Reverse the order of the list
-        renderItem={({ item }) => (
-          <ScrapbookContainer
-            title={item.title}
-            image={{ uri: "https://picsum.photos/200/300" }}
-            username={item.username}
-            onPress={() => console.log("Scrapbook selected")}
-          />
+    // Add a tab navigator to the screen to switch between the user's scrapbooks and the scrapbooks they follow
+    <Tab.Navigator>
+      <Tab.Screen name="Scrapbooks">
+        {() => (
+          // Add a refresh control to the screen to allow the user to refresh the page
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={false} onRefresh={onRefresh} />
+            }
+          >
+            <View style={styles.container}>
+              <AccountDetailContainer
+                first_name={first_name}
+                last_name={last_name}
+                username={username}
+                email={email}
+                id={id}
+              />
+              <FlatList
+                data={scrapbooks}
+                renderItem={({ item }) => (
+                  <ScrapbookContainer
+                    title={item.title}
+                    image={{ uri: "https://picsum.photos/200/300" }}
+                    username={item.username}
+                    onPress={() => console.log("Test")}
+                  />
+                )}
+                keyExtractor={(item) => item.id}
+                numColumns={2}
+                columnWrapperStyle={styles.grid}
+              />
+            </View>
+          </ScrollView>
         )}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        columnWrapperStyle={styles.grid}
-      />
-    </View>
+      </Tab.Screen>
+      <Tab.Screen name="Following">
+        {() => (
+          // Add a refresh control to the screen to allow the user to refresh the page, avoid VirtualizedList should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={false} onRefresh={onRefresh} />
+            }
+          >
+            <View style={styles.container}>
+              <FlatList
+                data={followedScrapbooks}
+                renderItem={({ item }) => (
+                  <ScrapbookContainer
+                    title={item.title}
+                    image={{ uri: "https://picsum.photos/200/300" }}
+                    username={item.username}
+                    onPress={() => console.log("Test")}
+                  />
+                )}
+                keyExtractor={(item) => item.id}
+                numColumns={2}
+                columnWrapperStyle={styles.grid}
+              />
+            </View>
+          </ScrollView>
+        )}
+      </Tab.Screen>
+    </Tab.Navigator>
   );
 }
 
@@ -79,13 +134,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   accountDetails: {
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 10,
-    marginRight: 10,
     padding: 15,
     backgroundColor: "#fff",
-    borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -100,5 +150,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-around",
+  },
+  usernameAndImage: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

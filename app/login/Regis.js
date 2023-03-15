@@ -52,49 +52,48 @@ export default function RegisScreen(props) {
 
       <TextInput
         style={styles.input}
-        placeholder=" Username"
+        placeholder="Username"
         onChangeText={setUserName}
       ></TextInput>
 
       <TextInput
         style={styles.input}
-        placeholder=" First Name"
+        placeholder="First Name"
         onChangeText={setFirstName}
       ></TextInput>
 
       <TextInput
         style={styles.input}
-        placeholder=" Last Name"
+        placeholder="Last Name"
         onChangeText={setLastName}
       ></TextInput>
 
       <TextInput
         style={styles.input}
-        placeholder=" Birthday (YYYY-MM-DD)"
+        placeholder="Birthday (YYYY-MM-DD)"
         onChangeText={setDob}
       ></TextInput>
 
       <TextInput
         style={styles.input}
-        placeholder=" Email (john@mail.com)"
-        onChangeText={setEmail}
+        placeholder="Email (john@mail.com)"
       ></TextInput>
 
       <TextInput
         style={styles.input}
-        placeholder=" Phone Number (International format)"
+        placeholder="Phone Number (International format)"
         onChangeText={setPhoneNum}
       ></TextInput>
 
       <TextInput
         style={styles.input}
-        placeholder=" Set your password"
+        placeholder="Set your password"
         onChangeText={setPassword}
         secureTextEntry={true}
       ></TextInput>
       <TextInput
         style={styles.input}
-        placeholder=" Enter your password again"
+        placeholder="Enter your password again"
         onChangeText={setPassword2}
         secureTextEntry={true}
       ></TextInput>

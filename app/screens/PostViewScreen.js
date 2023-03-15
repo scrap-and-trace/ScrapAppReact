@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   SafeAreaView,
@@ -17,11 +18,14 @@ import AccountsAPI from "../api/AccountsAPI";
 import CommentsContainer from "../components/CommentsContainer";
 import { Button } from "react-native-paper";
 
+// Allow for navigation to this screen from a nested stack navigator
 export default function PostViewScreen({ route }) {
   const [post, setPost] = React.useState(null);
   const [comment, setComment] = React.useState("");
   const [comments, setComments] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
 
   const fetchPostAndComments = React.useCallback(() => {
     PostAPI.getPost(route.params.id).then((post) => {
@@ -32,6 +36,14 @@ export default function PostViewScreen({ route }) {
     });
   }, [route.params.id]);
 
+  // Fetch the account details from the API.
+  const fetchAccountDetails = React.useCallback(() => {
+    AccountsAPI.getAccount().then((account) => {
+      setUsername(account.username);
+      setEmail(account.email);
+    });
+  }, []);
+
   // When the page is focused, fetch the post and comments from the API.
   React.useEffect(() => {
     fetchPostAndComments();
@@ -41,6 +53,7 @@ export default function PostViewScreen({ route }) {
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     fetchPostAndComments();
+    fetchAccountDetails();
     setRefreshing(false);
   }, [fetchPostAndComments]);
 
@@ -75,7 +88,7 @@ export default function PostViewScreen({ route }) {
                 "/" +
                 (400 + Math.floor(Math.random() * 400)),
             }}
-            author="Kieran Gordon"
+            username="Kieran Gordon"
             onPress={() => alert("Post Pressed")}
           />
         )}
@@ -93,10 +106,10 @@ export default function PostViewScreen({ route }) {
             onPress={() => {
               // Get account details
               CommentsAPI.createComment({
-                postId: post.id,
-                name: "Kieran Gordon",
+                postId: route.params.id,
+                name: username,
+                email: email,
                 body: comment,
-                email: "kjg2000@hw.ac.uk",
               });
               setComment("");
               fetchPostAndComments();
@@ -109,7 +122,7 @@ export default function PostViewScreen({ route }) {
             comments.map((comment) => (
               <CommentsContainer
                 key={comment.id}
-                author={comment.name}
+                username={comment.name}
                 comment={comment.body}
                 email={comment.email}
                 image={{

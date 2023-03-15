@@ -5,7 +5,6 @@ import {
   Text,
   Image,
   ActivityIndicator,
-  ImageBackground,
   Dimensions,
 } from "react-native";
 import MapView from "react-native-maps";
@@ -72,6 +71,7 @@ export default function MapScreen({ navigation }) {
     );
   }
 
+  // Return a tab navigator with the map and a screen to search for users.
   return (
     <View style={styles.container}>
       <MapView
@@ -97,16 +97,20 @@ export default function MapScreen({ navigation }) {
               <Callout
                 tooltip
                 onPress={() => {
-                  navigation.navigate("PostView", { id: post.id });
+                  // Account for the fact that this screen is nested inside a tab navigator, in Search.
+                  navigation.navigate("Post View", {
+                    id: post.id,
+                  });
                 }}
               >
                 <View style={styles.bubble}>
-                  {/* display image above title and description */}
                   <Image
+                    source={{ uri: post.image }}
                     style={styles.bubbleImage}
-                    source={{ uri: "https://picsum.photos/200/300" }}
                   />
-                  <Text style={styles.bubbleTitle}>{post.title}</Text>
+                  <Text style={styles.bubbleTitle}>
+                    {post.title.substring(0, 20)}
+                  </Text>
                   <Text style={styles.bubbleDescription}>
                     {post.body.substring(0, 50)}
                   </Text>
@@ -145,7 +149,6 @@ const styles = StyleSheet.create({
   bubbleImage: {
     width: Dimensions.get("window").width * 0.8,
   },
-  // display in the center of the screen
   loading: {
     flex: 1,
     justifyContent: "center",

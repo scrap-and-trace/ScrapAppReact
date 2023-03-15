@@ -5,7 +5,7 @@
  * Author: Kieran Gordon <kjg2000@hw.ac.uk>
  */
 
-import AccountsAPI from "./AccountsAPI";
+import axios from "axios";
 
 export default class PostAPI {
   /**

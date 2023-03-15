@@ -1,3 +1,15 @@
+/*
+ * This component is used to display a post
+ * Arguments for the component:
+ *   - title: the title of the post
+ *   - body: the body of the post
+ *   - image: the image to display in the post
+ *   - username: the username of the post
+ *   - onPress: the function to call when the post is pressed (usually to navigate to the post screen)
+ *
+ * Username: Kieran Gordon <kjg2000@hw.ac.uk>
+ */
+
 import * as React from "react";
 import {
   View,
@@ -8,18 +20,13 @@ import {
   Dimensions,
 } from "react-native";
 
-/**
- * This component is used to display a post
- * Arguments for the component:
- *   - title: the title of the post
- *   - body: the body of the post
- *   - image: the image to display in the post
- *   - author: the author of the post
- *   - onPress: the function to call when the post is pressed (usually to navigate to the post screen)
- *
- * Author: Kieran Gordon <kjg2000@hw.ac.uk>
- */
-export default function PostContainer({ title, body, image, author, onPress }) {
+export default function PostContainer({
+  title,
+  body,
+  image,
+  username,
+  onPress,
+}) {
   return (
     <Pressable onPress={onPress}>
       <View style={styles.container}>
@@ -30,7 +37,7 @@ export default function PostContainer({ title, body, image, author, onPress }) {
         <Text style={styles.body}>
           {body.length > 50 ? body.substring(0, 50) + "..." : body}
         </Text>
-        <Text style={styles.postAuthor}>{author}</Text>
+        <Text style={styles.postUsername}>{username}</Text>
       </View>
     </Pressable>
   );
@@ -70,7 +77,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     textAlign: "center",
   },
-  postAuthor: {
+  postUsername: {
     fontWeight: "bold",
     margin: 5,
     padding: 5,
