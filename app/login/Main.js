@@ -15,11 +15,11 @@ export default function Main(props) {
 
   return (
     <ImageBackground
-      source={require("../assets/Cover1.png")}
+      source={require("../assets/Signup.png")}
       style={styles.background}
     >
       <View style={styles.container}>
-        <Text style={styles.slogan}>Add a slogan here.</Text>
+        <Text style={styles.slogan}></Text>
         <TouchableOpacity onPress={Login} style={styles.buttonIn}>
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     marginTop: "75%",
   },
   buttonIn: {
-    marginTop: "30%",
+    marginTop: "31%",
     marginBottom: "0%",
     width: 200,
     height: 55,
@@ -65,8 +65,9 @@ const styles = StyleSheet.create({
     height: 55,
     alignItems: "center",
     backgroundColor: "white",
-    borderWidth: 2,
     borderRadius: 30,
+    borderWidth: 2,
+    borderColor: "white",
   },
   buttonText: {
     textAlign: "center",
