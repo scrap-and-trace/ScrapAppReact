@@ -1,42 +1,41 @@
+import { useFocusEffect } from "@react-navigation/native";
 import React from "react";
 import {
-  View,
   FlatList,
+  RefreshControl,
   SafeAreaView,
   ScrollView,
-  RefreshControl,
   StyleSheet,
   TextInput,
+  View,
 } from "react-native";
 import AccountsAPI from "../api/AccountsAPI";
 import UserSearchContainer from "../components/UserSearchContainer";
 
 export default function UserSearchScreen({ navigation }) {
   const [users, setUsers] = React.useState([]);
+  const [id, setId] = React.useState("");
   const [search, setSearch] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
 
-  React.useEffect(() => {
-    const fetchUsers = async () => {
-      const users = await AccountsAPI.getAllUsers();
-      setUsers(users);
-      setIsLoading(false);
-    };
-    fetchUsers();
-  }, []);
+  const fetchUsers = async () => {
+    const users = await AccountsAPI.getAllUsers();
+    setUsers(users);
+    setIsLoading(false);
+  };
+
+  const fetchOwnId = async () => {
+    const id = await AccountsAPI.getAccount();
+    setId(id);
+  };
 
   const onRefresh = React.useCallback(() => {
-    const fetchUsers = async () => {
-      const users = await AccountsAPI.getAllUsers();
-      setUsers(users);
-      setIsLoading(false);
-    };
+    setIsLoading(true);
     fetchUsers();
+    fetchOwnId();
+    setIsLoading(false);
   }, []);
 
-  // Dynamic search bar. Ensure that the search bar is not case sensitive.
-  // Update the search bar when the user types. Reset the search bar when all characters are deleted.
-  // Allow use of first name, last name, and username to search for users.
   const searchFilterFunction = (text) => {
     if (text) {
       const newData = users.filter((item) => {
@@ -47,13 +46,28 @@ export default function UserSearchScreen({ navigation }) {
       setUsers(newData);
       setSearch(text);
     } else {
-      const fetchUsers = async () => {
-        const users = await AccountsAPI.getAllUsers();
-        setUsers(users);
-      };
       fetchUsers();
       setSearch(text);
     }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUsers();
+      fetchOwnId();
+    }, [])
+  );
+
+  const getHeader = () => {
+    <View style={styles.searchBar}>
+      <TextInput
+        style={styles.searchInput}
+        onChangeText={(text) => searchFilterFunction(text)}
+        value={search}
+        underlineColorAndroid="transparent"
+        placeholder="Search Users"
+      />
+    </View>;
   };
 
   return (
@@ -67,29 +81,24 @@ export default function UserSearchScreen({ navigation }) {
           placeholder="Search Users"
         />
       </View>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
-        }
-      >
-        <FlatList
-          data={users}
-          renderItem={({ item }) => (
-            <UserSearchContainer
-              first_name={item.first_name}
-              last_name={item.last_name}
-              username={item.username}
-              id={item.id}
-              onPress={() => {
-                navigation.navigate("User Account", {
-                  id: item.id,
-                });
-              }}
-            />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-        />
-      </ScrollView>
+      <FlatList
+        data={users}
+        renderItem={({ item }) => (
+          <UserSearchContainer
+            first_name={item.first_name}
+            last_name={item.last_name}
+            username={item.username}
+            id={item.id}
+            onPress={() => {
+              navigation.navigate("User Account", {
+                id: item.id,
+              });
+            }}
+          />
+        )}
+        keyExtractor={(item) => item.id.toString()}
+        ListHeaderComponent={getHeader}
+      />
     </SafeAreaView>
   );
 }
@@ -104,14 +113,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 10,
     backgroundColor: "#fff",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3,
+    borderRadius: 10,
   },
   item: {
     padding: 10,

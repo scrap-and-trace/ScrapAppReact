@@ -19,9 +19,8 @@ import {
 } from "react-native";
 import { Button } from "react-native-paper";
 import AccountsAPI from "../api/AccountsAPI";
-import PostAPI from "../api/PostAPI";
 import { useFocusEffect } from "@react-navigation/native";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Location from "expo-location";
 
 export default function PostScreen({ navigation }) {
@@ -141,27 +140,20 @@ export default function PostScreen({ navigation }) {
     console.log(image);
   };
 
-  // Upload the post to the database.
-  const uploadPost = async () => {
+  // Select the scrapbook to upload the post to.
+  // Navigate to the scrapbook selection screen and pass all the data to the state.
+  const selectScrapbook = (id) => {
+    setScrapbookId(id);
     getLocation();
     getAccount();
-    const post = {
-      title: title,
-      body: body,
-      username: username,
-      email: email,
-      image: image,
-      latitude: latitude,
-      longitude: longitude,
-      scrapbookId: scrapbookId,
-    };
     if (title && body && image && latitude && longitude !== null) {
-      PostAPI.createPost(post);
-      ToastAndroid.show("Post uploaded!", ToastAndroid.SHORT);
-      removeImageFromState();
-      removeTitleFromState();
-      removeBodyFromState();
-      navigation.navigate("Home");
+      navigation.navigate("Select Scrapbook", {
+        title: title,
+        body: body,
+        image: image,
+        latitude: latitude,
+        longitude: longitude,
+      });
     } else if (latitude && longitude === null) {
       alert("Please enable location services.");
     }
@@ -200,7 +192,7 @@ export default function PostScreen({ navigation }) {
                 onPress={removeImageFromState}
                 style={styles.removeImageButton}
               >
-                <Ionicons name="close-circle" size={30} color="red" />
+                <MaterialIcons name="remove-circle" size={24} color="black" />
               </Pressable>
             )}
           </SafeAreaView>
@@ -238,13 +230,13 @@ export default function PostScreen({ navigation }) {
           </Button>
           {image && (
             <Button
-              icon={"upload"}
+              icon={"book"}
               mode="contained"
-              onPress={uploadPost}
+              onPress={selectScrapbook}
               style={styles.button}
               compact={true}
             >
-              Upload Post
+              Select Scrapbook
             </Button>
           )}
         </SafeAreaView>

@@ -12,12 +12,12 @@
 
 import * as React from "react";
 import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
   Dimensions,
+  Image,
   Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 export default function NotificationContainer({

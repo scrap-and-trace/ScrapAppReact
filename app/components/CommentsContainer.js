@@ -1,51 +1,47 @@
 /*
- * This component is used to display the comments for a post
+ * This component is used to display the user's account details.
  * Arguments for the component:
- * - username: the username of the comment
- * - comment: the comment
- * - image: profile image of the username
+ * - first_name: the first name of the user
+ * - last_name: the last name of the user
+ * - username: the username of the user
+ * - authorImage: the image of the author of the notification
+ * - onPress: the function to call when the notification is pressed
  *
- * username: Kieran Gordon <kjg2000@hw.ac.uk>
+ * Author: Kieran Gordon <kjg2000@hw.ac.uk>
  */
 
 import * as React from "react";
-import { View, Text, Image, StyleSheet, Dimensions } from "react-native";
+import {
+  Dimensions,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 export default function CommentsContainer({
-  first_name,
-  last_name,
   username,
-  comment,
-  image,
+  body,
+  authorImage,
+  onPress,
 }) {
   return (
-    <View style={styles.container}>
-      <View style={styles.usernameAndImage}>
-        <Image source={image} style={styles.image} />
-        <Text style={styles.commentUsername}>{username}</Text>
+    <Pressable onPress={onPress}>
+      <View style={styles.container}>
+        <View style={styles.usernameAndImage}>
+          <Image source={authorImage} style={styles.image} />
+          <View>
+            <Text style={styles.title}>{username}</Text>
+            <Text>{body}</Text>
+          </View>
+        </View>
       </View>
-      <View>
-        <Text>{comment}</Text>
-      </View>
-    </View>
+    </Pressable>
   );
 }
+
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    padding: 10,
-    margin: 5,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
   image: {
     width: Dimensions.get("window").width * 0.15,
     height: Dimensions.get("window").width * 0.15,
@@ -54,13 +50,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "grey",
   },
-  commentUsername: {
+  container: {
+    backgroundColor: "#fff",
+    padding: 10,
+    margin: 5,
+    borderRadius: 10,
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  title: {
     fontWeight: "bold",
   },
   usernameAndImage: {
     flexDirection: "row",
     flexWrap: "wrap",
-    // make sure the username and image are on the same line
     alignItems: "center",
     marginBottom: 5,
   },

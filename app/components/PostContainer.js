@@ -12,18 +12,15 @@
 
 import * as React from "react";
 import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  Pressable,
-  Dimensions,
+  Dimensions, Image, Pressable, StyleSheet, Text, View
 } from "react-native";
 
 export default function PostContainer({
   title,
   body,
   image,
+  first_name,
+  last_name,
   username,
   onPress,
 }) {
@@ -37,7 +34,6 @@ export default function PostContainer({
         <Text style={styles.body}>
           {body.length > 50 ? body.substring(0, 50) + "..." : body}
         </Text>
-        <Text style={styles.postUsername}>{username}</Text>
       </View>
     </Pressable>
   );

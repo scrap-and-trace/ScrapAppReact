@@ -5,18 +5,21 @@
  * Author: Kieran Gordon <kjg2000@hw.ac.uk>
  */
 
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
 import { StyleSheet } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import CreateScrapbookScreen from "../screens/CreateScrapbookScreen";
 import HomeScreen from "../screens/HomeScreen";
-import PostScreen from "../screens/PostScreen";
-import NotificationsScreen from "../screens/NotificationsScreen";
-import UserAccountScreen from "../screens/UserAccountScreen";
-import OtherUserAccountScreen from "../screens/OtherUserAccountScreen";
-import PostViewScreen from "../screens/PostViewScreen";
-import SearchScreen from "./SearchScreen";
 import ManageAccountScreen from "../screens/ManageAccountScreen";
+import NotificationsScreen from "../screens/NotificationsScreen";
+import OtherUserAccountScreen from "../screens/OtherUserAccountScreen";
+import PostScreen from "../screens/PostScreen";
+import PostViewScreen from "../screens/PostViewScreen";
+import ScrapbookViewScreen from "../screens/ScrapbookViewScreen";
+import SelectScrapbookScreen from "../screens/SelectScrapbookScreen";
+import UserAccountScreen from "../screens/UserAccountScreen";
+import SearchScreen from "./SearchScreen";
 const Tab = createBottomTabNavigator();
 
 export default function NavBar({ route, navigation }) {
@@ -81,6 +84,7 @@ export default function NavBar({ route, navigation }) {
           ),
         }}
       />
+      {/* The following screens are used to pass data between screens. */}
       <Tab.Screen
         name="Post View"
         component={PostViewScreen}
@@ -98,6 +102,27 @@ export default function NavBar({ route, navigation }) {
       <Tab.Screen
         name="Manage Account"
         component={ManageAccountScreen}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+      <Tab.Screen
+        name="Select Scrapbook"
+        component={SelectScrapbookScreen}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+      <Tab.Screen
+        name="Scrapbook View"
+        component={ScrapbookViewScreen}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+      <Tab.Screen
+        name="Create Scrapbook"
+        component={CreateScrapbookScreen}
         options={{
           tabBarButton: () => null,
         }}

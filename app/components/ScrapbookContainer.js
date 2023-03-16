@@ -9,12 +9,8 @@
 
 import React from "react";
 import {
-  StyleSheet,
-  Text,
-  Image,
-  View,
-  Pressable,
-  Dimensions,
+  Dimensions, Image, Pressable, StyleSheet,
+  Text, View
 } from "react-native";
 
 export default function ScrapbookContainer({

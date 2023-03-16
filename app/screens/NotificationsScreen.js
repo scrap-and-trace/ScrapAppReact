@@ -7,10 +7,10 @@
 
 import React from "react";
 import {
-  StyleSheet,
+  RefreshControl,
   SafeAreaView,
   ScrollView,
-  RefreshControl,
+  StyleSheet,
 } from "react-native";
 import NotificationContainer from "../components/NotificationContainer";
 

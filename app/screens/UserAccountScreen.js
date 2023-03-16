@@ -7,25 +7,26 @@
  * Author: Kieran Gordon <kjg2000@hw.ac.uk>
  */
 
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import React from "react";
 import {
-  View,
-  StyleSheet,
   FlatList,
-  Text,
+  Image,
+  LogBox,
+  RefreshControl,
   SafeAreaView,
   ScrollView,
-  RefreshControl,
-  Image,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import ScrapbookContainer from "../components/ScrapbookContainer";
-import AccountDetailContainer from "../components/AccountDetailContainer";
 import AccountsAPI from "../api/AccountsAPI";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import AccountDetailContainer from "../components/AccountDetailContainer";
+import ScrapbookContainer from "../components/ScrapbookContainer";
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function UserAccountScreen() {
+export default function UserAccountScreen({ navigation }) {
   const [first_name, setFirstName] = React.useState("");
   const [last_name, setLastName] = React.useState("");
   const [username, setUsername] = React.useState("");
@@ -34,30 +35,27 @@ export default function UserAccountScreen() {
   const [followedScrapbooks, setFollowedScrapbooks] = React.useState([]);
   const [scrapbooks, setScrapbooks] = React.useState([]);
 
+  const fetchUser = async () => {
+    const user = await AccountsAPI.getAccount();
+    setFirstName(user.first_name);
+    setLastName(user.last_name);
+    setUsername(user.username);
+    setEmail(user.email);
+    setId(user.id);
+    setScrapbooks(user.scrapbooks);
+    setFollowedScrapbooks(user.following);
+  };
+
   React.useEffect(() => {
-    const fetchUser = async () => {
-      const user = await AccountsAPI.getAccount();
-      setFirstName(user.first_name);
-      setLastName(user.last_name);
-      setUsername(user.username);
-      setEmail(user.email);
-      setId(user.id);
-      setScrapbooks(user.scrapbooks);
-      setFollowedScrapbooks(user.following);
-    };
     fetchUser();
   }, []);
 
   const onRefresh = React.useCallback(() => {
-    const fetchUser = async () => {
-      const user = await AccountsAPI.getAccount();
-      setUsername(user.username);
-      setEmail(user.email);
-      setId(user.id);
-      setScrapbooks(user.scrapbooks);
-      console.log(user.following);
-    };
     fetchUser();
+  }, []);
+
+  React.useEffect(() => {
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
   }, []);
 
   return (
@@ -86,7 +84,11 @@ export default function UserAccountScreen() {
                     title={item.title}
                     image={{ uri: "https://picsum.photos/200/300" }}
                     username={item.username}
-                    onPress={() => console.log("Test")}
+                    onPress={() =>
+                      navigation.navigate("Scrapbook View", {
+                        scrapbookId: item.id,
+                      })
+                    }
                   />
                 )}
                 keyExtractor={(item) => item.id}
@@ -99,7 +101,6 @@ export default function UserAccountScreen() {
       </Tab.Screen>
       <Tab.Screen name="Following">
         {() => (
-          // Add a refresh control to the screen to allow the user to refresh the page, avoid VirtualizedList should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead
           <ScrollView
             refreshControl={
               <RefreshControl refreshing={false} onRefresh={onRefresh} />
@@ -113,7 +114,11 @@ export default function UserAccountScreen() {
                     title={item.title}
                     image={{ uri: "https://picsum.photos/200/300" }}
                     username={item.username}
-                    onPress={() => console.log("Test")}
+                    onPress={() =>
+                      navigation.navigate("Scrapbook View", {
+                        scrapbookId: item.id,
+                      })
+                    }
                   />
                 )}
                 keyExtractor={(item) => item.id}
@@ -148,8 +153,6 @@ const styles = StyleSheet.create({
   grid: {
     flex: 1,
     flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
   },
   usernameAndImage: {
     flexDirection: "row",

@@ -1,16 +1,16 @@
+import { useFocusEffect } from "@react-navigation/native";
+import * as Location from "expo-location";
 import React from "react";
 import {
-  View,
-  StyleSheet,
-  Text,
-  Image,
   ActivityIndicator,
   Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import MapView from "react-native-maps";
-import { Marker, Callout } from "react-native-maps";
-import * as Location from "expo-location";
-import PostAPI from "../api/PostAPI";
+import MapView, { Callout, Marker } from "react-native-maps";
+import PageAPI from "../api/PageAPI";
 
 export default function MapScreen({ navigation }) {
   const [posts, setPosts] = React.useState(null);
@@ -19,11 +19,13 @@ export default function MapScreen({ navigation }) {
 
   // Fetch the posts from the API.
   const fetchPosts = () => {
-    PostAPI.getPosts().then((posts) => {
-      setPosts(posts);
+    PageAPI.getPages().then((pages) => {
+      setPosts(pages);
+      console.log(pages);
     });
   };
 
+  // Get the user's location.
   const getLocation = () => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -34,15 +36,22 @@ export default function MapScreen({ navigation }) {
     })();
   };
 
-  // Call fetchPosts when the screen is focused.
+  // Call fetchPosts and getLocation when the component is mounted.
   React.useEffect(() => {
     fetchPosts();
-  }, []);
-
-  // Get the user's location.
-  React.useEffect(() => {
     getLocation();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Do something when the screen is focused
+      fetchPosts();
+      return () => {
+        // Do something when the screen is unfocused
+        // Useful for cleanup functions
+      };
+    }, [])
+  );
 
   // When the user's location is available, set the region.
   React.useEffect(() => {
@@ -59,12 +68,13 @@ export default function MapScreen({ navigation }) {
   }, []);
 
   // If the region is null or isLoading is true, show a loading indicator.
+  // Allow the user to refresh the posts by pulling down on the screen.
   if (region === null || isLoading) {
     return (
       <View style={styles.container}>
         <ActivityIndicator
           size="large"
-          color="#0000ff"
+          color="#e96b37"
           style={styles.loading}
         />
       </View>
@@ -81,15 +91,13 @@ export default function MapScreen({ navigation }) {
         showsMyLocationButton={true}
         followsUserLocation={true}
       >
-        {posts?.map(
-          (
-            post // If posts is null, don't render the markers.
-          ) => (
+        {posts.map((post) =>
+          post.latitude && post.longitude ? ( // Only show markers for posts with a location.
             <Marker
               key={post.id}
               coordinate={{
-                latitude: region.latitude + Math.random() / 100,
-                longitude: region.longitude + Math.random() / 100,
+                latitude: parseFloat(post.latitude), // Convert the latitude and longitude to floats, as they are stored as decimals in the database.
+                longitude: parseFloat(post.longitude), // Convert the latitude and longitude to floats, as they are stored as decimals in the database.
               }}
               title={post.title.substring(0, 20)}
               description={post.body.substring(0, 50)}
@@ -97,7 +105,6 @@ export default function MapScreen({ navigation }) {
               <Callout
                 tooltip
                 onPress={() => {
-                  // Account for the fact that this screen is nested inside a tab navigator, in Search.
                   navigation.navigate("Post View", {
                     id: post.id,
                   });
@@ -117,7 +124,7 @@ export default function MapScreen({ navigation }) {
                 </View>
               </Callout>
             </Marker>
-          )
+          ) : null
         )}
       </MapView>
     </View>

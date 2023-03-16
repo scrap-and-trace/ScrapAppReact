@@ -1,12 +1,12 @@
 import React, { useRef, useState } from "react";
 import {
-  View,
-  Text,
+  Animated,
   Image,
   PanResponder,
-  StyleSheet,
-  Animated,
   Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 export default function CanvasScreen() {

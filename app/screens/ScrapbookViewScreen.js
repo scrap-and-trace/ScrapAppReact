@@ -1,31 +1,26 @@
-/*
- * This is the Home Screen of the App.
- * It displays a list of posts from the Scrap & Trace API.
- * The user should be able to tap a post to view it in more detail by navigating to the ScrapbookViewScreen.
- *
- * Author: Kieran Gordon <kjg2000@hw.ac.uk>
- */
-
 import React from "react";
 import {
-  ActivityIndicator,
+  FlatList,
   RefreshControl,
   SafeAreaView,
   ScrollView,
   StyleSheet,
+  TextInput,
   View,
+  ActivityIndicator,
 } from "react-native";
+import AccountsAPI from "../api/AccountsAPI";
 import PageAPI from "../api/PageAPI";
 import PostContainer from "../components/PostContainer";
-import { useFocusEffect } from "@react-navigation/native";
 
-export default function HomeScreen({ navigation }) {
+// Display the posts from a scrapbook in a flat list. The user can get to this screen by tapping a scrapbook in the AccountViewScreen or OtherAccountViewScreen.
+export default function ScrapbookViewScreen({ navigation, route }) {
   const [posts, setPosts] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
 
-  // When first loading the screen, fetch the posts from the API.
+  // When first loading the screen, fetch the posts from the API. Only show the posts from the scrapbook that was passed in as a parameter.
   React.useEffect(() => {
-    PageAPI.getPages().then((pages) => {
+    PageAPI.getPages(route.params.scrapbookId).then((pages) => {
       setPosts(pages);
     });
   }, []);
@@ -33,24 +28,11 @@ export default function HomeScreen({ navigation }) {
   // When the screen is focused, fetch the posts from the API.
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    PageAPI.getPages().then((pages) => {
+    PageAPI.getPages(route.params.scrapbookId).then((pages) => {
       setPosts(pages);
       setRefreshing(false);
     });
   }, []);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      // Do something when the screen is focused
-      PageAPI.getPages().then((pages) => {
-        setPosts(pages);
-      });
-      return () => {
-        // Do something when the screen is unfocused
-        // Useful for cleanup functions
-      };
-    }, [])
-  );
 
   // Show a loading indicator while the posts are being fetched.
   if (posts.length === 0) {
@@ -82,19 +64,17 @@ export default function HomeScreen({ navigation }) {
               image={{
                 uri:
                   "https://picsum.photos/" +
-                  (400 + Math.floor(Math.random() * 400)) +
-                  "/" +
-                  (400 + Math.floor(Math.random() * 400)),
+                  Math.floor(Math.random() * 1000) +
+                  "/400",
               }}
-              first_name="Kieran"
-              last_name="Gordon"
-              username="kjg2000"
-              // Navigate to post title screen when the post is tapped.
-              onPress={() => navigation.navigate("Post View", { id: post.id })}
+              onPress={() => {
+                navigation.navigate("Post View", {
+                  postId: post.id,
+                });
+              }}
             />
           ))
-          // Sort by most recent post first.
-          .sort((a, b) => b.key - a.key)}
+          .reverse()}
       </ScrollView>
     </SafeAreaView>
   );
@@ -103,12 +83,10 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#fff",
   },
   loading: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
   },
 });

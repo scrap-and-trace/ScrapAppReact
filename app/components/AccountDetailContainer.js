@@ -12,12 +12,12 @@
 
 import * as React from "react";
 import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
   Dimensions,
+  Image,
   Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 export default function AccountDetailContainer({
@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
   usernameAndImage: {
     flexDirection: "row",
     flexWrap: "wrap",
-    // make sure the username and image are on the same line
     alignItems: "center",
     marginBottom: 5,
   },

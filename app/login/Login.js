@@ -35,6 +35,8 @@ export default function LoginScreen(props) {
         style={styles.input}
         placeholder="Email (user@mail.com)"
         onChangeText={setEmail}
+        autoCompleteType="email"
+        keyboardType="email-address"
       ></TextInput>
 
       <TextInput

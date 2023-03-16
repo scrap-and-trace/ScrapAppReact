@@ -39,8 +39,17 @@ export default class AccountsAPI {
     return await AsyncStorage.setItem("token", response.data.token);
   }
 
+  static async logout() {
+    return await AsyncStorage.removeItem("token");
+  }
+
   static async getToken() {
     return await AsyncStorage.getItem("token");
+  }
+
+  static async isLoggedIn() {
+    const token = await this.getToken();
+    return token !== null;
   }
 
   static async getIsAuthenticated() {
@@ -66,34 +75,17 @@ export default class AccountsAPI {
     );
     return response.data;
   }
-
   static async getAccountById(id) {
-    const response = await axios.get(
-      "http://94.173.211.21:8000/api/auth/user/" + id,
-      {
-        headers: {
-          Authorization: `Token ${await this.getToken()}`,
-        },
-      }
-    );
+    const response = await axios.get("http://94.173.211.21:8000/user/" + id, {
+      headers: {
+        Authorization: `Token ${await this.getToken()}`,
+      },
+    });
     return response.data;
   }
-
   static async getFollowing(id) {
     const response = await axios.get(
       "http://94.173.211.21:8000/api/auth/followlist/" + id,
-      {
-        headers: {
-          Authorization: `Token ${await this.getToken()}`,
-        },
-      }
-    );
-    return response.data;
-  }
-
-  static async getScrapbooks(id) {
-    const response = await axios.get(
-      "http://94.173.211.21:8000/user/?id__in=&id=" + id,
       {
         headers: {
           Authorization: `Token ${await this.getToken()}`,

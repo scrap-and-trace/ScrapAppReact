@@ -1,10 +1,14 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { Button } from "react-native-paper";
+import AccountsAPI from "../api/AccountsAPI";
 
 export default function ManageAccountScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text>Manage Account Screen</Text>
+      <Button mode="contained" onPress={() => AccountsAPI.logout()}>
+        Logout
+      </Button>
     </View>
   );
 }

@@ -3,9 +3,9 @@ import {
   Alert,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
-  TextInput,
 } from "react-native";
 import AccountsAPI from "../api/AccountsAPI";
 

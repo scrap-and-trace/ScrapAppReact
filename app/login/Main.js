@@ -1,12 +1,12 @@
 import React from "react";
 import {
+  Alert,
+  Image,
+  ImageBackground,
   StyleSheet,
   Text,
-  View,
-  ImageBackground,
-  Image,
   TouchableOpacity,
-  Alert,
+  View,
 } from "react-native";
 
 export default function Main(props) {
