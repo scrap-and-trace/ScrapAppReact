@@ -11,22 +11,18 @@ export default class AccountsAPI {
     email,
     dob,
     phone,
-    password,
-    following,
-    scrapbooks
+    password
   ) {
     const response = await axios.post(
       "http://94.173.211.21:8000/api/auth/register/",
       {
-        username: username,
-        first_name: first_name,
-        last_name: last_name,
-        email: email,
-        dob: dob,
-        phone: phone,
-        password: password,
-        following: following,
-        scrapbooks: scrapbooks,
+        username,
+        first_name,
+        last_name,
+        email,
+        dob,
+        phone,
+        password,
       }
     );
     return response.data;
@@ -36,8 +32,8 @@ export default class AccountsAPI {
     const response = await axios.post(
       "http://94.173.211.21:8000/api/auth/login/",
       {
-        email: email,
-        password: password,
+        email,
+        password,
       }
     );
     return await AsyncStorage.setItem("token", response.data.token);
@@ -125,8 +121,6 @@ export default class AccountsAPI {
     );
     return response.data.results;
   }
-
-  static async;
 
   static async followUser(id) {
     const response = await axios.post(

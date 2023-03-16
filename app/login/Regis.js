@@ -72,17 +72,23 @@ export default function RegisScreen(props) {
         style={styles.input}
         placeholder="Birthday (YYYY-MM-DD)"
         onChangeText={setDob}
+        autoComplete="birthdate-full"
       ></TextInput>
 
       <TextInput
         style={styles.input}
         placeholder="Email (john@mail.com)"
+        onChangeText={setEmail}
+        autoComplete="email"
+        keyboardType="email-address"
       ></TextInput>
 
       <TextInput
         style={styles.input}
         placeholder="Phone Number (International format)"
         onChangeText={setPhoneNum}
+        autoComplete="tel-country-code"
+        keyboardType="phone-pad"
       ></TextInput>
 
       <TextInput
