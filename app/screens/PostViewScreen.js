@@ -13,6 +13,7 @@ import { Button } from "react-native-paper";
 import AccountsAPI from "../api/AccountsAPI";
 import PageAPI from "../api/PageAPI";
 import CommentsContainer from "../components/CommentsContainer";
+import LikeContainter from "../components/LikeContainer";
 import PostContainer from "../components/PostContainer";
 
 // Allow for navigation to this screen from a nested stack navigator
@@ -104,6 +105,9 @@ export default function PostViewScreen({ route, navigation }) {
           />
         )}
         <SafeAreaView style={styles.container}>
+          <LikeContainter
+
+          ></LikeContainter>
           <TextInput
             style={styles.commentBox}
             placeholder="Add a comment..."
