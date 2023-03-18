@@ -20,6 +20,7 @@ import ScrapbookViewScreen from "../screens/ScrapbookViewScreen";
 import SelectScrapbookScreen from "../screens/SelectScrapbookScreen";
 import UserAccountScreen from "../screens/UserAccountScreen";
 import SearchScreen from "./SearchScreen";
+
 const Tab = createBottomTabNavigator();
 
 export default function NavBar({ route, navigation }) {
@@ -104,6 +105,24 @@ export default function NavBar({ route, navigation }) {
         component={ManageAccountScreen}
         options={{
           tabBarButton: () => null,
+          headerRight: () => (
+            <MaterialIcons
+              name="logout"
+              color="black"
+              size={30}
+              style={{ marginRight: "10%" ,marginLeft: "5%" ,}}
+              onPress={() => AccountsAPI.logout()}
+            />
+          ),
+          headerLeft: () => (
+            <MaterialIcons
+              name="arrow-back"
+              color="black"
+              size={30}
+              style={{ marginLeft: "10%" , marginRight: "5%"}}
+              onPress={() => navigation.navigate("Account")}
+            />
+          ),
         }}
       />
       <Tab.Screen
@@ -133,7 +152,9 @@ export default function NavBar({ route, navigation }) {
 
 const styles = StyleSheet.create({
   tabBar: {
-    tabBarActiveTintColor: "#e96b37",
+    tabBarActiveTintColor: "#693a03",
     tabBarInactiveTintColor: "gray",
+    justifyContent: 'center',
+    alignItems: "center",
   },
 });
