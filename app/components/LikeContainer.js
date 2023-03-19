@@ -19,19 +19,53 @@ import {
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
-export default function LikeContainer({liked, likes, onPress }) {
+const isLiked = true;
+const likes = 10;
+
+/* Comments for kieran
+ * This container should be able to now be pluged into the api and should funcation correctly.
+ * The constant likes is the number of like that the page has
+ * Isliked should be true if the user has already liked the page
+ * isLiked should be populated before the first if under this comment.
+ * if you could implement the API I am more than happy to complete this section cause I really need to contribute to the project xD
+ * We will get a list of users, we need to check if our user is on the list. if they are then set is liked to true, if not then break
+ * take the list of users and the lnegue of that list will be the amount of likes
+ *
+ */
+
+/*
+if(isLiked == true){
+    likes = likes -1;
+}
+*/
+const copyToClipboard = () => {
+  Clipboard.setString("hello world");
+};
+
+export default function LikeContainter({ onPress }) {
+  const [isLiked, setIsLiked] = useState(false);
+
+  const toggleLike = () => {
+    setIsLiked(!isLiked);
+  };
+
   return (
-    <View style={styles.container}>
-      <Pressable onPress={onPress}>
-        {/* Change icon depending on how the like / unlike state from the PostViewScreen */}
-        {liked === 0 ? (
-          <MaterialIcons name="favorite-border" size={30} color="#000" />
-        ) : (
-          <MaterialIcons name="favorite" size={30} color="#000" />
-        )}
-      </Pressable>
-      <Text style={styles.title}>{likes}</Text>
-    </View>
+    <Pressable onPress={toggleLike}>
+      <View style={styles.container}>
+        <View style={styles.usernameAndImage}>
+          <Image
+            source={
+              isLiked
+                ? require("../assets/like_Full.png")
+                : require("../assets/like_Empty.png")
+            }
+            style={styles.image}
+          />
+          <Text style={styles.text}>{isLiked ? likes + 1 : likes}</Text>
+          <Image source={require("../assets/share.png")} style={styles.image} />
+        </View>
+      </View>
+    </Pressable>
   );
 }
 

@@ -1,17 +1,24 @@
 import React from "react";
-import { View, Text, StyleSheet,TextInput,Button,TouchableOpacity,Alert, } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import AccountsAPI from "../api/AccountsAPI";
-import { Avatar } from 'react-native-elements';
-
+import { Avatar } from "react-native-elements";
 
 export default function ManageAccountScreen({ navigation }) {
   const [username, setUsername] = React.useState("");
-  const [email, setEmail] = React.useState(""); 
-  const [FirstName, setFirstName] = React.useState(""); 
-  const [LastName, setLastName] = React.useState(""); 
-  const [Password, setPassword] = React.useState(""); 
-  const [PhoneNum, setPhoneNum] = React.useState(""); 
-  const [Dob, setDob] = React.useState(""); 
+  const [email, setEmail] = React.useState("");
+  const [FirstName, setFirstName] = React.useState("");
+  const [LastName, setLastName] = React.useState("");
+  const [Password, setPassword] = React.useState("");
+  const [PhoneNum, setPhoneNum] = React.useState("");
+  const [Dob, setDob] = React.useState("");
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -37,7 +44,8 @@ export default function ManageAccountScreen({ navigation }) {
       LastName,
       email,
       Dob,
-      PhoneNum,)
+      PhoneNum
+    )
       .then((response) => {
         console.log(response);
         Alert.alert("Information Changed");
@@ -48,9 +56,7 @@ export default function ManageAccountScreen({ navigation }) {
       });
   };
 
-
   return (
-    
     <View style={styles.accountDetails}>
       <View style={styles.avatar}>
         <Avatar
@@ -63,68 +69,68 @@ export default function ManageAccountScreen({ navigation }) {
       </View>
       <Text style={styles.line}></Text>
       <View style={styles.content} />
-        <View style={styles.account}>
-          <View style={styles.row}>
-            <Text style={styles.info}>username</Text>
-            <TextInput
-              style={styles.chginfo}
-              placeholder={username}
-              onChangeText={setUsername}
-            ></TextInput>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.info}>email</Text>
-            <TextInput
-              style={styles.chginfo}
-              placeholder={email}
-              onChangeText={""}
+      <View style={styles.account}>
+        <View style={styles.row}>
+          <Text style={styles.info}>username</Text>
+          <TextInput
+            style={styles.chginfo}
+            placeholder={username}
+            onChangeText={setUsername}
           ></TextInput>
-          </View>
-          <View style={styles.row}>
-        <Text style={styles.info}>FirstName</Text>
-        <TextInput
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.info}>email</Text>
+          <TextInput
+            style={styles.chginfo}
+            placeholder={email}
+            onChangeText={""}
+          ></TextInput>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.info}>FirstName</Text>
+          <TextInput
             style={styles.chginfo}
             placeholder={FirstName}
             onChangeText={""}
-        ></TextInput>
+          ></TextInput>
         </View>
         <View style={styles.row}>
-        <Text style={styles.info}>LastName</Text>
-        <TextInput
+          <Text style={styles.info}>LastName</Text>
+          <TextInput
             style={styles.chginfo}
             placeholder={LastName}
             onChangeText={""}
-        ></TextInput>
+          ></TextInput>
         </View>
         <View style={styles.row}>
-        <Text style={styles.info}>PhoneNum</Text>
-        <TextInput
+          <Text style={styles.info}>PhoneNum</Text>
+          <TextInput
             style={styles.chginfo}
             placeholder={PhoneNum}
             onChangeText={""}
-        ></TextInput>
+          ></TextInput>
         </View>
         <View style={styles.row}>
-        <Text style={styles.info}>Birthday</Text>
-        <TextInput
+          <Text style={styles.info}>Birthday</Text>
+          <TextInput
             style={styles.chginfo}
             placeholder={Dob}
             onChangeText={""}
-        ></TextInput>
+          ></TextInput>
         </View>
         <View style={styles.row}>
-        <Text style={styles.info}>Password</Text>
-        <TextInput
+          <Text style={styles.info}>Password</Text>
+          <TextInput
             style={styles.chginfo}
             placeholder={Password}
             onChangeText={""}
-        ></TextInput>
+          ></TextInput>
         </View>
       </View>
-      
+
       <View style={styles.buttonPositon}>
-        <TouchableOpacity style={styles.button} onPress= {changeInfo} >
-            <Text style={styles.buttonText}>Edit</Text>
+        <TouchableOpacity style={styles.button} onPress={changeInfo}>
+          <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -147,21 +153,21 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   account: {
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     marginLeft: "5%",
   },
   buttonPositon: {
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   avatar: {
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     alignItems: "center",
     marginBottom: "7%",
     marginTop: "5%",
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   info: {
     color: "#864904",
@@ -169,16 +175,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: "4%",
     textAlign: "left",
-    width:110,
+    width: 110,
   },
   chginfo: {
     color: "#000000",
     fontSize: 15,
-    width:150,
+    width: 150,
     marginTop: "4%",
     marginLeft: "10%",
     textAlign: "center",
-    selectionColor: "black"
+    selectionColor: "black",
   },
   button: {
     marginTop: "20%",
