@@ -18,7 +18,7 @@ import {
   View,
 } from "react-native";
 
-
+const isLiked = true;
 const likes = 10;
 
 /* Comments for kieran
@@ -32,10 +32,14 @@ const likes = 10;
  * 
 */
 
-
+/*
 if(isLiked == true){
     likes = likes -1;
 }
+*/
+const copyToClipboard = () => {
+  Clipboard.setString('hello world');
+};
 
 
 export default function LikeContainter({
@@ -53,8 +57,6 @@ export default function LikeContainter({
 
     return (
     <Pressable onPress={toggleLike} >
-        
-      
       <View style={styles.container}>
         <View style={styles.usernameAndImage}>
           
@@ -64,6 +66,7 @@ export default function LikeContainter({
                 {isLiked ? likes+1  : likes}
             
           </Text>
+          <Image source={require('../assets/share.png')} style ={styles.image} />
         </View>
       </View>
     </Pressable>
