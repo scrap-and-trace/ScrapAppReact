@@ -129,4 +129,22 @@ export default class AccountsAPI {
     );
     return response.data;
   }
+
+  static async changeInfo(
+    id,
+    username,
+    first_name,
+    last_name,
+    email,
+    dob,
+    phone,
+  ) {
+    const response = await axios.put(
+      "http://94.173.211.21:8000/user/"+ id,
+      {
+        username : user.username,
+      }
+    );
+    return response.data;
+  }
 }
