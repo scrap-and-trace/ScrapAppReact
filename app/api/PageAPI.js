@@ -48,16 +48,4 @@ export default class PageAPI {
     });
     return response.data;
   }
-
-  static async createScrapbook(title, author, friends_only) {
-    const response = await axios.post(
-      "http://94.173.211.21:8000/api/auth/scrapbooks/",
-      {
-        title,
-        author,
-        friends_only,
-      }
-    );
-    return response.data;
-  }
 }

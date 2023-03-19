@@ -5,9 +5,14 @@ import UserSearchScreen from "../screens/UserSearchScreen";
 
 const Tab = createMaterialTopTabNavigator();
 
+// Change colour of the indicator on the tab navigator to orange
 export default function SearchScreen({ route, navigation }) {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        indicatorStyle: { backgroundColor: "#e96b37" },
+      }}
+    >
       <Tab.Screen name="Map">
         {() => <MapScreen navigation={navigation} route={route} />}
       </Tab.Screen>

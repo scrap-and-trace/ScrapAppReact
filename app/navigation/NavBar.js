@@ -6,6 +6,7 @@
  */
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { StyleSheet } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -20,14 +21,79 @@ import ScrapbookViewScreen from "../screens/ScrapbookViewScreen";
 import SelectScrapbookScreen from "../screens/SelectScrapbookScreen";
 import UserAccountScreen from "../screens/UserAccountScreen";
 import SearchScreen from "./SearchScreen";
+
+const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-export default function NavBar({ route, navigation }) {
+function HomeStack() {
   return (
-    <Tab.Navigator screenOptions={styles.tabBar}>
+    <Stack.Navigator>
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Post View" component={PostViewScreen} />
+      <Stack.Screen name="Scrapbook View" component={ScrapbookViewScreen} />
+      <Stack.Screen name="User Account" component={OtherUserAccountScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function SearchStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Search" component={SearchScreen} />
+      <Stack.Screen name="Post View" component={PostViewScreen} />
+      <Stack.Screen name="User Account" component={OtherUserAccountScreen} />
+      <Stack.Screen name="Scrapbook View" component={ScrapbookViewScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function PostStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Upload an Image" component={PostScreen} />
+      <Stack.Screen name="Select Scrapbook" component={SelectScrapbookScreen} />
+      <Stack.Screen name="Create Scrapbook" component={CreateScrapbookScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function AccountStack({ navigation }) {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Account"
+        component={UserAccountScreen}
+        options={{
+          // add material icon button to header to allow user to modify account details
+          headerRight: () => (
+            <MaterialIcons
+              name="account-circle"
+              color="black"
+              size={30}
+              onPress={() => navigation.navigate("Manage Account")}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen name="Manage Account" component={ManageAccountScreen} />
+      <Stack.Screen name="Scrapbook View" component={ScrapbookViewScreen} />
+    </Stack.Navigator>
+  );
+}
+
+export default function NavBar() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        tabBarActiveTintColor: "#e96b37",
+        tabBarInactiveTintColor: "gray",
+        headerShown: false,
+      }}
+    >
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeStack}
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (
@@ -37,7 +103,7 @@ export default function NavBar({ route, navigation }) {
       />
       <Tab.Screen
         name="Search"
-        component={SearchScreen}
+        component={SearchStack}
         options={{
           tabBarLabel: "Search",
           tabBarIcon: ({ color, size }) => (
@@ -46,10 +112,10 @@ export default function NavBar({ route, navigation }) {
         }}
       />
       <Tab.Screen
-        name="Upload an Image"
-        component={PostScreen}
+        name="Post"
+        component={PostStack}
         options={{
-          tabBarLabel: "New Post",
+          tabBarLabel: "Post",
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="add-a-photo" color={color} size={size} />
           ),
@@ -63,77 +129,20 @@ export default function NavBar({ route, navigation }) {
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="notifications" color={color} size={size} />
           ),
+          headerShown: true,
         }}
       />
       <Tab.Screen
         name="Account"
-        component={UserAccountScreen}
+        component={AccountStack}
         options={{
           tabBarLabel: "Account",
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="account-circle" color={color} size={size} />
+            <MaterialIcons name="person" color={color} size={size} />
           ),
-          headerRight: () => (
-            <MaterialIcons
-              name="account-circle"
-              color="black"
-              size={30}
-              style={{ marginRight: 10 }}
-              onPress={() => navigation.navigate("Manage Account")}
-            />
-          ),
-        }}
-      />
-      {/* The following screens are used to pass data between screens. */}
-      <Tab.Screen
-        name="Post View"
-        component={PostViewScreen}
-        options={{
-          tabBarButton: () => null,
-        }}
-      />
-      <Tab.Screen
-        name="User Account"
-        component={OtherUserAccountScreen}
-        options={{
-          tabBarButton: () => null,
-        }}
-      />
-      <Tab.Screen
-        name="Manage Account"
-        component={ManageAccountScreen}
-        options={{
-          tabBarButton: () => null,
-        }}
-      />
-      <Tab.Screen
-        name="Select Scrapbook"
-        component={SelectScrapbookScreen}
-        options={{
-          tabBarButton: () => null,
-        }}
-      />
-      <Tab.Screen
-        name="Scrapbook View"
-        component={ScrapbookViewScreen}
-        options={{
-          tabBarButton: () => null,
-        }}
-      />
-      <Tab.Screen
-        name="Create Scrapbook"
-        component={CreateScrapbookScreen}
-        options={{
-          tabBarButton: () => null,
+          headerShown: false,
         }}
       />
     </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  tabBar: {
-    tabBarActiveTintColor: "#e96b37",
-    tabBarInactiveTintColor: "gray",
-  },
-});

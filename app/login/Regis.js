@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import AccountsAPI from "../api/AccountsAPI";
+import PhoneInput from "react-native-phone-input";
 
 export default function RegisScreen(props) {
   const [FirstName, setFirstName] = useState("");
@@ -83,13 +84,14 @@ export default function RegisScreen(props) {
         keyboardType="email-address"
       ></TextInput>
 
-      <TextInput
+      <PhoneInput
         style={styles.input}
-        placeholder="Phone Number (International format)"
         onChangeText={setPhoneNum}
-        autoComplete="tel-country-code"
+        autoComplete="tel"
         keyboardType="phone-pad"
-      ></TextInput>
+        initialCountry="gb"
+        textProps={{ placeholder: "Phone Number" }}
+      ></PhoneInput>
 
       <TextInput
         style={styles.input}
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    color: "#975305",
+    color: "#e96b37",
     fontWeight: "bold",
     fontSize: 30,
     marginBottom: "4%",
@@ -131,18 +133,18 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   subtitle: {
-    color: "#975305",
+    color: "#e96b37",
     fontSize: 15,
     marginBottom: "14%",
   },
   info1: {
-    color: "#975305",
+    color: "#e96b37",
     paddingRight: 250,
     fontWeight: "bold",
     fontSize: 20,
   },
   info2: {
-    color: "#975305",
+    color: "#e96b37",
     paddingRight: 210,
     fontWeight: "bold",
     fontSize: 20,
@@ -153,7 +155,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: 300,
     padding: 10,
-    borderColor: "#975305",
+    borderColor: "#e96b37",
     borderRadius: 30,
   },
   button: {
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 50,
     alignItems: "center",
-    backgroundColor: "#975305",
+    backgroundColor: "#e96b37",
     borderRadius: 30,
   },
   buttonText: {

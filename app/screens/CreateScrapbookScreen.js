@@ -1,20 +1,27 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Dimensions,
+  ToastAndroid,
+} from "react-native";
 import { Button } from "react-native-paper";
 import AccountsAPI from "../api/AccountsAPI";
 import Checkbox from "expo-checkbox";
-import PageAPI from "../api/PageAPI";
+import ScrapbookAPI from "../api/ScrapbookAPI";
 
 export default function CreateScrapbookScreen({ navigation }) {
   const [title, setTitle] = React.useState("");
+  const [author, setAuthor] = React.useState("");
   const [friendsOnly, setFriendsOnly] = React.useState(false);
-  const [id, setId] = React.useState("");
   const [toggleCheckBox, setToggleCheckBox] = React.useState(false);
 
   // Fetch the user's account details from the API.
   const fetchAccountDetails = React.useCallback(() => {
-    AccountsAPI.getAccount().then((account) => {
-      setId(account.id);
+    AccountsAPI.getAccount().then((details) => {
+      setAuthor(details.id);
     });
   }, []);
 
@@ -25,8 +32,10 @@ export default function CreateScrapbookScreen({ navigation }) {
 
   // When the user presses the "Create" button, create the scrapbook.
   const onCreate = () => {
-    PageAPI.createScrapbook(id, title, friendsOnly).then(() => {
-      navigation.navigate("Home");
+    ScrapbookAPI.createScrapbook(title, author, friendsOnly).then(() => {
+      // Create a toast to confirm the scrapbook was created.
+      ToastAndroid.show("Scrapbook was created!", ToastAndroid.SHORT);
+      navigation.goBack();
     });
   };
 
@@ -40,7 +49,7 @@ export default function CreateScrapbookScreen({ navigation }) {
         onValueChange={(newValue) => setToggleCheckBox(newValue)}
       />
       <Text>Friends only</Text>
-      <Button mode="contained" onPress={onCreate}>
+      <Button mode="contained" onPress={onCreate} style={styles.button}>
         Create
       </Button>
     </View>
@@ -63,5 +72,13 @@ const styles = StyleSheet.create({
   label: {
     width: "80%",
     textAlign: "left",
+  },
+  button: {
+    margin: 10,
+    padding: 10,
+    backgroundColor: "#e96b37",
+    position: "absolute",
+    bottom: 0,
+    width: Dimensions.get("window").width - 20,
   },
 });

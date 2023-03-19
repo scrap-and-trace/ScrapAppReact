@@ -1,35 +1,39 @@
 import axios from "axios";
 
-export default class LieksAPI {
-  constructor(id, title, likes, scrapbook, ) {
-    this.id = id;
-    this.title = title;
-    this.body = body;
-    this.scrapbook = scrapbook;
-    this.longitude = longitude;
-    this.latitude = latitude;
+export default class LikesAPI {
+  static async getLikesByUser(userId) {
+    const response = await axios.get(
+      `http://94.173.211.21:8000/api/auth/userlikes/${userId}`
+    );
+    return response.data.results[0];
   }
 
-  static async getLikes() {
-    const response = await axios.get("http://94.173.211.21:8000/page/");
-    return response.data.results;
+  static async getLikesByPage(pageId) {
+    // Count the number of results in the array
+    const response = await axios.get(
+      `http://94.173.211.21:8000/api/auth/likes/${pageId}`
+    );
+    return response.data.results.length;
   }
 
-
-  static async sendLike(authorid, page, body) {
-    const response = await axios.post("http://94.173.211.21:8000/comment/", {
-      pageID,
-      UserID,
-
-    });
+  static async createLike(userId, pageId) {
+    const response = await axios.post(
+      `http://94.173.211.21:8000/api/auth/likes/${pageId}`,
+      {
+        liker: userId,
+        liked_page: pageId,
+      }
+    );
     return response.data;
   }
 
-  static async sendUnlike(authorid, page, body) {
-    const response = await axios.post("http://94.173.211.21:8000/comment/", {
-      PageID,
-      UserID,
-    });
+  static async deleteLike(pageId) {
+    const response = await axios.delete(
+      `http://94.173.211.21:8000/api/auth/deletelike/${pageId}`,
+      {
+        pageId,
+      }
+    );
     return response.data;
   }
 }

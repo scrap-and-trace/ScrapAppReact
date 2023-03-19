@@ -6,8 +6,6 @@ import NavBar from "./app/navigation/NavBar";
 import Login from "./app/login/Login";
 import Main from "./app/login/Main";
 import Regis from "./app/login/Regis";
-import CanvasScreen from "./app/screens/CanvasScreen";
-import PostViewScreen from "./app/screens/PostViewScreen";
 import AccountsAPI from "./app/api/AccountsAPI";
 
 const { Navigator, Screen } = createStackNavigator();
@@ -37,8 +35,6 @@ const App = () => {
 
         {/* Main app view */}
         <Screen name="NavBar" component={NavBar} />
-        <Screen name="CanvasScreen" component={CanvasScreen} />
-        <Screen name="PostViewScreen" component={PostViewScreen} />
       </Navigator>
     </NavigationContainer>
   );

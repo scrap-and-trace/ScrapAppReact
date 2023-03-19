@@ -21,8 +21,10 @@ import {
   Text,
   View,
 } from "react-native";
+import { Button } from "react-native-paper";
 import AccountsAPI from "../api/AccountsAPI";
 import AccountDetailContainer from "../components/AccountDetailContainer";
+import LoadingContainer from "../components/LoadingContainer";
 import ScrapbookContainer from "../components/ScrapbookContainer";
 
 const Tab = createMaterialTopTabNavigator();
@@ -46,10 +48,6 @@ export default function OtherUserAccountScreen({ route, navigation }) {
   };
 
   React.useEffect(() => {
-    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
-  }, []);
-
-  React.useEffect(() => {
     fetchUser();
   }, []);
 
@@ -63,8 +61,19 @@ export default function OtherUserAccountScreen({ route, navigation }) {
     fetchUser();
   }, []);
 
+  // While the data is being fetched, display a loading message.
+  if (!dataUpdated) {
+    return <LoadingContainer />;
+  }
+
   return (
-    <Tab.Navigator dataUpdated={dataUpdated} key={dataUpdated}>
+    <Tab.Navigator
+      dataUpdated={dataUpdated}
+      key={dataUpdated}
+      tabBarOptions={{
+        indicatorStyle: { backgroundColor: "#e96b37" },
+      }}
+    >
       <Tab.Screen name="Scrapbooks">
         {() => (
           <SafeAreaView style={styles.container}>
@@ -86,7 +95,6 @@ export default function OtherUserAccountScreen({ route, navigation }) {
                   renderItem={({ item }) => (
                     <ScrapbookContainer
                       title={item.title}
-                      image={{ uri: "https://picsum.photos/200/300" }}
                       username={item.username}
                       onPress={() =>
                         navigation.navigate("Scrapbook View", {
@@ -117,7 +125,6 @@ export default function OtherUserAccountScreen({ route, navigation }) {
                 renderItem={({ item }) => (
                   <ScrapbookContainer
                     title={item.title}
-                    image={{ uri: "https://picsum.photos/200/300" }}
                     username={item.username}
                     onPress={() =>
                       navigation.navigate("Scrapbook View", {
@@ -161,6 +168,11 @@ const styles = StyleSheet.create({
   },
   usernameAndImage: {
     flexDirection: "row",
+    alignItems: "center",
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
   },
 });

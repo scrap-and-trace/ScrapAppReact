@@ -8,6 +8,7 @@
  */
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { useFocusEffect } from "@react-navigation/native";
 import React from "react";
 import {
   FlatList,
@@ -23,6 +24,7 @@ import {
 import AccountsAPI from "../api/AccountsAPI";
 import AccountDetailContainer from "../components/AccountDetailContainer";
 import ScrapbookContainer from "../components/ScrapbookContainer";
+import LoadingContainer from "../components/LoadingContainer";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -46,6 +48,12 @@ export default function UserAccountScreen({ navigation }) {
     setFollowedScrapbooks(user.following);
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUser();
+    }, [])
+  );
+
   React.useEffect(() => {
     fetchUser();
   }, []);
@@ -58,9 +66,18 @@ export default function UserAccountScreen({ navigation }) {
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
   }, []);
 
+  // While the data is being fetched, display a loading indicator
+  if (!scrapbooks) {
+    return <LoadingContainer />;
+  }
+
   return (
     // Add a tab navigator to the screen to switch between the user's scrapbooks and the scrapbooks they follow
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        indicatorStyle: { backgroundColor: "#e96b37" },
+      }}
+    >
       <Tab.Screen name="Scrapbooks">
         {() => (
           // Add a refresh control to the screen to allow the user to refresh the page
@@ -82,7 +99,6 @@ export default function UserAccountScreen({ navigation }) {
                 renderItem={({ item }) => (
                   <ScrapbookContainer
                     title={item.title}
-                    image={{ uri: "https://picsum.photos/200/300" }}
                     username={item.username}
                     onPress={() =>
                       navigation.navigate("Scrapbook View", {
@@ -112,7 +128,6 @@ export default function UserAccountScreen({ navigation }) {
                 renderItem={({ item }) => (
                   <ScrapbookContainer
                     title={item.title}
-                    image={{ uri: "https://picsum.photos/200/300" }}
                     username={item.username}
                     onPress={() =>
                       navigation.navigate("Scrapbook View", {

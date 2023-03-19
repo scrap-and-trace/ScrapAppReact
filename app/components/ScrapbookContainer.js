@@ -9,20 +9,18 @@
 
 import React from "react";
 import {
-  Dimensions, Image, Pressable, StyleSheet,
-  Text, View
+  Dimensions,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
-export default function ScrapbookContainer({
-  title,
-  image,
-  username,
-  onPress,
-}) {
+export default function ScrapbookContainer({ title, username, onPress }) {
   return (
     <Pressable onPress={onPress}>
       <View style={styles.container}>
-        <Image style={styles.image} source={image} />
         <Text style={styles.name}>{title}</Text>
         <Text style={styles.author}>By {username}</Text>
       </View>
