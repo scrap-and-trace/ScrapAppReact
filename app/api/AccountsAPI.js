@@ -153,6 +153,7 @@ export default class AccountsAPI {
     return response.data;
   }
 
+
   static async changeFirstName(id, first_name) {
     const response = await axios.put(
       "http://94.173.211.21:8000/user/" + id + "/",
@@ -178,9 +179,41 @@ export default class AccountsAPI {
         headers: {
           Authorization: `Token ${await this.getToken()}`,
         },
+      }
+    );
+    return response.data;
+  }
 
-      })
-    }
+  static async changePhoneNum(id, phone) {
+    const response = await axios.put(
+      "http://94.173.211.21:8000/user/" + id + "/",
+      {
+        phone: phone,
+      },
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
+    );
+    return response.data;
+  }
+
+  static async changeBirthday(id, dob) {
+    const response = await axios.put(
+      "http://94.173.211.21:8000/user/" + id + "/",
+      {
+        dob: dob,
+      },
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
+    );
+    return response.data;
+  }
+
 
   static async getLikesByUser(userId) {
     const response = await axios.get(
