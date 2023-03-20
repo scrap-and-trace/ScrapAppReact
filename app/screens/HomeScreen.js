@@ -71,7 +71,10 @@ export default function HomeScreen({ navigation }) {
               key={post.id}
               title={post.title}
               body={post.body}
-              image={{ uri: "https://i.imgur.com/JGlBzqE.jpeg" }}
+              // If image is null, show the /assets/default_img.png image.
+              image={
+                post.image ? post.image : require("../assets/default_img.png")
+              }
               // Navigate to post title screen when the post is tapped.
               onPress={() => navigation.navigate("Post View", { id: post.id })}
             />

@@ -103,7 +103,9 @@ export default function PostViewScreen({ route, navigation }) {
           <PostContainer
             title={post.title}
             body={post.body}
-            image={post.image}
+            image={
+              post.image ? post.image : require("../assets/default_img.png")
+            }
           />
         )}
         <SafeAreaView style={styles.container}>
@@ -121,6 +123,19 @@ export default function PostViewScreen({ route, navigation }) {
               setComment("");
             }}
           />
+          <Button
+            icon={"plus"}
+            style={styles.button}
+            mode="contained"
+            onPress={() => {
+              PageAPI.createComment(id, route.params.id, comment);
+              ToastAndroid.show("Comment Added", ToastAndroid.SHORT);
+              fetchDetails();
+              setComment("");
+            }}
+          >
+            Add Comment
+          </Button>
           {post &&
             comments
               .map((comment) => (

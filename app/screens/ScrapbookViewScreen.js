@@ -83,7 +83,9 @@ export default function ScrapbookViewScreen({ navigation, route }) {
             <PostContainer
               title={item.title}
               body={item.body}
-              image={item.image}
+              image={
+                item.image ? item.image : require("../assets/default_img.png")
+              }
             />
           )}
           keyExtractor={(item) => item.id.toString()}

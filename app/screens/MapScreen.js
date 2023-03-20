@@ -103,15 +103,20 @@ export default function MapScreen({ navigation }) {
                       <WebView
                         style={styles.image}
                         source={{
-                          uri: "https://picsum.photos/200/200",
+                          uri: post.image
+                            ? post.image
+                            : require("../assets/placeholder.png"),
                         }}
                       />
                     ) : (
                       <Image
                         style={styles.image}
-                        source={{
-                          uri: "https://picsum.photos/200/200",
-                        }}
+                        // If the post has an image, use that, else use a placeholder image.
+                        source={
+                          post.image
+                            ? { uri: post.image }
+                            : require("../assets/placeholder.png")
+                        }
                       />
                     )}
                   </View>
@@ -186,7 +191,6 @@ const styles = StyleSheet.create({
   image: {
     width: 200,
     height: 200,
-    borderRadius: 50,
     alignSelf: "center",
     resizeMode: "cover",
     padding: 10,
