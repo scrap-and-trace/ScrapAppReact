@@ -20,10 +20,18 @@ export default function ManageAccountScreen({ navigation }) {
   const [PhoneNum, setPhoneNum] = React.useState("");
   const [Dob, setDob] = React.useState("");
 
+  const [username1, setUsername1] = React.useState("");
+  const [email1, setEmail1] = React.useState("");
+  const [FirstName1, setFirstName1] = React.useState("");
+  const [LastName1, setLastName1] = React.useState("");
+  const [Password1, setPassword1] = React.useState("");
+  const [PhoneNum1, setPhoneNum1] = React.useState("");
+  const [Dob1, setDob1] = React.useState("");
+  const [id1, setId1] = React.useState("");
+
   React.useEffect(() => {
     const fetchUser = async () => {
       const user = await AccountsAPI.getAccount();
-      console.log(user);
       setUsername(user.username);
       setEmail(user.email);
       setFirstName(user.first_name);
@@ -31,27 +39,18 @@ export default function ManageAccountScreen({ navigation }) {
       setPassword(user.Password);
       setPhoneNum(user.phone);
       setDob(user.dob);
+      setId1(user.id);
+      console.log(user.id);
     };
     fetchUser();
   }, []);
 
-  const changeInfo = () => {
-    const user = AccountsAPI.getAccount();
-    AccountsAPI.changeInfo(
-      user,
-      username,
-      FirstName,
-      LastName,
-      email,
-      Dob,
-      PhoneNum
-    )
+  const changeInfo = async () => {
+    AccountsAPI.changeInfo(id1, username1)
       .then((response) => {
-        console.log(response);
         Alert.alert("Information Changed");
       })
       .catch((error) => {
-        console.log(error);
         Alert.alert("Change Failed");
       });
   };
@@ -75,7 +74,7 @@ export default function ManageAccountScreen({ navigation }) {
           <TextInput
             style={styles.chginfo}
             placeholder={username}
-            onChangeText={setUsername}
+            onChangeText={setUsername1}
           ></TextInput>
         </View>
         <View style={styles.row}>
