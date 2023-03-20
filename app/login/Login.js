@@ -16,13 +16,13 @@ export default function LoginScreen(props) {
   const LoginAcc = () => {
     AccountsAPI.login(Email, Password)
       .then((response) => {
-        props.navigation.navigate("NavBar");
+        if (response.status == 200) {
+          console.log("Login successful");
+        } else {
+          console.log("Login failed");
+        }
       })
       .catch((error) => {
-        Alert.alert(
-          "Login Failed",
-          "Please check your email and password and try again."
-        );
         console.log(error);
       });
   };

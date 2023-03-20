@@ -89,8 +89,8 @@ function AccountStack({ navigation }) {
               style={{ marginRight: "0%", marginLeft: "5%" }}
               onPress={() =>
                 AccountsAPI.logout().then(() => {
-                  Alert.alert("You have logged out！");
-                  navigation.navigate("Login");
+                  Alert.alert("Logged out successfully");
+                  navigation.navigate("Home");
                 })
               }
             />

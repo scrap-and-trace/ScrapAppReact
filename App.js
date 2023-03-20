@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, addListener } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import NavBar from "./app/navigation/NavBar";
@@ -10,39 +10,54 @@ import AccountsAPI from "./app/api/AccountsAPI";
 
 const { Navigator, Screen } = createStackNavigator();
 
-const isAuthenicated = () => {
-  AccountsAPI.getIsAuthenticated()
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+export default function App() {
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
-const App = () => {
+  // Check if the user is logged in when the app is first loaded.
+  React.useEffect(() => {
+    AccountsAPI.isLoggedIn().then((loggedIn) => {
+      setLoggedIn(loggedIn);
+    });
+  }, []);
+
+  // Constantly check if the user is logged in.
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      AccountsAPI.isLoggedIn().then((loggedIn) => {
+        setLoggedIn(loggedIn);
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // If the user is logged in, show the main app. Otherwise, show the login screen.
+  if (loggedIn) {
+    return (
+      <NavigationContainer>
+        <Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Screen name="NavBar" component={NavBar} />
+        </Navigator>
+      </NavigationContainer>
+    );
+  }
+
+  // If the user is not logged in, show the login screen.
   return (
     <NavigationContainer>
       <Navigator
-        headerMode="none"
-        initialRouteName="Main"
-        style={styles.container}
+        screenOptions={{
+          headerShown: false,
+          initialRouteName: "Main",
+        }}
       >
-        {/* Keep registration, login and main screen in a separate view so that user's cant access the main app without an account */}
         <Screen name="Main" component={Main} />
         <Screen name="Login" component={Login} />
         <Screen name="Regis" component={Regis} />
-
-        {/* Main app view */}
-        <Screen name="NavBar" component={NavBar} />
       </Navigator>
     </NavigationContainer>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-export default App;
+}
