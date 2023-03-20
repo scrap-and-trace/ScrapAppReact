@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
   },
-
   usernameAndImage: {
     flexDirection: "row",
     flexWrap: "wrap",

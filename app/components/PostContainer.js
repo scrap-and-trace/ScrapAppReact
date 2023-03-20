@@ -12,7 +12,12 @@
 
 import * as React from "react";
 import {
-  Dimensions, Image, Pressable, StyleSheet, Text, View
+  Dimensions,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 export default function PostContainer({

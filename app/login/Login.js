@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    color: "#975305",
+    color: "#e96b37",
     fontWeight: "bold",
     fontSize: 30,
     marginBottom: 70,
@@ -73,13 +73,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   info1: {
-    color: "#975305",
+    color: "#e96b37",
     paddingRight: 250,
     fontWeight: "bold",
     fontSize: 20,
   },
   info2: {
-    color: "#975305",
+    color: "#e96b37",
     paddingRight: 210,
     fontWeight: "bold",
     fontSize: 20,
@@ -91,14 +91,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 30,
     padding: 10,
-    borderColor: "#975305",
+    borderColor: "#e96b37",
   },
   button: {
     marginTop: 50,
     width: 90,
     height: 40,
     alignItems: "center",
-    backgroundColor: "#975305",
+    backgroundColor: "#e96b37",
     borderRadius: 30,
   },
   buttonText: {

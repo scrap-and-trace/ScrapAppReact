@@ -2,15 +2,17 @@ import { useFocusEffect } from "@react-navigation/native";
 import * as Location from "expo-location";
 import React from "react";
 import {
-  ActivityIndicator,
   Dimensions,
   Image,
   StyleSheet,
   Text,
   View,
+  Pressable,
 } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import PageAPI from "../api/PageAPI";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import LoadingContainer from "../components/LoadingContainer";
 
 export default function MapScreen({ navigation }) {
   const [posts, setPosts] = React.useState(null);
@@ -42,17 +44,6 @@ export default function MapScreen({ navigation }) {
     getLocation();
   }, []);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      // Do something when the screen is focused
-      fetchPosts();
-      return () => {
-        // Do something when the screen is unfocused
-        // Useful for cleanup functions
-      };
-    }, [])
-  );
-
   // When the user's location is available, set the region.
   React.useEffect(() => {
     (async () => {
@@ -70,15 +61,7 @@ export default function MapScreen({ navigation }) {
   // If the region is null or isLoading is true, show a loading indicator.
   // Allow the user to refresh the posts by pulling down on the screen.
   if (region === null || isLoading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator
-          size="large"
-          color="#e96b37"
-          style={styles.loading}
-        />
-      </View>
-    );
+    return <LoadingContainer />;
   }
 
   // Return a tab navigator with the map and a screen to search for users.
@@ -111,15 +94,15 @@ export default function MapScreen({ navigation }) {
                 }}
               >
                 <View style={styles.bubble}>
-                  <Image
-                    source={{ uri: post.image }}
-                    style={styles.bubbleImage}
-                  />
                   <Text style={styles.bubbleTitle}>
                     {post.title.substring(0, 20)}
                   </Text>
                   <Text style={styles.bubbleDescription}>
                     {post.body.substring(0, 50)}
+                  </Text>
+                  <Text style={styles.bubbleDate}>
+                    {/* Convert date created to user's locale, without time */}
+                    {new Date(post.date_created).toLocaleDateString()}
                   </Text>
                 </View>
               </Callout>
@@ -127,6 +110,20 @@ export default function MapScreen({ navigation }) {
           ) : null
         )}
       </MapView>
+      {/* Add button at bottom left of the screen to allow users to refresh the view */}
+      <Pressable
+        style={({ pressed }) => [
+          {
+            backgroundColor: pressed ? "#e96b37" : "#fff",
+          },
+          styles.refreshButton,
+        ]}
+        onPress={() => {
+          fetchPosts();
+        }}
+      >
+        <MaterialIcons name="refresh" size={30} color="#e96b37" />
+      </Pressable>
     </View>
   );
 }
@@ -153,12 +150,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center",
   },
-  bubbleImage: {
-    width: Dimensions.get("window").width * 0.8,
+  bubbleDate: {
+    fontSize: 12,
+    textAlign: "center",
   },
-  loading: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  refreshButton: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    margin: 16,
+    borderRadius: 50,
   },
 });

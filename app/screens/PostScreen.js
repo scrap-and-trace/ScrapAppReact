@@ -29,6 +29,7 @@ export default function PostScreen({ navigation }) {
   const [hasLocationPermission, setHasLocationPermission] =
     React.useState(null);
   const [image, setImage] = React.useState(null);
+  const [imgBase64, setImgBase64] = React.useState(null);
   const [title, setTitle] = React.useState("");
   const [body, setBody] = React.useState("");
   const [username, setUsername] = React.useState("");
@@ -104,18 +105,19 @@ export default function PostScreen({ navigation }) {
         allowsEditing: true,
         aspect: [1, 1],
         quality: 1,
+        base64: true,
       });
 
       if (!result.canceled) {
         for (let i = 0; i < result.assets.length; i++) {
           setImage(result.assets[i].uri);
+          setImgBase64(result.assets[i].base64);
         }
       }
     }
-    console.log(image);
   };
 
-  // Select a photo from the gallery.
+  // Select a photo from the gallery. Allow for base64 encoding.
   const pickImage = async () => {
     if (hasGalleryPermission === null) {
       alert("Requesting gallery permissions");
@@ -129,15 +131,16 @@ export default function PostScreen({ navigation }) {
         allowsEditing: true,
         aspect: [1, 1],
         quality: 1,
+        base64: true,
       });
 
       if (!result.canceled) {
         for (let i = 0; i < result.assets.length; i++) {
           setImage(result.assets[i].uri);
+          setImgBase64(result.assets[i].base64);
         }
       }
     }
-    console.log(image);
   };
 
   // Select the scrapbook to upload the post to.
@@ -151,6 +154,7 @@ export default function PostScreen({ navigation }) {
         title: title,
         body: body,
         image: image,
+        imgBase64: imgBase64,
         latitude: latitude,
         longitude: longitude,
       });
@@ -183,7 +187,7 @@ export default function PostScreen({ navigation }) {
               <Image source={{ uri: image }} style={styles.image} />
             ) : (
               <Image
-                source={require("../assets/icon.png")}
+                source={require("../assets/black.png")}
                 style={styles.image}
               />
             )}
@@ -192,7 +196,7 @@ export default function PostScreen({ navigation }) {
                 onPress={removeImageFromState}
                 style={styles.removeImageButton}
               >
-                <MaterialIcons name="remove-circle" size={24} color="black" />
+                <MaterialIcons name="remove-circle" size={24} color="red" />
               </Pressable>
             )}
           </SafeAreaView>

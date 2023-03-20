@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import AccountsAPI from "../api/AccountsAPI";
+import LoadingContainer from "../components/LoadingContainer";
 import UserSearchContainer from "../components/UserSearchContainer";
 
 export default function UserSearchScreen({ navigation }) {
@@ -70,6 +71,11 @@ export default function UserSearchScreen({ navigation }) {
     </View>;
   };
 
+  // WHile the data is loading, display a loading screen
+  if (isLoading) {
+    return <LoadingContainer />;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.searchBar}>
@@ -90,6 +96,7 @@ export default function UserSearchScreen({ navigation }) {
             username={item.username}
             id={item.id}
             onPress={() => {
+              // Navigate to the User Account screen and refresh the data
               navigation.navigate("User Account", {
                 id: item.id,
               });

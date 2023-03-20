@@ -114,21 +114,13 @@ export default class AccountsAPI {
     return response.data.results;
   }
 
-  static async followUser(id) {
+  static async followScrapbook(follower, scrapbook) {
     const response = await axios.post(
       "http://94.173.211.21:8000/api/auth/followlist/" + id,
       {
-        headers: {
-          Authorization: `Token ${await this.getToken()}`,
-        },
-      }
-    );
-    return response.data;
-  }
-
-  static async unfollowUser(id) {
-    const response = await axios.delete(
-      "http://94.173.211.21:8000/api/auth/deletefollow/" + id,
+        follower,
+        scrapbook,
+      },
       {
         headers: {
           Authorization: `Token ${await this.getToken()}`,

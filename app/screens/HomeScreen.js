@@ -8,7 +8,6 @@
 
 import React from "react";
 import {
-  ActivityIndicator,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -18,6 +17,7 @@ import {
 import PageAPI from "../api/PageAPI";
 import PostContainer from "../components/PostContainer";
 import { useFocusEffect } from "@react-navigation/native";
+import LoadingContainer from "../components/LoadingContainer";
 
 export default function HomeScreen({ navigation }) {
   const [posts, setPosts] = React.useState([]);
@@ -54,15 +54,7 @@ export default function HomeScreen({ navigation }) {
 
   // Show a loading indicator while the posts are being fetched.
   if (posts.length === 0) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator
-          size="large"
-          color="#e96b37"
-          style={styles.loading}
-        />
-      </View>
-    );
+    return <LoadingContainer />;
   }
 
   return (
@@ -79,16 +71,7 @@ export default function HomeScreen({ navigation }) {
               key={post.id}
               title={post.title}
               body={post.body}
-              image={{
-                uri:
-                  "https://picsum.photos/" +
-                  (400 + Math.floor(Math.random() * 400)) +
-                  "/" +
-                  (400 + Math.floor(Math.random() * 400)),
-              }}
-              first_name="Kieran"
-              last_name="Gordon"
-              username="kjg2000"
+              image={{ uri: "https://i.imgur.com/JGlBzqE.jpeg" }}
               // Navigate to post title screen when the post is tapped.
               onPress={() => navigation.navigate("Post View", { id: post.id })}
             />

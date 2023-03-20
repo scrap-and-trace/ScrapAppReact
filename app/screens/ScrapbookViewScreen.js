@@ -1,3 +1,4 @@
+import { useFocusEffect } from "@react-navigation/native";
 import React from "react";
 import {
   FlatList,
@@ -7,45 +8,57 @@ import {
   StyleSheet,
   TextInput,
   View,
-  ActivityIndicator,
 } from "react-native";
+import { Button } from "react-native-paper";
 import AccountsAPI from "../api/AccountsAPI";
 import PageAPI from "../api/PageAPI";
+import ScrapbookAPI from "../api/ScrapbookAPI";
 import PostContainer from "../components/PostContainer";
 
 // Display the posts from a scrapbook in a flat list. The user can get to this screen by tapping a scrapbook in the AccountViewScreen or OtherAccountViewScreen.
 export default function ScrapbookViewScreen({ navigation, route }) {
   const [posts, setPosts] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [id, setId] = React.useState("");
 
-  // When first loading the screen, fetch the posts from the API. Only show the posts from the scrapbook that was passed in as a parameter.
-  React.useEffect(() => {
-    PageAPI.getPages(route.params.scrapbookId).then((pages) => {
-      setPosts(pages);
+  // Match the page's scrapbook id to the scrapbook id in the route params. If the scrapbook id matches, then add the page to the posts array.
+  const getPosts = async () => {
+    const scrapbook = await ScrapbookAPI.getScrapbook(route.params.scrapbookId);
+    const pages = await PageAPI.getPages(route.params.scrapbookId);
+    const posts = [];
+    pages.forEach((page) => {
+      if (page.scrapbook === scrapbook.id) {
+        posts.push(page);
+      }
     });
+    setPosts(posts);
+  };
+
+  // Get user id from account api
+  const getAccountId = async () => {
+    const account = await AccountsAPI.getAccount();
+    setId(account.id);
+  };
+
+  // Get the posts when the screen loads.
+  React.useEffect(() => {
+    getPosts();
+    getAccountId();
   }, []);
 
-  // When the screen is focused, fetch the posts from the API.
+  useFocusEffect(
+    React.useCallback(() => {
+      getPosts();
+      getAccountId();
+    }, [])
+  );
+
+  // Get the posts when the user pulls down to refresh.
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    PageAPI.getPages(route.params.scrapbookId).then((pages) => {
-      setPosts(pages);
-      setRefreshing(false);
-    });
+    getPosts();
+    setRefreshing(false);
   }, []);
-
-  // Show a loading indicator while the posts are being fetched.
-  if (posts.length === 0) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator
-          size="large"
-          color="#e96b37"
-          style={styles.loading}
-        />
-      </View>
-    );
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,27 +67,27 @@ export default function ScrapbookViewScreen({ navigation, route }) {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {posts
-          .map((post) => (
-            // Sort by most recent post first.
+        <Button
+          mode="contained"
+          style={styles.button}
+          onPress={() =>
+            AccountsAPI.followScrapbook(id, route.params.scrapbookId)
+          }
+        >
+          Follow
+        </Button>
+
+        <FlatList
+          data={posts}
+          renderItem={({ item }) => (
             <PostContainer
-              key={post.id}
-              title={post.title}
-              body={post.body}
-              image={{
-                uri:
-                  "https://picsum.photos/" +
-                  Math.floor(Math.random() * 1000) +
-                  "/400",
-              }}
-              onPress={() => {
-                navigation.navigate("Post View", {
-                  postId: post.id,
-                });
-              }}
+              title={item.title}
+              body={item.body}
+              image={item.image}
             />
-          ))
-          .reverse()}
+          )}
+          keyExtractor={(item) => item.id.toString()}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -85,8 +98,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  loading: {
-    flex: 1,
-    justifyContent: "center",
+  button: {
+    margin: 10,
+    backgroundColor: "#e96b37",
   },
 });

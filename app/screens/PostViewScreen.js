@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  ActivityIndicator,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -12,9 +11,11 @@ import {
 import { Button } from "react-native-paper";
 import AccountsAPI from "../api/AccountsAPI";
 import PageAPI from "../api/PageAPI";
+import LikesAPI from "../api/LikesAPI";
 import CommentsContainer from "../components/CommentsContainer";
-import LikeContainter from "../components/LikeContainer";
+import LikeContainer from "../components/LikeContainer";
 import PostContainer from "../components/PostContainer";
+import LoadingContainer from "../components/LoadingContainer";
 
 // Allow for navigation to this screen from a nested stack navigator
 export default function PostViewScreen({ route, navigation }) {
@@ -25,13 +26,18 @@ export default function PostViewScreen({ route, navigation }) {
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [id, setId] = React.useState("");
+  const [likes, setLikes] = React.useState(0);
+  const [liked, setLiked] = React.useState(false);
 
-  const fetchPostAndComments = React.useCallback(() => {
+  const fetchDetails = React.useCallback(() => {
     PageAPI.getPage(route.params.id).then((post) => {
       setPost(post);
     });
     PageAPI.getComments(route.params.id).then((comments) => {
       setComments(comments);
+    });
+    LikesAPI.getLikesByPage(route.params.id).then((likes) => {
+      setLikes(likes);
     });
   }, [route.params.id]);
 
@@ -46,29 +52,37 @@ export default function PostViewScreen({ route, navigation }) {
 
   // When the page is focused, fetch the post and comments from the API.
   React.useEffect(() => {
-    fetchPostAndComments();
+    fetchDetails();
     fetchAccountDetails();
-  }, [fetchPostAndComments, fetchAccountDetails]);
+  }, [fetchDetails, fetchAccountDetails]);
 
   // When the user pulls down to refresh, fetch the post and comments from the API.
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetchPostAndComments();
+    fetchDetails();
     fetchAccountDetails();
     setRefreshing(false);
-  }, [fetchPostAndComments, fetchAccountDetails]);
+  }, [fetchDetails, fetchAccountDetails]);
+
+  const handleLike = () => {
+    // Allow user to like and unlike a post
+    if (liked) {
+      LikesAPI.deleteLike(id, post.id).then(() => {
+        setLiked(false);
+        fetchDetails();
+      });
+    }
+    if (!liked) {
+      LikesAPI.createLike(id, post.id).then(() => {
+        setLiked(true);
+        fetchDetails();
+      });
+    }
+  };
 
   // Show a loading indicator while the post and comments are being fetched.
   if (post === null) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator
-          size="large"
-          color="#e96b37"
-          style={styles.loading}
-        />
-      </View>
-    );
+    return <LoadingContainer />;
   }
 
   return (
@@ -82,32 +96,17 @@ export default function PostViewScreen({ route, navigation }) {
           <PostContainer
             title={post.title}
             body={post.body}
-            image={{
-              uri:
-                "https://picsum.photos/" +
-                (400 + Math.floor(Math.random() * 400)) +
-                "/" +
-                (400 + Math.floor(Math.random() * 400)),
-            }}
-            authorImage={{
-              uri:
-                "https://picsum.photos/" +
-                (400 + Math.floor(Math.random() * 400)) +
-                "/" +
-                (400 + Math.floor(Math.random() * 400)),
-            }}
-            // Go to scrapbook containing the post
-            onPress={() => {
-              navigation.navigate("Scrapbook View", {
-                id: post.id,
-              });
-            }}
+            image={post.image}
           />
         )}
         <SafeAreaView style={styles.container}>
-          <LikeContainter
-
-          ></LikeContainter>
+          <LikeContainer
+            liked={liked}
+            likes={likes}
+            onPress={() => {
+              handleLike();
+            }}
+          />
           <TextInput
             style={styles.commentBox}
             placeholder="Add a comment..."
@@ -121,7 +120,7 @@ export default function PostViewScreen({ route, navigation }) {
             onPress={() => {
               PageAPI.createComment(id, route.params.id, comment);
               ToastAndroid.show("Comment Added", ToastAndroid.SHORT);
-              fetchPostAndComments();
+              fetchDetails();
               setComment("");
             }}
           >
