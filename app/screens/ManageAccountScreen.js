@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import AccountsAPI from "../api/AccountsAPI";
 import { Avatar } from "react-native-elements";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 export default function ManageAccountScreen({ navigation }) {
   const [username, setUsername] = React.useState("");
@@ -45,8 +46,63 @@ export default function ManageAccountScreen({ navigation }) {
     fetchUser();
   }, []);
 
-  const changeInfo = async () => {
-    AccountsAPI.changeInfo(id1, username1)
+  const changeUsername = async () => {
+    AccountsAPI.changeUsername(
+      id1, 
+      username1,
+      )
+      .then((response) => {
+        Alert.alert("Information Changed");
+      })
+      .catch((error) => {
+        Alert.alert("Change Failed");
+      });
+  };
+
+  const changeFirstName = async () => {
+    AccountsAPI.changeFirstName(
+      id1, 
+      FirstName1,
+      )
+      .then((response) => {
+        Alert.alert("Information Changed");
+      })
+      .catch((error) => {
+        Alert.alert("Change Failed");
+      });
+  };
+
+  const changeLastName = async () => {
+    AccountsAPI.changeLastName(
+      id1, 
+      LastName1,
+      )
+      .then((response) => {
+        Alert.alert("Information Changed");
+      })
+      .catch((error) => {
+        Alert.alert("Change Failed");
+      });
+  };
+
+  const changePhoneNum = async () => {
+    AccountsAPI.changePhoneNum(
+      id1, 
+      PhoneNum1,
+      )
+      .then((response) => {
+        Alert.alert("Information Changed");
+      })
+      .catch((error) => {
+        Alert.alert("Change Failed");
+      });
+  };
+
+  const changeBirthday = async () => {
+    AccountsAPI.changeBirthday(
+      id1, 
+      Dob1,
+      )
       .then((response) => {
         Alert.alert("Information Changed");
       })
@@ -76,6 +132,13 @@ export default function ManageAccountScreen({ navigation }) {
             placeholder={username}
             onChangeText={setUsername1}
           ></TextInput>
+          <MaterialIcons
+              name="edit"
+              color="#7c7c7c"
+              size={25}
+              style={styles.chgicon}
+              onPress={changeUsername}
+            />
         </View>
         <View style={styles.row}>
           <Text style={styles.info}>email</Text>
@@ -90,45 +153,73 @@ export default function ManageAccountScreen({ navigation }) {
           <TextInput
             style={styles.chginfo}
             placeholder={FirstName}
-            onChangeText={""}
+            onChangeText={setFirstName1}
           ></TextInput>
+                    <MaterialIcons
+              name="edit"
+              color="#7c7c7c"
+              size={25}
+              style={styles.chgicon}
+              onPress={changeFirstName}
+            />
         </View>
         <View style={styles.row}>
           <Text style={styles.info}>LastName</Text>
           <TextInput
             style={styles.chginfo}
             placeholder={LastName}
-            onChangeText={""}
+            onChangeText={setLastName1}
           ></TextInput>
+                    <MaterialIcons
+              name="edit"
+              color="#7c7c7c"
+              size={25}
+              style={styles.chgicon}
+              onPress={changeLastName}
+            />
         </View>
         <View style={styles.row}>
           <Text style={styles.info}>PhoneNum</Text>
           <TextInput
             style={styles.chginfo}
             placeholder={PhoneNum}
-            onChangeText={""}
+            onChangeText={setPhoneNum1}
           ></TextInput>
+                    <MaterialIcons
+              name="edit"
+              color="#7c7c7c"
+              size={25}
+              style={styles.chgicon}
+              onPress={changePhoneNum}
+            />
         </View>
         <View style={styles.row}>
           <Text style={styles.info}>Birthday</Text>
           <TextInput
             style={styles.chginfo}
             placeholder={Dob}
-            onChangeText={""}
+            onChangeText={setDob1}
           ></TextInput>
+                    <MaterialIcons
+              name="edit"
+              color="#7c7c7c"
+              size={25}
+              style={styles.chgicon}
+              onPress={changeBirthday}
+            />
         </View>
-        <View style={styles.row}>
+        {/* <View style={styles.row}>
           <Text style={styles.info}>Password</Text>
           <TextInput
             style={styles.chginfo}
             placeholder={Password}
             onChangeText={""}
           ></TextInput>
-        </View>
+        </View> */}
       </View>
 
       <View style={styles.buttonPositon}>
-        <TouchableOpacity style={styles.button} onPress={changeInfo}>
+        <TouchableOpacity style={styles.button} onPress={changeUsername}>
           <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
       </View>
@@ -185,6 +276,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     selectionColor: "black",
   },
+  chgicon: {
+    fontSize: 20,
+    marginTop: "5%",
+    marginLeft: "2%",
+    textAlign: "center",
+  },
   button: {
     marginTop: "20%",
     width: 90,
@@ -206,5 +303,14 @@ const styles = StyleSheet.create({
     marginRight: "5%",
     borderColor: "#e96b37",
     borderWidth: 0.5,
+  },
+  buttonSmall: {
+    marginTop: "20%",
+    width: 90,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#e96b37",
+    borderRadius: 30,
   },
 });
