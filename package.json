@@ -31,6 +31,7 @@
     "gradlew": "^0.0.1-security",
     "react": "18.1.0",
     "react-native": "0.70.5",
+    "react-native-clipboard": "^0.0.5",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-image-crop-picker": "^0.39.0",

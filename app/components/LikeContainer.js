@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
+import "react-native-clipboard/RNClipboard";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import LikesAPI from "../api/LikesAPI";
 import PageAPI from "../api/PageAPI";
@@ -88,6 +89,19 @@ export default function LikeContainer({ post_id, user_id, likes }) {
 }
 
 const styles = StyleSheet.create({
+  image: {
+    width: Dimensions.get("window").width * 0.1,
+    height: Dimensions.get("window").width * 0.1,
+    marginRight: 10,
+    padding: 2,
+  },
+  imageRight: {
+    width: Dimensions.get("window").width * 0.1,
+    height: Dimensions.get("window").width * 0.1,
+    padding: 2,
+    //position: "absolute",
+    marginRight: 100,
+  },
   container: {
     flexDirection: "row",
     alignItems: "center",
@@ -96,5 +110,15 @@ const styles = StyleSheet.create({
   },
   likes: {
     marginLeft: 5,
+  },
+  like: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    marginBottom: 5,
+  },
+  share: {
+    floar: "right",
+    imageRight: 1000,
   },
 });
