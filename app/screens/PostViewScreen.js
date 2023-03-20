@@ -11,7 +11,6 @@ import {
 import { Button } from "react-native-paper";
 import AccountsAPI from "../api/AccountsAPI";
 import PageAPI from "../api/PageAPI";
-import LikesAPI from "../api/LikesAPI";
 import CommentsContainer from "../components/CommentsContainer";
 import LikeContainer from "../components/LikeContainer";
 import PostContainer from "../components/PostContainer";
@@ -36,8 +35,16 @@ export default function PostViewScreen({ route, navigation }) {
     PageAPI.getComments(route.params.id).then((comments) => {
       setComments(comments);
     });
-    LikesAPI.getLikesByPage(route.params.id).then((likes) => {
+    AccountsAPI.getLikesByPage(route.params.id).then((likes) => {
       setLikes(likes);
+    });
+    AccountsAPI.getLikesByUser(route.params.id).then((liked_page) => {
+      if(liked_page == post){
+        setLiked(liked_page);
+
+      }else{
+        console.log("The user has either not liked this page or there was another errror");
+      }
     });
   }, [route.params.id]);
 
@@ -67,13 +74,13 @@ export default function PostViewScreen({ route, navigation }) {
   const handleLike = () => {
     // Allow user to like and unlike a post
     if (liked) {
-      LikesAPI.deleteLike(id, post.id).then(() => {
+      AccountsAPI.deleteLike(id, post.id).then(() => {
         setLiked(false);
         fetchDetails();
       });
     }
     if (!liked) {
-      LikesAPI.createLike(id, post.id).then(() => {
+      AccountsAPI.createLike(id, post.id).then(() => {
         setLiked(true);
         fetchDetails();
       });
@@ -100,7 +107,7 @@ export default function PostViewScreen({ route, navigation }) {
           />
         )}
         <SafeAreaView style={styles.container}>
-          <LikeContainer user_id={id} post_id={post.id} likes={likes} />
+          <LikeContainer user_id={id} post_id={post.id} liked={liked} likes={likes} />
           {/* add button to text field to submit commment */}
           <TextInput
             style={styles.commentBox}
