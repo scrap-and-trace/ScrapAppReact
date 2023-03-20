@@ -16,7 +16,9 @@ import {
   StyleSheet,
   Text,
   View,
+  Clipboard,
 } from "react-native";
+import "react-native-clipboard/RNClipboard"
 
 const isLiked = true;
 const likes = 10;
@@ -56,20 +58,23 @@ export default function LikeContainter({
       
 
     return (
-    <Pressable onPress={toggleLike} >
       <View style={styles.container}>
-        <View style={styles.usernameAndImage}>
-          
-          <Image source={isLiked ? require('../assets/like_Full.png') : require('../assets/like_Empty.png')} style ={styles.image} />
-          <Text style = {styles.text}>
-
-                {isLiked ? likes+1  : likes}
-            
-          </Text>
-          <Image source={require('../assets/share.png')} style ={styles.image} />
+        
+          <Pressable onPress={toggleLike} >
+            <View style={styles.like}>
+              <Image source={isLiked ? require('../assets/like_Full.png') : require('../assets/like_Empty.png')} style ={styles.image} />
+              <Text style = {styles.text}>
+                  {isLiked ? likes+1  : likes}
+              </Text>
+            </View>
+          </Pressable>
+        
+        <View style ={styles.share}>
+          <Pressable onPress={copyToClipboard} >  
+            <Image source={require('../assets/share.png')} style ={styles.image} />
+          </Pressable>  
         </View>
       </View>
-    </Pressable>
   );
 }
 
@@ -79,6 +84,13 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").width * 0.1,
     marginRight: 10,
     padding:2,
+  },
+  imageRight: {
+    width: Dimensions.get("window").width * 0.1,
+    height: Dimensions.get("window").width * 0.1,
+    padding:2,
+    //position: "absolute",
+    marginRight: 100,
   },
   container: {
     backgroundColor: "#fff",
@@ -91,10 +103,15 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
   },
-  usernameAndImage: {
+  like: {
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
     marginBottom: 5,
+  },
+  share: {
+    floar: "right",
+    imageRight:1000,
+    
   },
 });
