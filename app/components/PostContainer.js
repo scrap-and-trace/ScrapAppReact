@@ -46,6 +46,7 @@ export default function PostContainer({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: "#fff",
     padding: 10,
     paddingTop: 20,
@@ -65,13 +66,15 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width - 30,
     height: Dimensions.get("window").width - 30,
     resizeMode: "cover",
-    paddingTop: 20,
+    margin: 5,
+    padding: 5,
   },
   title: {
     fontWeight: "bold",
     fontSize: 20,
     padding: 5,
     margin: 5,
+    flexWrap: "wrap",
     textAlign: "center",
   },
   body: {

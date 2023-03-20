@@ -8,11 +8,13 @@ import {
   Text,
   View,
   Pressable,
+  Platform,
 } from "react-native";
-import MapView, { Callout, Marker } from "react-native-maps";
+import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import PageAPI from "../api/PageAPI";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import LoadingContainer from "../components/LoadingContainer";
+import WebView from "react-native-webview";
 
 export default function MapScreen({ navigation }) {
   const [posts, setPosts] = React.useState(null);
@@ -73,6 +75,7 @@ export default function MapScreen({ navigation }) {
         showsUserLocation={true}
         showsMyLocationButton={true}
         followsUserLocation={true}
+        provider={PROVIDER_GOOGLE}
       >
         {posts.map((post) =>
           post.latitude && post.longitude ? ( // Only show markers for posts with a location.
@@ -94,6 +97,24 @@ export default function MapScreen({ navigation }) {
                 }}
               >
                 <View style={styles.bubble}>
+                  <View>
+                    {/* If the user is using android, use a WebView, else use a regular image */}
+                    {Platform.OS === "android" ? (
+                      <WebView
+                        style={styles.image}
+                        source={{
+                          uri: "https://picsum.photos/200/200",
+                        }}
+                      />
+                    ) : (
+                      <Image
+                        style={styles.image}
+                        source={{
+                          uri: "https://picsum.photos/200/200",
+                        }}
+                      />
+                    )}
+                  </View>
                   <Text style={styles.bubbleTitle}>
                     {post.title.substring(0, 20)}
                   </Text>
@@ -138,13 +159,14 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderWidth: 0.5,
     padding: 15,
-    width: 200,
+    width: Dimensions.get("window").width * 0.8,
   },
   bubbleTitle: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
     textAlign: "center",
+    marginTop: 5,
   },
   bubbleDescription: {
     fontSize: 14,
@@ -160,5 +182,14 @@ const styles = StyleSheet.create({
     left: 0,
     margin: 16,
     borderRadius: 50,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 50,
+    alignSelf: "center",
+    resizeMode: "cover",
+    padding: 10,
+    margin: 10,
   },
 });

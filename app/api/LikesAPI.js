@@ -27,12 +27,16 @@ export default class LikesAPI {
     return response.data;
   }
 
-  static async deleteLike(pageId) {
+  static async getLikeById(id) {
+    const response = await axios.get(
+      `http://94.173.211.21:8000/api/auth/likes/${id}`
+    );
+    return response.data;
+  }
+
+  static async deleteLike(id) {
     const response = await axios.delete(
-      `http://94.173.211.21:8000/api/auth/deletelike/${pageId}`,
-      {
-        pageId,
-      }
+      `http://94.173.211.21:8000/api/auth/deletelike/${id}`
     );
     return response.data;
   }

@@ -100,32 +100,20 @@ export default function PostViewScreen({ route, navigation }) {
           />
         )}
         <SafeAreaView style={styles.container}>
-          <LikeContainer
-            liked={liked}
-            likes={likes}
-            onPress={() => {
-              handleLike();
-            }}
-          />
+          <LikeContainer user_id={id} post_id={post.id} likes={likes} />
+          {/* add button to text field to submit commment */}
           <TextInput
             style={styles.commentBox}
             placeholder="Add a comment..."
-            onChangeText={(text) => setComment(text)}
             value={comment}
-          />
-          <Button
-            icon={"plus"}
-            style={styles.button}
-            mode="contained"
-            onPress={() => {
+            onChangeText={(text) => setComment(text)}
+            onSubmitEditing={() => {
               PageAPI.createComment(id, route.params.id, comment);
               ToastAndroid.show("Comment Added", ToastAndroid.SHORT);
               fetchDetails();
               setComment("");
             }}
-          >
-            Add Comment
-          </Button>
+          />
           {post &&
             comments
               .map((comment) => (

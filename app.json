@@ -14,6 +14,11 @@
     },
     "ios": {
       "bundleIdentifier": "com.scrapandtrace.scrapappreact"
+    },
+    "config": {
+      "googleMaps": {
+        "apiKey": "AIzaSyCXCEmVb19_7_fbtjBWw43JXAEcg9elIaY"
+      }
     }
   },
   "name": "scrapappreact"

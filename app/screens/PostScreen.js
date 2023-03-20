@@ -16,6 +16,7 @@ import {
   Image,
   Pressable,
   ToastAndroid,
+  Dimensions,
 } from "react-native";
 import { Button } from "react-native-paper";
 import AccountsAPI from "../api/AccountsAPI";
@@ -273,8 +274,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   image: {
-    width: 350,
-    height: 350,
+    width: Dimensions.get("window").width - 30,
+    height: Dimensions.get("window").width - 30,
     resizeMode: "cover",
     margin: 5,
     padding: 5,
