@@ -6,31 +6,31 @@ import {
   StyleSheet,
   Text,
   View,
+  Clipboard,
 } from "react-native";
 import "react-native-clipboard/RNClipboard";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import LikesAPI from "../api/LikesAPI";
 import PageAPI from "../api/PageAPI";
 import AccountsAPI from "../api/AccountsAPI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Sharing from "expo-sharing";
 
 // Display the number of likes and a like button on the left side of the screen for the respective post
-export default function LikeContainer({ post_id, user_id, likes }) {
-  const [liked, setLiked] = useState(false);
+export default function LikeContainer({ post_id, user_id, likes , liked }) {
+  
   const [likeCount, setLikeCount] = useState(likes);
   const [userId, setUserId] = useState(user_id);
 
   // When the user presses the like button, send a request to the API to like the post. Store the like ID in AsyncStorage and prevent the user from liking the post again.
   const like = () => {
     if (liked) {
-      LikesAPI.deleteLike(userId, post_id).then(() => {
+      AccountsAPI.deleteLike(user_id, post_id).then(() => {
         setLiked(false);
         setLikeCount(likeCount - 1);
         AsyncStorage.removeItem(post_id);
       });
     } else {
-      LikesAPI.createLike(userId, post_id).then((like) => {
+      AccountsAPI.createLike(user_id, post_id).then((like) => {
         setLiked(true);
         setLikeCount(likeCount + 1);
         AsyncStorage.setItem(post_id, like.id.toString());
@@ -38,16 +38,18 @@ export default function LikeContainer({ post_id, user_id, likes }) {
     }
   };
 
+  //when a like is creAted it is sent away to the AIP, it is also updated locally
   const share = () => {
     // Get the post's image URL from the API.
     PageAPI.getPage(post_id).then((page) => {
       // Share the image.
-      Sharing.shareAsync(page.image);
+      Clipboard.setString("http://94.173.211.21:8000/page/?id=" +post_id.toString());
+      
     });
   };
 
   const getLikes = () => {
-    LikesAPI.getLikesByPage(post_id).then((likes) => {
+    AccountsAPI.getLikesByPage(post_id).then((likes) => {
       setLikeCount(likes);
     });
   };
@@ -71,7 +73,7 @@ export default function LikeContainer({ post_id, user_id, likes }) {
         <MaterialIcons
           name={liked ? "favorite" : "favorite-border"}
           size={30}
-          color={liked ? "red" : "black"}
+          color={liked ? "E96B37" : "black"}
         />
       </Pressable>
       <Text style={styles.likes}>{likeCount}</Text>
