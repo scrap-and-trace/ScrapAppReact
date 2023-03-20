@@ -1,7 +1,5 @@
-// IP: http://94.173.211.21:8000/api/auth
-
 import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 
 export default class AccountsAPI {
   static async register(
@@ -36,7 +34,7 @@ export default class AccountsAPI {
         password,
       }
     );
-    return await AsyncStorage.setItem("token", response.data.token);
+    return await SecureStore.setItemAsync("token", response.data.token);
   }
 
   static async logout() {
@@ -52,12 +50,15 @@ export default class AccountsAPI {
   }
 
   static async getToken() {
-    return await AsyncStorage.getItem("token");
+    return await SecureStore.getItemAsync("token");
   }
 
   static async isLoggedIn() {
     const token = await this.getToken();
-    return token !== null;
+    if (token) {
+      return true;
+    }
+    return false;
   }
 
   static async getIsAuthenticated() {
@@ -91,16 +92,14 @@ export default class AccountsAPI {
     });
     return response.data;
   }
+
   static async getFollowing(id) {
-    const response = await axios.get(
-      "http://94.173.211.21:8000/api/auth/followlist/" + id,
-      {
-        headers: {
-          Authorization: `Token ${await this.getToken()}`,
-        },
-      }
-    );
-    return response.data;
+    const response = await axios.get("http://94.173.211.21:8000/user/" + id, {
+      headers: {
+        Authorization: `Token ${await this.getToken()}`,
+      },
+    });
+    return response.data.following;
   }
 
   static async getAllUsers() {
@@ -124,7 +123,7 @@ export default class AccountsAPI {
 
   static async followScrapbook(follower, scrapbook) {
     const response = await axios.post(
-      "http://94.173.211.21:8000/api/auth/followlist/" + id,
+      "http://94.173.211.21:8000/api/auth/followlist/" + scrapbook + "/",
       {
         follower,
         scrapbook,
@@ -138,7 +137,7 @@ export default class AccountsAPI {
     return response.data;
   }
 
-  static async changeUsername(id, username,) {
+  static async changeUsername(id, username) {
     const response = await axios.put(
       "http://94.173.211.21:8000/user/" + id + "/",
       {
@@ -152,7 +151,6 @@ export default class AccountsAPI {
     );
     return response.data;
   }
-
 
   static async changeFirstName(id, first_name) {
     const response = await axios.put(
@@ -214,7 +212,6 @@ export default class AccountsAPI {
     return response.data;
   }
 
-
   static async getLikesByUser(userId) {
     const response = await axios.get(
       `http://94.173.211.21:8000/api/auth/userlikes/${userId}`
@@ -230,10 +227,7 @@ export default class AccountsAPI {
     return response.data.results.length;
   }
 
-  static async createLike(
-    userId,
-    pageId
-    ) {
+  static async createLike(userId, pageId) {
     const response = await axios.post(
       `http://94.173.211.21:8000/api/auth/likes/${pageId}`,
       {
@@ -254,9 +248,10 @@ export default class AccountsAPI {
         headers: {
           Authorization: `Token ${await this.getToken()}`,
         },
-      })
-
-    }
+      }
+    );
+    return response.data;
+  }
   /*static async createLike(
     userId,
     pageId
@@ -272,8 +267,6 @@ export default class AccountsAPI {
     return response.data;
   }*/
 
-  
-
   static async getLikeById(id) {
     const response = await axios.get(
       `http://94.173.211.21:8000/api/auth/likes/${id}`
@@ -286,10 +279,9 @@ export default class AccountsAPI {
       "http://94.173.211.21:8000/user/" + id + "/",
       {
         dob: dob,
-      },)
-
-
-    }
+      }
+    );
+  }
   static async deleteLike(id) {
     const response = await axios.delete(
       `http://94.173.211.21:8000/api/auth/deletelike/${id}`,
@@ -301,8 +293,6 @@ export default class AccountsAPI {
     );
     return response.data;
   }
-
-
 
   static async deleteLike(id) {
     const response = await axios.delete(

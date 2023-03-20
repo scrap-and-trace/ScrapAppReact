@@ -12,12 +12,10 @@ import "react-native-clipboard/RNClipboard";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import PageAPI from "../api/PageAPI";
 import AccountsAPI from "../api/AccountsAPI";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Sharing from "expo-sharing";
 
 // Display the number of likes and a like button on the left side of the screen for the respective post
-export default function LikeContainer({ post_id, user_id, likes , liked }) {
-  
+export default function LikeContainer({ post_id, user_id, likes, liked }) {
   const [likeCount, setLikeCount] = useState(likes);
   const [userId, setUserId] = useState(user_id);
 
@@ -27,13 +25,11 @@ export default function LikeContainer({ post_id, user_id, likes , liked }) {
       AccountsAPI.deleteLike(user_id, post_id).then(() => {
         setLiked(false);
         setLikeCount(likeCount - 1);
-        AsyncStorage.removeItem(post_id);
       });
     } else {
       AccountsAPI.createLike(user_id, post_id).then((like) => {
         setLiked(true);
         setLikeCount(likeCount + 1);
-        AsyncStorage.setItem(post_id, like.id.toString());
       });
     }
   };
@@ -43,8 +39,9 @@ export default function LikeContainer({ post_id, user_id, likes , liked }) {
     // Get the post's image URL from the API.
     PageAPI.getPage(post_id).then((page) => {
       // Share the image.
-      Clipboard.setString("http://94.173.211.21:8000/page/?id=" +post_id.toString());
-      
+      Clipboard.setString(
+        "http://94.173.211.21:8000/page/?id=" + post_id.toString()
+      );
     });
   };
 
