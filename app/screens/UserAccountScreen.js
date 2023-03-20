@@ -45,17 +45,23 @@ export default function UserAccountScreen({ navigation }) {
     setEmail(user.email);
     setId(user.id);
     setScrapbooks(user.scrapbooks);
-    setFollowedScrapbooks(user.following);
+  };
+
+  const getFollowing = async () => {
+    const user = await AccountsAPI.getFollowing(id);
+    setFollowedScrapbooks(user);
   };
 
   useFocusEffect(
     React.useCallback(() => {
       fetchUser();
+      getFollowing();
     }, [])
   );
 
   React.useEffect(() => {
     fetchUser();
+    getFollowing();
   }, []);
 
   const onRefresh = React.useCallback(() => {
@@ -127,8 +133,8 @@ export default function UserAccountScreen({ navigation }) {
                 data={followedScrapbooks}
                 renderItem={({ item }) => (
                   <ScrapbookContainer
-                    title={item.title}
-                    username={item.username}
+                    title={item.scrapbook.title}
+                    username={item.scrapbook.username}
                     onPress={() =>
                       navigation.navigate("Scrapbook View", {
                         scrapbookId: item.id,
