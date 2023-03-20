@@ -8,7 +8,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet,Alert,} from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import CreateScrapbookScreen from "../screens/CreateScrapbookScreen";
 import HomeScreen from "../screens/HomeScreen";
@@ -21,6 +21,7 @@ import ScrapbookViewScreen from "../screens/ScrapbookViewScreen";
 import SelectScrapbookScreen from "../screens/SelectScrapbookScreen";
 import UserAccountScreen from "../screens/UserAccountScreen";
 import SearchScreen from "./SearchScreen";
+import AccountsAPI from "../api/AccountsAPI";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -75,7 +76,22 @@ function AccountStack({ navigation }) {
           ),
         }}
       />
-      <Stack.Screen name="Manage Account" component={ManageAccountScreen} />
+      <Stack.Screen name="Manage Account" component={ManageAccountScreen} 
+        options={{
+          // add material icon button to header to allow user to modify account details
+          headerRight: () => (
+            <MaterialIcons
+              name="logout"
+              color="black"
+              size={22}
+              style={{ marginRight: "0%" ,marginLeft: "5%" ,}}
+              onPress={() => AccountsAPI.logout().then((response) => {
+                Alert.alert("You have logged out！");
+                navigation.navigate("Login");
+              })}
+            />
+          ),
+        }}/>
       <Stack.Screen name="Scrapbook View" component={ScrapbookViewScreen} />
     </Stack.Navigator>
   );

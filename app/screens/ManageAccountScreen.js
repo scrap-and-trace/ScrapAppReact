@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   info: {
-    color: "#864904",
+    color: "#e96b37",
     fontWeight: "bold",
     fontSize: 20,
     marginTop: "4%",
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#693a03",
+    backgroundColor: "#e96b37",
     borderRadius: 30,
   },
   buttonText: {
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     height: 0,
     marginLeft: "5%",
     marginRight: "5%",
-    borderColor: "#864904",
+    borderColor: "#e96b37",
     borderWidth: 0.5,
   },
 });

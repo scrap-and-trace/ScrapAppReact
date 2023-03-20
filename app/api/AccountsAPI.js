@@ -40,7 +40,15 @@ export default class AccountsAPI {
   }
 
   static async logout() {
-    return await AsyncStorage.removeItem("token");
+    const response = await axios.post(
+      "http://94.173.211.21:8000/api/auth/logout/",
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
+    );
+    return response.data;
   }
 
   static async getToken() {
