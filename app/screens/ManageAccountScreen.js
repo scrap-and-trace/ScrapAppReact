@@ -117,7 +117,7 @@ export default function ManageAccountScreen({ navigation }) {
         <Avatar
           size="large"
           rounded
-          source={require("../assets/Signup.png")}
+          source={require("../assets/user.png")}
           onPress={() => console.log("Works!")}
           activeOpacity={0.7}
         />

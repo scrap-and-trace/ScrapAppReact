@@ -105,7 +105,7 @@ export default function MapScreen({ navigation }) {
                         source={{
                           uri: post.image
                             ? post.image
-                            : require("../assets/placeholder.png"),
+                            : require("../assets/default_img.png"),
                         }}
                       />
                     ) : (
@@ -115,7 +115,7 @@ export default function MapScreen({ navigation }) {
                         source={
                           post.image
                             ? { uri: post.image }
-                            : require("../assets/placeholder.png")
+                            : require("../assets/default_img.png")
                         }
                       />
                     )}
