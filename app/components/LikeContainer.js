@@ -15,20 +15,21 @@ import AccountsAPI from "../api/AccountsAPI";
 import * as Sharing from "expo-sharing";
 
 // Display the number of likes and a like button on the left side of the screen for the respective post
-export default function LikeContainer({ post_id, user_id, likes, liked }) {
+export default function LikeContainer({ post_id, user_id, likes,Liked }) {
   const [likeCount, setLikeCount] = useState(likes);
   const [userId, setUserId] = useState(user_id);
+  const [liked, setLiked] = useState(Liked);
 
   // When the user presses the like button, send a request to the API to like the post. Store the like ID in AsyncStorage and prevent the user from liking the post again.
   const like = () => {
-    if (liked) {
-      AccountsAPI.deleteLike(user_id, post_id).then(() => {
-        setLiked(false);
+    if(liked==true) {
+      AccountsAPI.deleteLike(post_id).then(() => {
+        setLiked(true);
         setLikeCount(likeCount - 1);
       });
     } else {
-      AccountsAPI.createLike(user_id, post_id).then((like) => {
-        setLiked(true);
+      AccountsAPI.createLike(user_id, post_id).then(() => {
+        setLiked(false);
         setLikeCount(likeCount + 1);
       });
     }
@@ -70,7 +71,7 @@ export default function LikeContainer({ post_id, user_id, likes, liked }) {
         <MaterialIcons
           name={liked ? "favorite" : "favorite-border"}
           size={30}
-          color={liked ? "E96B37" : "black"}
+          color={liked ? "red" : "black"}
         />
       </Pressable>
       <Text style={styles.likes}>{likeCount}</Text>

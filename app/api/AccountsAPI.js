@@ -221,11 +221,17 @@ export default class AccountsAPI {
 
   static async createLike(userId, pageId) {
     const response = await axios.post(
-      `http://94.173.211.21:8000/api/auth/likes/${pageId}`,
+      `http://94.173.211.21:8000/api/auth/likes/${pageId}/`,
       {
         liker: userId,
         liked_page: pageId,
-      }
+      },
+      {
+
+       headers: {
+        Authorization: `Token ${await this.getToken()}`,
+      },
+    }
     );
     return response.data;
   }
@@ -274,18 +280,6 @@ export default class AccountsAPI {
       }
     );
   }
-  static async deleteLike(id) {
-    const response = await axios.delete(
-      `http://94.173.211.21:8000/api/auth/deletelike/${id}`,
-      {
-        headers: {
-          Authorization: `Token ${await this.getToken()}`,
-        },
-      }
-    );
-    return response.data;
-  }
-
   static async deleteLike(id) {
     const response = await axios.delete(
       `http://94.173.211.21:8000/api/auth/deletelike/${id}`,
