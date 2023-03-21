@@ -36,6 +36,7 @@ export default function OtherUserAccountScreen({ route, navigation }) {
   const [followedScrapbooks, setFollowedScrapbooks] = React.useState([]);
   const [scrapbooks, setScrapbooks] = React.useState([]);
   const [dataUpdated, setDataUpdated] = React.useState(false);
+  const [authorImage, setAuthorImage] = React.useState("");
 
   const fetchUser = async () => {
     const user = await AccountsAPI.getAccountById(route.params.id);
@@ -44,6 +45,7 @@ export default function OtherUserAccountScreen({ route, navigation }) {
     setUsername(user.username);
     setScrapbooks(user.scrapbooks);
     setFollowedScrapbooks(user.following.scrapbook);
+    setAuthorImage(user.image_url);
     setDataUpdated(true); // set dataUpdated to true
   };
 
@@ -88,6 +90,7 @@ export default function OtherUserAccountScreen({ route, navigation }) {
                 username={username}
                 first_name={first_name}
                 last_name={last_name}
+                authorImage={{ uri: authorImage }}
               />
               <View style={styles.scrapbookList}>
                 <FlatList

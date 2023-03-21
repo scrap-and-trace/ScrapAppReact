@@ -32,7 +32,7 @@ export default function CommentsContainer({
         <View style={styles.usernameAndImage}>
           <Image source={authorImage} style={styles.image} />
           <View>
-            <Text style={styles.title}>{username}</Text>
+            <Text style={styles.title}>@{username}</Text>
             <Text>{body}</Text>
           </View>
         </View>

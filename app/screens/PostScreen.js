@@ -19,11 +19,9 @@ import {
   Dimensions,
 } from "react-native";
 import { Button } from "react-native-paper";
-import AccountsAPI from "../api/AccountsAPI";
 import { useFocusEffect } from "@react-navigation/native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Location from "expo-location";
-import { get } from "react-native-clipboard";
 
 export default function PostScreen({ navigation }) {
   const [hasGalleryPermission, setHasGalleryPermission] = React.useState(null);

@@ -25,7 +25,6 @@ export default function MapScreen({ navigation }) {
   const fetchPosts = () => {
     PageAPI.getPages().then((pages) => {
       setPosts(pages);
-      console.log(pages);
     });
   };
 

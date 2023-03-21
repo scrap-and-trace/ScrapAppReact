@@ -14,17 +14,7 @@ export default function LoginScreen(props) {
   const [Password, setPassword] = useState("");
 
   const LoginAcc = () => {
-    AccountsAPI.login(Email, Password)
-      .then((response) => {
-        if (response.status == 200) {
-          console.log("Login successful");
-        } else {
-          console.log("Login failed");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    AccountsAPI.login(Email, Password);
   };
 
   return (

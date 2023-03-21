@@ -30,13 +30,6 @@ export default function UserSearchScreen({ navigation }) {
     setId(id);
   };
 
-  const onRefresh = React.useCallback(() => {
-    setIsLoading(true);
-    fetchUsers();
-    fetchOwnId();
-    setIsLoading(false);
-  }, []);
-
   const searchFilterFunction = (text) => {
     if (text) {
       const newData = users.filter((item) => {
@@ -95,7 +88,9 @@ export default function UserSearchScreen({ navigation }) {
             last_name={item.last_name}
             username={item.username}
             id={item.id}
-            authorImage={item.image_url}
+            authorImage={{
+              uri: item.image_url,
+            }}
             onPress={() => {
               // Navigate to the User Account screen and refresh the data
               navigation.navigate("User Account", {

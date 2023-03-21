@@ -35,12 +35,14 @@ export default function RegisScreen(props) {
       )
         .then((response) => {
           console.log(response);
-          Alert.alert("Account Created");
+          Alert.alert("Account created successfully!");
           props.navigation.navigate("Login");
         })
         .catch((error) => {
-          console.log(error);
-          Alert.alert("Account Creation Failed");
+          Alert.alert(
+            "Account creation failed.",
+            "Please check your details and try again. Error: " + error
+          );
         });
     }
   };

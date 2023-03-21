@@ -43,7 +43,7 @@ export default function PostViewScreen({ route, navigation }) {
         setLiked(liked_page);
       } else {
         console.log(
-          "The user has either not liked this page or there was another errror"
+          "The user has either not liked this page or there was another error."
         );
       }
     });
@@ -137,11 +137,7 @@ export default function PostViewScreen({ route, navigation }) {
                   username={comment.author_username}
                   body={comment.body}
                   authorImage={{
-                    uri:
-                      "https://picsum.photos/" +
-                      (400 + Math.floor(Math.random() * 400)) +
-                      "/" +
-                      (400 + Math.floor(Math.random() * 400)),
+                    uri: comment.image_url,
                   }}
                   onPress={() => {
                     navigation.navigate("User Account", {

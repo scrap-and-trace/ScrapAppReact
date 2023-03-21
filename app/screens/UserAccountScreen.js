@@ -32,7 +32,7 @@ export default function UserAccountScreen({ navigation }) {
   const [first_name, setFirstName] = React.useState("");
   const [last_name, setLastName] = React.useState("");
   const [username, setUsername] = React.useState("");
-  const [profileImage, setProfileImage] = React.useState("");
+  const [authorImage, setAuthorImage] = React.useState("");
   const [id, setId] = React.useState("");
   const [followedScrapbooks, setFollowedScrapbooks] = React.useState([]);
   const [scrapbooks, setScrapbooks] = React.useState([]);
@@ -43,7 +43,7 @@ export default function UserAccountScreen({ navigation }) {
     setLastName(user.last_name);
     setUsername(user.username);
     setId(user.id);
-    setProfileImage(user.image_url);
+    setAuthorImage(user.image_url);
     setScrapbooks(user.scrapbooks);
   };
 
@@ -98,7 +98,7 @@ export default function UserAccountScreen({ navigation }) {
                 first_name={first_name}
                 last_name={last_name}
                 username={username}
-                authorImage={profileImage}
+                authorImage={{ uri: authorImage }}
                 id={id}
               />
               <FlatList

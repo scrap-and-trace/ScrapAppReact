@@ -11,8 +11,10 @@ import {
 import AccountsAPI from "../api/AccountsAPI";
 import { Avatar } from "react-native-elements";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import * as ImagePicker from "expo-image-picker";
+import { useFocusEffect } from "@react-navigation/native";
 
-export default function ManageAccountScreen({ navigation }) {
+export default function ManageAccountScreen() {
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [FirstName, setFirstName] = React.useState("");
@@ -22,13 +24,96 @@ export default function ManageAccountScreen({ navigation }) {
   const [Dob, setDob] = React.useState("");
 
   const [username1, setUsername1] = React.useState("");
-  const [email1, setEmail1] = React.useState("");
   const [FirstName1, setFirstName1] = React.useState("");
   const [LastName1, setLastName1] = React.useState("");
-  const [Password1, setPassword1] = React.useState("");
+  const [authorImage, setAuthorImage] = React.useState("");
   const [PhoneNum1, setPhoneNum1] = React.useState("");
   const [Dob1, setDob1] = React.useState("");
   const [id1, setId1] = React.useState("");
+
+  const [hasCameraPermission, setHasCameraPermission] = React.useState(null);
+  const [hasGalleryPermission, setHasGalleryPermission] = React.useState(null);
+  const [imgBase64, setImgBase64] = React.useState(null);
+  const [imageUrl, setImageUrl] = React.useState(null);
+  const [deleteUrl, setDeleteUrl] = React.useState(null);
+
+  const imgBB = require("../json/imgbb-key.json").key;
+
+  // Check if user has permission to access camera roll
+  useFocusEffect(
+    React.useCallback(() => {
+      (async () => {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        setHasGalleryPermission(status === "granted");
+      })();
+    }, [])
+  );
+
+  // Request permissions for the camera.
+  useFocusEffect(
+    React.useCallback(() => {
+      (async () => {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        setHasCameraPermission(status === "granted");
+      })();
+    }, [])
+  );
+
+  // Get the image from the camera roll and set it as the image to be uploaded.
+  const takePhoto = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      resizeMode: "contain",
+      quality: 1,
+      base64: true,
+    });
+
+    if (!result.canceled) {
+      for (let i = 0; i < result.assets.length; i++) {
+        setImgBase64(result.assets[i].base64);
+      }
+    }
+  };
+
+  // Select a photo from the gallery. Allow for base64 encoding.
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      resizeMode: "contain",
+      quality: 1,
+      base64: true,
+    });
+
+    if (!result.canceled) {
+      for (let i = 0; i < result.assets.length; i++) {
+        setImgBase64(result.assets[i].base64);
+      }
+    }
+  };
+
+  // Upload image to imgBB
+  const uploadImage = async () => {
+    const formData = new FormData();
+    formData.append("image", imgBase64);
+    formData.append("key", imgBB);
+    const response = await fetch("https://api.imgbb.com/1/upload", {
+      method: "POST",
+      body: formData,
+    });
+    const result = await response.json();
+    setImageUrl(result.data.url);
+    return new Promise((resolve, reject) => {
+      if (result.success) {
+        resolve(result);
+      }
+      reject(result);
+    });
+  };
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -37,77 +122,70 @@ export default function ManageAccountScreen({ navigation }) {
       setEmail(user.email);
       setFirstName(user.first_name);
       setLastName(user.last_name);
+      setAuthorImage(user.image_url);
       setPassword(user.Password);
       setPhoneNum(user.phone);
       setDob(user.dob);
       setId1(user.id);
-      console.log(user.id);
     };
     fetchUser();
   }, []);
 
   const changeUsername = async () => {
-    AccountsAPI.changeUsername(
-      id1, 
-      username1,
-      )
+    AccountsAPI.changeUsername(id1, username1)
       .then((response) => {
-        Alert.alert("Information Changed");
+        Alert.alert("Your username has been changed.");
       })
       .catch((error) => {
-        Alert.alert("Change Failed");
+        Alert.alert(
+          "Change failed.",
+          "Either the username is already taken or the username is invalid. Error: " +
+            error
+        );
       });
   };
 
   const changeFirstName = async () => {
-    AccountsAPI.changeFirstName(
-      id1, 
-      FirstName1,
-      )
+    AccountsAPI.changeFirstName(id1, FirstName1)
       .then((response) => {
-        Alert.alert("Information Changed");
+        Alert.alert("Your first name has been changed.");
       })
       .catch((error) => {
-        Alert.alert("Change Failed");
+        Alert.alert("Change failed.", "Error: " + error);
       });
   };
 
   const changeLastName = async () => {
-    AccountsAPI.changeLastName(
-      id1, 
-      LastName1,
-      )
+    AccountsAPI.changeLastName(id1, LastName1)
       .then((response) => {
-        Alert.alert("Information Changed");
+        Alert.alert("Your last name has been changed.");
       })
       .catch((error) => {
-        Alert.alert("Change Failed");
+        Alert.alert("Change failed.", "Error: " + error);
       });
   };
 
   const changePhoneNum = async () => {
-    AccountsAPI.changePhoneNum(
-      id1, 
-      PhoneNum1,
-      )
+    AccountsAPI.changePhoneNum(id1, PhoneNum1)
       .then((response) => {
-        Alert.alert("Information Changed");
+        Alert.alert("Your phone number has been changed.");
       })
       .catch((error) => {
-        Alert.alert("Change Failed");
+        Alert.alert(
+          "Change failed.",
+          "Either the phone number is already taken or the phone number is invalid. Error: " +
+            error
+        );
       });
   };
 
   const changeBirthday = async () => {
-    AccountsAPI.changeBirthday(
-      id1, 
-      Dob1,
-      )
+    AccountsAPI.changeBirthday(id1, Dob1)
       .then((response) => {
-        Alert.alert("Information Changed");
+        Alert.alert("Your birthday has been changed.");
       })
       .catch((error) => {
-        Alert.alert("Change Failed");
+        Alert.alert("Change failed.", "Error: " + error);
       });
   };
 
@@ -117,8 +195,55 @@ export default function ManageAccountScreen({ navigation }) {
         <Avatar
           size="large"
           rounded
-          source={require("../assets/user.png")}
-          onPress={() => console.log("Works!")}
+          source={{ uri: authorImage }}
+          // allow user to change profile picture from either camera roll or camera and then upload to imgBB and then put the url in the database
+          onPress={() => {
+            Alert.alert(
+              "Change Profile Picture",
+              "Select an image from your camera roll or take a new photo.",
+              [
+                {
+                  text: "Camera Roll",
+                  onPress: () => {
+                    pickImage().then(() => {
+                      uploadImage().then(() => {
+                        AccountsAPI.changeProfilePic(id1, imageUrl)
+                          .then((response) => {
+                            Alert.alert("Image changed!");
+                          })
+                          .catch((error) => {
+                            Alert.alert(
+                              "Change failed. Please try again.",
+                              "Error: " + error
+                            );
+                          });
+                      });
+                    });
+                  },
+                },
+                {
+                  text: "Take a Photo",
+                  onPress: () => {
+                    takePhoto().then(() => {
+                      uploadImage().then(() => {
+                        AccountsAPI.changeProfilePic(id1, imageUrl)
+                          .then((response) => {
+                            Alert.alert("Image changed!");
+                          })
+                          .catch((error) => {
+                            Alert.alert(
+                              "Change failed. Please try again.",
+                              "Error: " + error
+                            );
+                          });
+                      });
+                    });
+                  },
+                },
+              ]
+            );
+          }}
+          showEditButton
           activeOpacity={0.7}
         />
       </View>
@@ -126,22 +251,22 @@ export default function ManageAccountScreen({ navigation }) {
       <View style={styles.content} />
       <View style={styles.account}>
         <View style={styles.row}>
-          <Text style={styles.info}>username</Text>
+          <Text style={styles.info}>Username</Text>
           <TextInput
             style={styles.chginfo}
             placeholder={username}
             onChangeText={setUsername1}
           ></TextInput>
           <MaterialIcons
-              name="edit"
-              color="#7c7c7c"
-              size={25}
-              style={styles.chgicon}
-              onPress={changeUsername}
-            />
+            name="edit"
+            color="#7c7c7c"
+            size={25}
+            style={styles.chgicon}
+            onPress={changeUsername}
+          />
         </View>
         <View style={styles.row}>
-          <Text style={styles.info}>email</Text>
+          <Text style={styles.info}>Email</Text>
           <TextInput
             style={styles.chginfo}
             placeholder={email}
@@ -149,49 +274,49 @@ export default function ManageAccountScreen({ navigation }) {
           ></TextInput>
         </View>
         <View style={styles.row}>
-          <Text style={styles.info}>FirstName</Text>
+          <Text style={styles.info}>First Name</Text>
           <TextInput
             style={styles.chginfo}
             placeholder={FirstName}
             onChangeText={setFirstName1}
           ></TextInput>
-                    <MaterialIcons
-              name="edit"
-              color="#7c7c7c"
-              size={25}
-              style={styles.chgicon}
-              onPress={changeFirstName}
-            />
+          <MaterialIcons
+            name="edit"
+            color="#7c7c7c"
+            size={25}
+            style={styles.chgicon}
+            onPress={changeFirstName}
+          />
         </View>
         <View style={styles.row}>
-          <Text style={styles.info}>LastName</Text>
+          <Text style={styles.info}>Surname</Text>
           <TextInput
             style={styles.chginfo}
             placeholder={LastName}
             onChangeText={setLastName1}
           ></TextInput>
-                    <MaterialIcons
-              name="edit"
-              color="#7c7c7c"
-              size={25}
-              style={styles.chgicon}
-              onPress={changeLastName}
-            />
+          <MaterialIcons
+            name="edit"
+            color="#7c7c7c"
+            size={25}
+            style={styles.chgicon}
+            onPress={changeLastName}
+          />
         </View>
         <View style={styles.row}>
-          <Text style={styles.info}>PhoneNum</Text>
+          <Text style={styles.info}>Phone No.</Text>
           <TextInput
             style={styles.chginfo}
             placeholder={PhoneNum}
             onChangeText={setPhoneNum1}
           ></TextInput>
-                    <MaterialIcons
-              name="edit"
-              color="#7c7c7c"
-              size={25}
-              style={styles.chgicon}
-              onPress={changePhoneNum}
-            />
+          <MaterialIcons
+            name="edit"
+            color="#7c7c7c"
+            size={25}
+            style={styles.chgicon}
+            onPress={changePhoneNum}
+          />
         </View>
         <View style={styles.row}>
           <Text style={styles.info}>Birthday</Text>
@@ -200,13 +325,13 @@ export default function ManageAccountScreen({ navigation }) {
             placeholder={Dob}
             onChangeText={setDob1}
           ></TextInput>
-                    <MaterialIcons
-              name="edit"
-              color="#7c7c7c"
-              size={25}
-              style={styles.chgicon}
-              onPress={changeBirthday}
-            />
+          <MaterialIcons
+            name="edit"
+            color="#7c7c7c"
+            size={25}
+            style={styles.chgicon}
+            onPress={changeBirthday}
+          />
         </View>
         {/* <View style={styles.row}>
           <Text style={styles.info}>Password</Text>
@@ -273,7 +398,7 @@ const styles = StyleSheet.create({
     width: 150,
     marginTop: "4%",
     marginLeft: "10%",
-    textAlign: "center",
+    textAlign: "right",
     selectionColor: "black",
   },
   chgicon: {

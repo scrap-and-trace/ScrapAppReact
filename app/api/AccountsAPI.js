@@ -208,6 +208,21 @@ export default class AccountsAPI {
     return response.data;
   }
 
+  static async changeProfilePic(id, image_url) {
+    const response = await axios.put(
+      "http://94.173.211.21:8000/user/" + id + "/",
+      {
+        image_url: image_url,
+      },
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
+    );
+    return response.data;
+  }
+
   static async getLikesByUser(userId) {
     const response = await axios.get(
       `http://94.173.211.21:8000/api/auth/userlikes/${userId}`
@@ -231,11 +246,10 @@ export default class AccountsAPI {
         liked_page: pageId,
       },
       {
-
-       headers: {
-        Authorization: `Token ${await this.getToken()}`,
-      },
-    }
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
     );
     return response.data;
   }
