@@ -23,6 +23,7 @@ import AccountsAPI from "../api/AccountsAPI";
 import { useFocusEffect } from "@react-navigation/native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import * as Location from "expo-location";
+import { get } from "react-native-clipboard";
 
 export default function PostScreen({ navigation }) {
   const [hasGalleryPermission, setHasGalleryPermission] = React.useState(null);
@@ -33,13 +34,10 @@ export default function PostScreen({ navigation }) {
   const [imgBase64, setImgBase64] = React.useState(null);
   const [title, setTitle] = React.useState("");
   const [body, setBody] = React.useState("");
-  const [username, setUsername] = React.useState("");
-  const [email, setEmail] = React.useState("");
   const [latitude, setLatitude] = React.useState(null);
   const [longitude, setLongitude] = React.useState(null);
-  const [scrapbookId, setScrapbookId] = React.useState(1);
 
-  // Request permissions for the camera and gallery.
+  // Request permissions for the gallery.
   useFocusEffect(
     React.useCallback(() => {
       (async () => {
@@ -50,7 +48,7 @@ export default function PostScreen({ navigation }) {
     }, [])
   );
 
-  // Request permissions for the camera and gallery.
+  // Request permissions for the camera.
   useFocusEffect(
     React.useCallback(() => {
       (async () => {
@@ -60,7 +58,7 @@ export default function PostScreen({ navigation }) {
     }, [])
   );
 
-  // Request permissions for geolocation.
+  // Request permissions for geolocation and call the getLocation function.
   useFocusEffect(
     React.useCallback(() => {
       (async () => {
@@ -72,111 +70,69 @@ export default function PostScreen({ navigation }) {
 
   // Get the user's current location.
   const getLocation = async () => {
-    if (hasLocationPermission === null) {
-      alert("Requesting location permissions");
-    } else if (hasLocationPermission === false) {
-      alert(
-        "No access to location. You can fix this by going to Settings > Location > Allow Location Access > Allow"
-      );
-    } else {
-      let location = await Location.getCurrentPositionAsync({});
-      setLatitude(location.coords.latitude);
-      setLongitude(location.coords.longitude);
-    }
-  };
-
-  // Get the user's account details.
-  const getAccount = async () => {
-    const response = await AccountsAPI.getAccount();
-    setUsername(response.username);
-    setEmail(response.email);
+    let location = await Location.getCurrentPositionAsync({});
+    setLatitude(location.coords.latitude);
+    setLongitude(location.coords.longitude);
   };
 
   // Take a photo with the camera.
   const takePhoto = async () => {
-    if (hasCameraPermission === null) {
-      alert("Requesting camera permissions");
-    } else if (hasCameraPermission === false) {
-      alert(
-        "No access to camera. You can fix this by going to Settings > Camera > Allow Camera Access > Allow"
-      );
-    } else {
-      let result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-        base64: true,
-      });
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      resizeMode: "contain",
+      quality: 1,
+      base64: true,
+    });
 
-      if (!result.canceled) {
-        for (let i = 0; i < result.assets.length; i++) {
-          setImage(result.assets[i].uri);
-          setImgBase64(result.assets[i].base64);
-        }
+    if (!result.canceled) {
+      for (let i = 0; i < result.assets.length; i++) {
+        setImage(result.assets[i].uri);
+        setImgBase64(result.assets[i].base64);
       }
     }
   };
 
   // Select a photo from the gallery. Allow for base64 encoding.
   const pickImage = async () => {
-    if (hasGalleryPermission === null) {
-      alert("Requesting gallery permissions");
-    } else if (hasGalleryPermission === false) {
-      alert(
-        "No access to gallery. You can fix this by going to Settings > Gallery > Allow Gallery Access > Allow"
-      );
-    } else {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-        base64: true,
-      });
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      resizeMode: "contain",
+      quality: 1,
+      base64: true,
+    });
 
-      if (!result.canceled) {
-        for (let i = 0; i < result.assets.length; i++) {
-          setImage(result.assets[i].uri);
-          setImgBase64(result.assets[i].base64);
-        }
+    if (!result.canceled) {
+      for (let i = 0; i < result.assets.length; i++) {
+        setImage(result.assets[i].uri);
+        setImgBase64(result.assets[i].base64);
       }
     }
   };
 
+  React.useEffect(() => {
+    getLocation();
+  }, [hasLocationPermission]);
+
   // Select the scrapbook to upload the post to.
   // Navigate to the scrapbook selection screen and pass all the data to the state.
-  const selectScrapbook = (id) => {
-    setScrapbookId(id);
+  const selectScrapbook = () => {
     getLocation();
-    getAccount();
-    if (title && body && image && latitude && longitude !== null) {
-      navigation.navigate("Select Scrapbook", {
-        title: title,
-        body: body,
-        image: image,
-        imgBase64: imgBase64,
-        latitude: latitude,
-        longitude: longitude,
-      });
-    } else if (latitude && longitude === null) {
-      alert("Please enable location services.");
-    }
+    navigation.navigate("Select Scrapbook", {
+      title: title,
+      body: body,
+      imgBase64: imgBase64,
+      latitude: latitude,
+      longitude: longitude,
+    });
   };
 
   // Remove the image from the state.
   const removeImageFromState = () => {
     setImage(null);
-  };
-
-  // Remove the title from the state.
-  const removeTitleFromState = () => {
-    setTitle("");
-  };
-
-  // Remove the body from the state.
-  const removeBodyFromState = () => {
-    setBody("");
   };
 
   return (

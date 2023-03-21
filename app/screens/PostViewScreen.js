@@ -39,11 +39,12 @@ export default function PostViewScreen({ route, navigation }) {
       setLikes(likes);
     });
     AccountsAPI.getLikesByUser(route.params.id).then((liked_page) => {
-      if(liked_page == post){
+      if (liked_page == post) {
         setLiked(liked_page);
-
-      }else{
-        console.log("The user has either not liked this page or there was another errror");
+      } else {
+        console.log(
+          "The user has either not liked this page or there was another errror"
+        );
       }
     });
   }, [route.params.id]);
@@ -71,22 +72,6 @@ export default function PostViewScreen({ route, navigation }) {
     setRefreshing(false);
   }, [fetchDetails, fetchAccountDetails]);
 
-  const handleLike = () => {
-    // Allow user to like and unlike a post
-    if (liked) {
-      AccountsAPI.deleteLike(id, post.id).then(() => {
-        setLiked(false);
-        fetchDetails();
-      });
-    }
-    if (!liked) {
-      AccountsAPI.createLike(id, post.id).then(() => {
-        setLiked(true);
-        fetchDetails();
-      });
-    }
-  };
-
   // Show a loading indicator while the post and comments are being fetched.
   if (post === null) {
     return <LoadingContainer />;
@@ -104,12 +89,20 @@ export default function PostViewScreen({ route, navigation }) {
             title={post.title}
             body={post.body}
             image={
-              post.image ? post.image : require("../assets/default_img.png")
+              post.image_url
+                ? { uri: post.image_url }
+                : require("../assets/default_img.png")
             }
+            date_created={post.date_created}
           />
         )}
         <SafeAreaView style={styles.container}>
-          <LikeContainer user_id={id} post_id={post.id} liked={liked} likes={likes} />
+          <LikeContainer
+            user_id={id}
+            post_id={post.id}
+            liked={liked}
+            likes={likes}
+          />
           {/* add button to text field to submit commment */}
           <TextInput
             style={styles.commentBox}

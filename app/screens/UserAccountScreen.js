@@ -32,7 +32,7 @@ export default function UserAccountScreen({ navigation }) {
   const [first_name, setFirstName] = React.useState("");
   const [last_name, setLastName] = React.useState("");
   const [username, setUsername] = React.useState("");
-  const [email, setEmail] = React.useState("");
+  const [profileImage, setProfileImage] = React.useState("");
   const [id, setId] = React.useState("");
   const [followedScrapbooks, setFollowedScrapbooks] = React.useState([]);
   const [scrapbooks, setScrapbooks] = React.useState([]);
@@ -42,8 +42,8 @@ export default function UserAccountScreen({ navigation }) {
     setFirstName(user.first_name);
     setLastName(user.last_name);
     setUsername(user.username);
-    setEmail(user.email);
     setId(user.id);
+    setProfileImage(user.image_url);
     setScrapbooks(user.scrapbooks);
   };
 
@@ -66,6 +66,7 @@ export default function UserAccountScreen({ navigation }) {
 
   const onRefresh = React.useCallback(() => {
     fetchUser();
+    getFollowing();
   }, []);
 
   React.useEffect(() => {
@@ -97,7 +98,7 @@ export default function UserAccountScreen({ navigation }) {
                 first_name={first_name}
                 last_name={last_name}
                 username={username}
-                email={email}
+                authorImage={profileImage}
                 id={id}
               />
               <FlatList
@@ -137,7 +138,7 @@ export default function UserAccountScreen({ navigation }) {
                     username={item.scrapbook.username}
                     onPress={() =>
                       navigation.navigate("Scrapbook View", {
-                        scrapbookId: item.id,
+                        scrapbookId: item.scrapbook.id,
                       })
                     }
                   />

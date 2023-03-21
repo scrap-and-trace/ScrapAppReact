@@ -102,20 +102,21 @@ export default function MapScreen({ navigation }) {
                     {Platform.OS === "android" ? (
                       <WebView
                         style={styles.image}
+                        // if image not found, show a placeholder image
                         source={{
-                          uri: post.image
-                            ? post.image
-                            : require("../assets/placeholder.png"),
+                          uri: post.image_url
+                            ? post.image_url
+                            : require("../assets/default_img.png"),
                         }}
                       />
                     ) : (
                       <Image
                         style={styles.image}
-                        // If the post has an image, use that, else use a placeholder image.
+                        // if image not found, show a placeholder image
                         source={
-                          post.image
-                            ? { uri: post.image }
-                            : require("../assets/placeholder.png")
+                          post.image_url
+                            ? { uri: post.image_url }
+                            : require("../assets/default_img.png")
                         }
                       />
                     )}
@@ -191,6 +192,7 @@ const styles = StyleSheet.create({
   image: {
     width: 200,
     height: 200,
+    borderRadius: 50,
     alignSelf: "center",
     resizeMode: "cover",
     padding: 10,

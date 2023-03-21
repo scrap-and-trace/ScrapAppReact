@@ -29,11 +29,21 @@ export default class PageAPI {
     return response.data.results[0].comments;
   }
 
-  static async createPage(title, body, scrapbook, longitude, latitude) {
+  static async createPage(
+    title,
+    body,
+    scrapbook,
+    image_url,
+    delete_url,
+    longitude,
+    latitude
+  ) {
     const response = await axios.post("http://94.173.211.21:8000/page/", {
       title,
       body,
       scrapbook,
+      image_url,
+      delete_url,
       longitude,
       latitude,
     });

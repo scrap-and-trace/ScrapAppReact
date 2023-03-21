@@ -95,6 +95,7 @@ export default function UserSearchScreen({ navigation }) {
             last_name={item.last_name}
             username={item.username}
             id={item.id}
+            authorImage={item.image_url}
             onPress={() => {
               // Navigate to the User Account screen and refresh the data
               navigation.navigate("User Account", {

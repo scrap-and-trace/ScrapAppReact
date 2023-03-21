@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { Alert } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import AccountsAPI from "../api/AccountsAPI";
 import CreateScrapbookScreen from "../screens/CreateScrapbookScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ManageAccountScreen from "../screens/ManageAccountScreen";
@@ -21,7 +22,6 @@ import ScrapbookViewScreen from "../screens/ScrapbookViewScreen";
 import SelectScrapbookScreen from "../screens/SelectScrapbookScreen";
 import UserAccountScreen from "../screens/UserAccountScreen";
 import SearchScreen from "./SearchScreen";
-import AccountsAPI from "../api/AccountsAPI";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -89,8 +89,7 @@ function AccountStack({ navigation }) {
               style={{ marginRight: "0%", marginLeft: "5%" }}
               onPress={() =>
                 AccountsAPI.logout().then(() => {
-                  Alert.alert("Logged out successfully");
-                  navigation.navigate("Home");
+                  Alert.alert("Logged out successfully!");
                 })
               }
             />
@@ -143,12 +142,12 @@ export default function NavBar() {
         }}
       />
       <Tab.Screen
-        name="Notifications"
-        component={NotificationsScreen}
+        name="Create Scrapbook"
+        component={CreateScrapbookScreen}
         options={{
-          tabBarLabel: "Notifications",
+          tabBarLabel: "Create Scrapbook",
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="notifications" color={color} size={size} />
+            <MaterialIcons name="book" color={color} size={size} />
           ),
           headerShown: true,
         }}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, addListener } from "react-native";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import NavBar from "./app/navigation/NavBar";
@@ -26,7 +26,7 @@ export default function App() {
       AccountsAPI.isLoggedIn().then((loggedIn) => {
         setLoggedIn(loggedIn);
       });
-    }, 1000);
+    }, 1000); // Wait 1 second before checking again.
     return () => clearInterval(interval);
   }, []);
 

@@ -14,18 +14,17 @@ import PageAPI from "../api/PageAPI";
 import ScrapbookContainer from "../components/ScrapbookContainer";
 
 export default function SelectScrapbookScreen({ route, navigation }) {
-  const { title, body, image, imgBase64, latitude, longitude } = route.params;
+  const { title, body, imgBase64, longitude, latitude } = route.params;
   const [scrapbooks, setScrapbooks] = React.useState([]);
-  const [dataUpdated, setDataUpdated] = React.useState(false);
-  const [imgBBreturnedUrl, setImgBBurl] = React.useState("");
+  const [imageUrl, setImageUrl] = React.useState("");
+  const [deleteUrl, setDeleteUrl] = React.useState("");
+
   const imgBB = require("../json/imgbb-key.json").key;
 
   // Fetch the user's scrapbooks from the API.
   const fetchUser = async () => {
     const user = await AccountsAPI.getAccount();
     setScrapbooks(user.scrapbooks);
-    setDataUpdated(true); // set dataUpdated to true
-    console.log(title, body, image, imgBase64, latitude, longitude);
   };
 
   // When the page is focused, fetch the post and comments from the API.
@@ -51,23 +50,25 @@ export default function SelectScrapbookScreen({ route, navigation }) {
 
   // Because the backend currently does not support uploading images, we need to upload the image to imgBB and then use the returned url to create the post.
   // This might actually be a good thing, as it offloads the image hosting to imgBB, which is a lot better than hosting it on our own server.
-  const uploadImage = async (image) => {
-    const data = new FormData();
-    data.append("image", imgBase64);
-    data.append("key", imgBB);
-
-    fetch("https://api.imgbb.com/1/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        setImgBBurl(response.data.url);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  // Use a promise to ensure that the image is uploaded before creating the post.
+  const uploadImage = async () => {
+    const formData = new FormData();
+    formData.append("image", imgBase64);
+    formData.append("key", imgBB);
+    const response = await fetch("https://api.imgbb.com/1/upload", {
+      method: "POST",
+      body: formData,
+    });
+    const result = await response.json();
+    setImageUrl(result.data.display_url);
+    setDeleteUrl(result.data.delete_url);
+    return new Promise((resolve, reject) => {
+      // add promise to ensure that the image is uploaded before creating the post
+      if (result.success) {
+        resolve(result);
+      }
+      reject(result);
+    });
   };
 
   // Return a list of scrapbooks that the user can select from, and a button to create a new scrapbook at the bottom of the screen outside of the scrollview
@@ -86,25 +87,33 @@ export default function SelectScrapbookScreen({ route, navigation }) {
               body={item.body}
               username={item.username}
               onPress={() =>
-                // Upload the image to imgBB then create the post with the returned url
-                uploadImage(image).then(() =>
-                  PageAPI.createPage(
-                    title,
-                    body,
-                    item.id,
-                    convertToJSONNumber(longitude),
-                    convertToJSONNumber(latitude)
-                  )
-                    .then(() => {
-                      ToastAndroid.show(
-                        "Page created successfully!",
+                // Make sure imageUrl is not empty. This isn't a perfect solution, but it works for now.
+                // We need to use a promise to ensure that the image is uploaded before creating the post.
+                uploadImage().then(() =>
+                  imageUrl === ""
+                    ? ToastAndroid.show(
+                        "Image not uploaded. Please try again.",
                         ToastAndroid.SHORT
-                      );
-                      navigation.navigate("Home");
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                    })
+                      )
+                    : PageAPI.createPage(
+                        title,
+                        body,
+                        item.id,
+                        imageUrl,
+                        deleteUrl,
+                        convertToJSONNumber(longitude),
+                        convertToJSONNumber(latitude)
+                      ).then(() => {
+                        ToastAndroid.show(
+                          "Page created successfully",
+                          ToastAndroid.SHORT
+                        );
+                        // Reset navigation stack to the home screen
+                        navigation.reset({
+                          index: 0,
+                          routes: [{ name: "Home" }],
+                        });
+                      })
                 )
               }
             />

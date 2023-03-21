@@ -53,18 +53,6 @@ export default class AccountsAPI {
     return false;
   }
 
-  static async getIsAuthenticated() {
-    const response = await axios.get(
-      "http://94.173.211.21:8000/api/auth/user/",
-      {
-        headers: {
-          Authorization: `Token ${await this.getToken()}`,
-        },
-      }
-    );
-    return response.ok;
-  }
-
   static async getAccount() {
     const response = await axios.get(
       "http://94.173.211.21:8000/api/auth/user/",
@@ -115,6 +103,22 @@ export default class AccountsAPI {
 
   static async followScrapbook(follower, scrapbook) {
     const response = await axios.post(
+      "http://94.173.211.21:8000/api/auth/followlist/" + scrapbook + "/",
+      {
+        follower,
+        scrapbook,
+      },
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
+    );
+    return response.data;
+  }
+
+  static async unfollowScrapbook(follower, scrapbook) {
+    const response = await axios.delete(
       "http://94.173.211.21:8000/api/auth/followlist/" + scrapbook + "/",
       {
         follower,
@@ -244,20 +248,6 @@ export default class AccountsAPI {
     );
     return response.data;
   }
-  /*static async createLike(
-    userId,
-    pageId
-    ) {
-      let data = JSON.stringify({
-        liker: userId,
-        liked_page: pageId,
-      })
-    const response = await axios.post(
-      `http://94.173.211.21:8000/api/auth/likes/${pageId}`,
-      data
-    );
-    return response.data;
-  }*/
 
   static async getLikeById(id) {
     const response = await axios.get(
@@ -273,6 +263,7 @@ export default class AccountsAPI {
         dob: dob,
       }
     );
+    return response.data;
   }
   static async deleteLike(id) {
     const response = await axios.delete(

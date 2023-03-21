@@ -23,7 +23,7 @@ export default function HomeScreen({ navigation }) {
   const [posts, setPosts] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
 
-  // When first loading the screen, fetch the posts from the API.
+  // When first loading the screen, get the posts from the API.
   React.useEffect(() => {
     PageAPI.getPages().then((pages) => {
       setPosts(pages);
@@ -73,8 +73,11 @@ export default function HomeScreen({ navigation }) {
               body={post.body}
               // If image is null, show the /assets/default_img.png image.
               image={
-                post.image ? post.image : require("../assets/default_img.png")
+                post.image_url
+                  ? { uri: post.image_url }
+                  : require("../assets/default_img.png")
               }
+              date_created={post.date_created}
               // Navigate to post title screen when the post is tapped.
               onPress={() => navigation.navigate("Post View", { id: post.id })}
             />

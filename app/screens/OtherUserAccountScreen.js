@@ -43,7 +43,7 @@ export default function OtherUserAccountScreen({ route, navigation }) {
     setLastName(user.last_name);
     setUsername(user.username);
     setScrapbooks(user.scrapbooks);
-    setFollowedScrapbooks(user.following);
+    setFollowedScrapbooks(user.following.scrapbook);
     setDataUpdated(true); // set dataUpdated to true
   };
 
