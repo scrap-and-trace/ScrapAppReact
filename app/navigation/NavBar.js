@@ -68,7 +68,7 @@ function AccountStack({ navigation }) {
           // add material icon button to header to allow user to modify account details
           headerRight: () => (
             <MaterialIcons
-              name="account-circle"
+              name="settings"
               color="black"
               size={30}
               onPress={() => navigation.navigate("Manage Account")}
@@ -88,9 +88,23 @@ function AccountStack({ navigation }) {
               size={22}
               style={{ marginRight: "0%", marginLeft: "5%" }}
               onPress={() =>
-                AccountsAPI.logout().then(() => {
-                  Alert.alert("Logged out successfully!");
-                })
+                Alert.alert(
+                  "Logout",
+                  "Are you sure you want to logout?",
+                  [
+                    {
+                      text: "Cancel",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Logout",
+                      onPress: () => {
+                        AccountsAPI.logout();
+                      },
+                    },
+                  ],
+                  { cancelable: false }
+                )
               }
             />
           ),
