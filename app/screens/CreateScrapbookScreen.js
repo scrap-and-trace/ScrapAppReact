@@ -41,17 +41,23 @@ export default function CreateScrapbookScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Title</Text>
-      <TextInput style={styles.input} onChangeText={setTitle} value={title} />
-      <Checkbox
-        style={styles.checkbox}
-        value={toggleCheckBox}
-        onValueChange={(newValue) => setToggleCheckBox(newValue)}
-      />
-      <Text>Friends only</Text>
-      <Button mode="contained" onPress={onCreate} style={styles.button}>
-        Create
-      </Button>
+      <View style={styles.container}>
+        <TextInput
+          style={styles.input}
+          onChangeText={setTitle}
+          value={title}
+          placeholder="Title"
+        />
+        <Text style={styles.label}>Friends only</Text>
+        <Checkbox
+          style={styles.checkbox}
+          value={toggleCheckBox}
+          onValueChange={(newValue) => setToggleCheckBox(newValue)}
+        />
+        <Button mode="contained" onPress={onCreate} style={styles.button}>
+          Create
+        </Button>
+      </View>
     </View>
   );
 }
@@ -64,14 +70,15 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: "80%",
+    width: Dimensions.get("window").width - 20,
     margin: 12,
-    borderWidth: 1,
     padding: 10,
+    backgroundColor: "#fff",
+    borderRadius: 10,
   },
   label: {
-    width: "80%",
-    textAlign: "left",
+    width: Dimensions.get("window").width - 20,
+    textAlign: "center",
   },
   button: {
     margin: 10,

@@ -1,10 +1,14 @@
 import axios from "axios";
-
+import * as SecureStore from "expo-secure-store";
 export default class ScrapbookAPI {
   constructor(title, author, friends_only) {
     this.title = title;
     this.author = author;
     this.friends_only = friends_only;
+  }
+
+  static async getToken() {
+    return await SecureStore.getItemAsync("token");
   }
 
   static async getScrapbooks() {
@@ -42,7 +46,12 @@ export default class ScrapbookAPI {
 
   static async deleteScrapbook(id) {
     const response = await axios.delete(
-      "http://94.173.211.21:8000/api/auth/scrapbooks/" + id
+      "http://94.173.211.21:8000/api/auth/deletescrapbook/" + id + "/",
+      {
+        headers: {
+          Authorization: "Token " + (await this.getToken()),
+        },
+      }
     );
     return response.data;
   }

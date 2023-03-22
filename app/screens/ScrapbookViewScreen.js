@@ -1,6 +1,7 @@
 import { useFocusEffect } from "@react-navigation/native";
 import React from "react";
 import {
+  Alert,
   FlatList,
   RefreshControl,
   SafeAreaView,
@@ -9,6 +10,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { get } from "react-native-clipboard";
 import { Button } from "react-native-paper";
 import AccountsAPI from "../api/AccountsAPI";
 import PageAPI from "../api/PageAPI";
@@ -20,6 +22,8 @@ export default function ScrapbookViewScreen({ route, navigation }) {
   const [posts, setPosts] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
   const [id, setId] = React.useState("");
+  const [scrapbookOwner, setScrapbookOwner] = React.useState("");
+  const [following, setFollowing] = React.useState(false);
 
   // Match the page's scrapbook id to the scrapbook id in the route params. If the scrapbook id matches, then add the page to the posts array.
   const getPosts = async () => {
@@ -47,12 +51,11 @@ export default function ScrapbookViewScreen({ route, navigation }) {
     const following = await AccountsAPI.getFollowing(account.id);
     following.forEach((followedScrapbook) => {
       if (followedScrapbook.id === scrapbook.id) {
-        console.log("following");
-        return true;
+        setFollowing(true);
+      } else {
+        setFollowing(false);
       }
     });
-    console.log("not following");
-    return false;
   };
 
   // If the user owns the scrapbook, then disable the follow button.
@@ -60,23 +63,27 @@ export default function ScrapbookViewScreen({ route, navigation }) {
     const account = await AccountsAPI.getAccount();
     const scrapbook = await ScrapbookAPI.getScrapbook(route.params.scrapbookId);
     if (account.id === scrapbook.author) {
-      console.log("owner");
-      return true;
+      setScrapbookOwner(true);
+    } else {
+      setScrapbookOwner(false);
     }
-    console.log("not owner");
-    return false;
   };
 
   // Get the posts when the screen loads.
   React.useEffect(() => {
     getPosts();
     getAccountId();
+    isOwner();
+    isFollowing();
   }, []);
 
   // Get the posts when the user pulls down to refresh.
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getPosts();
+    getAccountId();
+    isOwner();
+    isFollowing();
     setRefreshing(false);
   }, []);
 
@@ -87,21 +94,18 @@ export default function ScrapbookViewScreen({ route, navigation }) {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {/* If the user is the owner of the scrapbook, then disable the follow button. */}
-        {/* Similarly, if the user is following the scrapbook, then show the unfollow button. */}
-        {/* if isOwner is true, don't show anything, otherwise display a follow or unfollow button depending on the state */}
-        {isOwner() === false ? (
-          isFollowing() === false ? (
+        {/* If the user is the owner of the scrapbook, don't display any buttons. */}
+        {/* If the user is not the owner of the scrapbook, display either:
+        - The follow button if the user is not already following the scrapbook.
+        - The unfollow button if the user is already following the scrapbook. */}
+        {!scrapbookOwner ? (
+          !following ? (
             <Button
               style={styles.button}
               mode="contained"
               onPress={async () => {
-                const account = await AccountsAPI.getAccount();
-                const scrapbook = await ScrapbookAPI.getScrapbook(
-                  route.params.scrapbookId
-                );
-                await AccountsAPI.followScrapbook(account.id, scrapbook.id);
-                await getPosts();
+                await AccountsAPI.followScrapbook(id, route.params.scrapbookId);
+                setFollowing(true);
               }}
             >
               Follow
@@ -111,18 +115,43 @@ export default function ScrapbookViewScreen({ route, navigation }) {
               style={styles.button}
               mode="contained"
               onPress={async () => {
-                const account = await AccountsAPI.getAccount();
-                const scrapbook = await ScrapbookAPI.getScrapbook(
-                  route.params.scrapbookId
-                );
-                await AccountsAPI.unfollowScrapbook(account.id, scrapbook.id);
-                await getPosts();
+                await AccountsAPI.unfollowScrapbook(route.params.scrapbookId);
+                setFollowing(false);
               }}
             >
               Unfollow
             </Button>
           )
-        ) : null}
+        ) : (
+          // If the user is the owner of the scrapbook, display the edit button.
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={() => {
+              Alert.alert(
+                "Delete Scrapbook",
+                "Are you sure you want to delete this scrapbook?",
+                [
+                  {
+                    text: "Cancel",
+                    style: "cancel",
+                  },
+                  {
+                    text: "Delete",
+                    onPress: async () => {
+                      await ScrapbookAPI.deleteScrapbook(
+                        route.params.scrapbookId
+                      );
+                      navigation.navigate("Account");
+                    },
+                  },
+                ]
+              );
+            }}
+          >
+            Delete Scrapbook
+          </Button>
+        )}
 
         {/* Display the posts in a flat list. */}
         <FlatList
@@ -158,7 +187,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   button: {
-    margin: 10,
+    marginVertical: 10,
+    marginHorizontal: 10,
     backgroundColor: "#e96b37",
   },
 });
