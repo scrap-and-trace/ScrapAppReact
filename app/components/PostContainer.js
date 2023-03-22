@@ -32,10 +32,10 @@ export default function PostContainer({
       <View style={styles.container}>
         <Image source={image} style={styles.image} />
         <Text style={styles.title}>
-          {title.length > 50 ? title.substring(0, 50) + "..." : title}
+          {title.length > 20 ? title.substring(0, 50) + "..." : title}
         </Text>
         <Text style={styles.body}>
-          {body.length > 50 ? body.substring(0, 50) + "..." : body}
+          {body.length > 255 ? body.substring(0, 255) + "..." : body}
         </Text>
         <Text style={styles.postUsername}>
           {new Date(date_created).toLocaleDateString()}
