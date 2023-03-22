@@ -6,6 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  FlatList,
+  
 } from "react-native";
 import AccountsAPI from "../api/AccountsAPI";
 import PhoneInput from "react-native-phone-input";
@@ -46,6 +48,20 @@ export default function RegisScreen(props) {
           );
         });
     }
+  };
+
+  const data = [
+    { id: 1, name: 'Password must be a minimum of 8 characters long' },
+    { id: 2, name: 'Password must not be similar to first name, last name, or username' },
+    { id: 3, name: 'Password must not only consist of numbers' },
+  ];
+
+  const renderItem = ({ item }) => {
+    return (
+      <View>
+        <Text>{item.name}</Text>
+      </View>
+    );
   };
 
   return (
@@ -109,15 +125,26 @@ export default function RegisScreen(props) {
         secureTextEntry={true}
       ></TextInput>
       {/* Test */}
+      
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+      />
 
       <TouchableOpacity onPress={RegisterAcc}>
         <View style={styles.button}>
           <Text style={styles.buttonText}>Register</Text>
         </View>
       </TouchableOpacity>
+
     </View>
+
+
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
