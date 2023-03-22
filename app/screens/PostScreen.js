@@ -160,12 +160,14 @@ export default function PostScreen({ navigation }) {
             onChangeText={(text) => setTitle(text)}
             value={title}
             placeholder="Title"
+            maxLength={20}
           />
           <TextInput
             style={styles.textInputBody}
             onChangeText={(text) => setBody(text)}
             value={body}
             placeholder="Body"
+            maxLength={255}
           />
         </SafeAreaView>
         <SafeAreaView style={styles.container}>
