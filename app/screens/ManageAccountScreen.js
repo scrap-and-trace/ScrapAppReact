@@ -19,7 +19,6 @@ export default function ManageAccountScreen() {
   const [email, setEmail] = React.useState("");
   const [FirstName, setFirstName] = React.useState("");
   const [LastName, setLastName] = React.useState("");
-  const [Password, setPassword] = React.useState("");
   const [PhoneNum, setPhoneNum] = React.useState("");
   const [Dob, setDob] = React.useState("");
 
@@ -30,6 +29,9 @@ export default function ManageAccountScreen() {
   const [PhoneNum1, setPhoneNum1] = React.useState("");
   const [Dob1, setDob1] = React.useState("");
   const [id1, setId1] = React.useState("");
+  const [old_password, setold_password] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [password2, setPassword2] = React.useState("");
 
   const [hasCameraPermission, setHasCameraPermission] = React.useState(null);
   const [hasGalleryPermission, setHasGalleryPermission] = React.useState(null);
@@ -189,6 +191,16 @@ export default function ManageAccountScreen() {
       });
   };
 
+  const changePassword= async () => {
+    AccountsAPI.changePassword(id1, old_password, password, password2)
+      .then((response) => {
+        Alert.alert("Your password has been changed.");
+      })
+      .catch((error) => {
+        Alert.alert("Change failed.", "\n\nError: " + error.message);
+      });
+  };
+
   return (
     <View style={styles.accountDetails}>
       <View style={styles.avatar}>
@@ -338,21 +350,41 @@ export default function ManageAccountScreen() {
             onPress={changeBirthday}
           />
         </View>
-        {/* <View style={styles.row}>
-          <Text style={styles.info}>Password</Text>
+        </View>
+        <View style={styles.account1}>
+        <Text style={styles.line1}></Text>
+        <View style={styles.row}>
+          <Text style={styles.info1}>Old Password</Text>
           <TextInput
-            style={styles.chginfo}
-            placeholder={Password}
-            onChangeText={""}
+            style={styles.chginfo1}
+            onChangeText={setold_password}
+            secureTextEntry={true}
           ></TextInput>
-        </View> */}
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.info1}>New Password</Text>
+          <TextInput
+            style={styles.chginfo1}
+            onChangeText={setPassword}
+            secureTextEntry={true}
+          ></TextInput>
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.info1}>Enter Agian</Text>
+          <TextInput
+            style={styles.chginfo1}
+            onChangeText={setPassword2}
+            secureTextEntry={true}
+          ></TextInput>
+        </View>
       </View>
 
       <View style={styles.buttonPositon}>
-        <TouchableOpacity style={styles.button} onPress={changeUsername}>
-          <Text style={styles.buttonText}>Edit</Text>
+        <TouchableOpacity style={styles.button} onPress={changePassword}>
+          <Text style={styles.buttonText}>Change Password</Text>
         </TouchableOpacity>
       </View>
+      
     </View>
   );
 }
@@ -376,6 +408,9 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     marginLeft: "5%",
   },
+  account1: {
+    justifyContent: "flex-start",
+  },
   buttonPositon: {
     justifyContent: "flex-start",
     alignItems: "center",
@@ -397,14 +432,36 @@ const styles = StyleSheet.create({
     textAlign: "left",
     width: 110,
   },
+
+  info1: {
+    color: "#e96b37",
+    fontWeight: "bold",
+    fontSize: 20,
+    marginTop: "4%",
+    textAlign: "left",
+    width: 150,
+  },
   chginfo: {
     color: "#000000",
     fontSize: 15,
-    width: 150,
+    width: 185,
     marginTop: "4%",
-    marginLeft: "10%",
     textAlign: "right",
     selectionColor: "black",
+  },
+
+  chginfo1: {
+    color: "#000000",
+    fontSize: 15,
+    width: 185,
+    height: 30,
+    marginTop: "4%",
+    textAlign: "center",
+    selectionColor: "black",
+    backgroundColor: "#fbfbfb",
+    borderRadius: 30,
+    borderColor: "#e96b37",
+    borderWidth: 0.5,
   },
   chgicon: {
     fontSize: 20,
@@ -412,9 +469,14 @@ const styles = StyleSheet.create({
     marginLeft: "2%",
     textAlign: "center",
   },
+  chgicon1: {
+    fontSize: 20,
+    marginTop: "4%",
+    textAlign: "center",
+  },
   button: {
-    marginTop: "20%",
-    width: 90,
+    marginTop: "10%",
+    width: 160,
     height: 40,
     justifyContent: "center",
     alignItems: "center",
@@ -431,6 +493,14 @@ const styles = StyleSheet.create({
     height: 0,
     marginLeft: "5%",
     marginRight: "5%",
+    borderColor: "#e96b37",
+    borderWidth: 0.5,
+  },
+  line1: {
+    height: 0,
+    marginLeft: "5%",
+    marginRight: "5%",
+    marginTop: "5%",
     borderColor: "#e96b37",
     borderWidth: 0.5,
   },

@@ -250,4 +250,22 @@ export default class AccountsAPI {
     );
     return response.data;
   }
+
+  static async changePassword(id, old_password, password, password2) {
+    const response = await axios.post(
+      "http://13.41.14.97:8000/user/" + id + "/set_password/",
+      {
+        old_password: old_password,
+        password: password,
+        password2:password2,
+      },
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
+    );
+    return response.data;
+  }
+
 }
