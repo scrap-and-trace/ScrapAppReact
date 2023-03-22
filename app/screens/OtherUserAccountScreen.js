@@ -44,7 +44,6 @@ export default function OtherUserAccountScreen({ route, navigation }) {
     setLastName(user.last_name);
     setUsername(user.username);
     setScrapbooks(user.scrapbooks);
-    setFollowedScrapbooks(user.following.scrapbook);
     setAuthorImage(user.image_url);
     setDataUpdated(true); // set dataUpdated to true
   };
@@ -69,82 +68,41 @@ export default function OtherUserAccountScreen({ route, navigation }) {
   }
 
   return (
-    <Tab.Navigator
-      dataUpdated={dataUpdated}
-      key={dataUpdated}
-      tabBarOptions={{
-        indicatorStyle: { backgroundColor: "#e96b37" },
-      }}
-    >
-      <Tab.Screen name="Scrapbooks">
-        {() => (
-          <SafeAreaView style={styles.container}>
-            <ScrollView
-              style={styles.scrollView}
-              refreshControl={
-                <RefreshControl refreshing={false} onRefresh={onRefresh} />
-              }
-            >
-              <AccountDetailContainer
-                navigation={navigation}
-                username={username}
-                first_name={first_name}
-                last_name={last_name}
-                authorImage={{ uri: authorImage }}
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        style={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={false} onRefresh={onRefresh} />
+        }
+      >
+        <AccountDetailContainer
+          navigation={navigation}
+          username={username}
+          first_name={first_name}
+          last_name={last_name}
+          authorImage={{ uri: authorImage }}
+        />
+        <View style={styles.scrapbookList}>
+          <FlatList
+            data={scrapbooks}
+            renderItem={({ item }) => (
+              <ScrapbookContainer
+                title={item.title}
+                username={item.username}
+                onPress={() =>
+                  navigation.navigate("Scrapbook View", {
+                    scrapbookId: item.id,
+                  })
+                }
               />
-              <View style={styles.scrapbookList}>
-                <FlatList
-                  data={scrapbooks}
-                  renderItem={({ item }) => (
-                    <ScrapbookContainer
-                      title={item.title}
-                      username={item.username}
-                      onPress={() =>
-                        navigation.navigate("Scrapbook View", {
-                          scrapbookId: item.id,
-                        })
-                      }
-                    />
-                  )}
-                  keyExtractor={(item) => item.id}
-                  numColumns={2}
-                  columnWrapperStyle={styles.grid}
-                />
-              </View>
-            </ScrollView>
-          </SafeAreaView>
-        )}
-      </Tab.Screen>
-      <Tab.Screen name="Following">
-        {() => (
-          <ScrollView
-            refreshControl={
-              <RefreshControl refreshing={false} onRefresh={onRefresh} />
-            }
-          >
-            <View style={styles.container}>
-              <FlatList
-                data={followedScrapbooks}
-                renderItem={({ item }) => (
-                  <ScrapbookContainer
-                    title={item.title}
-                    username={item.username}
-                    onPress={() =>
-                      navigation.navigate("Scrapbook View", {
-                        scrapbookId: item.id,
-                      })
-                    }
-                  />
-                )}
-                keyExtractor={(item) => item.id}
-                numColumns={2}
-                columnWrapperStyle={styles.grid}
-              />
-            </View>
-          </ScrollView>
-        )}
-      </Tab.Screen>
-    </Tab.Navigator>
+            )}
+            keyExtractor={(item) => item.id}
+            numColumns={2}
+            columnWrapperStyle={styles.grid}
+          />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
