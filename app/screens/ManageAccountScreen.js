@@ -201,6 +201,19 @@ export default function ManageAccountScreen() {
       });
   };
 
+  const changePic = async () => {
+    AccountsAPI.changeProfilePic(id1, imageUrl)
+      .then((response) => {
+        Alert.alert("Image changed!");
+      })
+      .catch((error) => {
+        Alert.alert(
+          "Change failed. Please try again.",
+          "\n\nError: " + error.message
+        );
+      });
+  };
+
   return (
     <View style={styles.accountDetails}>
       <View style={styles.avatar}>
@@ -263,6 +276,12 @@ export default function ManageAccountScreen() {
           showEditButton
           activeOpacity={0.7}
         />
+        <MaterialIcons
+              name="edit" 
+              color="#7c7c7c"
+              style={styles.chgicon1}
+              onPress={changePic}
+        />
       </View>
       <Text style={styles.line}></Text>
       <View style={styles.content} />
@@ -286,7 +305,7 @@ export default function ManageAccountScreen() {
           <Text style={styles.info}>Email</Text>
           <TextInput
             style={styles.chginfo}
-            placeholder={email}
+            value={email}
             onChangeText={""}
           ></TextInput>
         </View>
@@ -418,8 +437,8 @@ const styles = StyleSheet.create({
   avatar: {
     justifyContent: "flex-start",
     alignItems: "center",
-    marginBottom: "7%",
-    marginTop: "5%",
+    marginBottom: "2.5%",
+    marginTop: "0%",
   },
   row: {
     flexDirection: "row",
@@ -471,11 +490,11 @@ const styles = StyleSheet.create({
   },
   chgicon1: {
     fontSize: 20,
-    marginTop: "4%",
+    marginTop: "2%",
     textAlign: "center",
   },
   button: {
-    marginTop: "10%",
+    marginTop: "9%",
     width: 160,
     height: 40,
     justifyContent: "center",
