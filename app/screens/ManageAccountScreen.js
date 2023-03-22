@@ -139,7 +139,7 @@ export default function ManageAccountScreen() {
       .catch((error) => {
         Alert.alert(
           "Change failed.",
-          "Either the username is already taken or the username is invalid. Error: " +
+          "Either the username is already taken or the username is invalid. \n\nError: " +
             error
         );
       });
@@ -151,7 +151,7 @@ export default function ManageAccountScreen() {
         Alert.alert("Your first name has been changed.");
       })
       .catch((error) => {
-        Alert.alert("Change failed.", "Error: " + error);
+        Alert.alert("Change failed.", "\n\nError: " + error.message);
       });
   };
 
@@ -161,7 +161,7 @@ export default function ManageAccountScreen() {
         Alert.alert("Your last name has been changed.");
       })
       .catch((error) => {
-        Alert.alert("Change failed.", "Error: " + error);
+        Alert.alert("Change failed.", "\n\nError: " + error.message);
       });
   };
 
@@ -173,7 +173,7 @@ export default function ManageAccountScreen() {
       .catch((error) => {
         Alert.alert(
           "Change failed.",
-          "Either the phone number is already taken or the phone number is invalid. Error: " +
+          "Either the phone number is already taken or the phone number is invalid. \n\nError: " +
             error
         );
       });
@@ -185,7 +185,7 @@ export default function ManageAccountScreen() {
         Alert.alert("Your birthday has been changed.");
       })
       .catch((error) => {
-        Alert.alert("Change failed.", "Error: " + error);
+        Alert.alert("Change failed.", "\n\nError: " + error.message);
       });
   };
 
@@ -214,7 +214,7 @@ export default function ManageAccountScreen() {
                           .catch((error) => {
                             Alert.alert(
                               "Change failed. Please try again.",
-                              "Error: " + error
+                              "\n\nError: " + error.message
                             );
                           });
                       });
@@ -233,12 +233,17 @@ export default function ManageAccountScreen() {
                           .catch((error) => {
                             Alert.alert(
                               "Change failed. Please try again.",
-                              "Error: " + error
+                              "\n\nError: " + error.message
                             );
                           });
                       });
                     });
                   },
+                },
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel",
                 },
               ]
             );
