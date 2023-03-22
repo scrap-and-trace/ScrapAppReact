@@ -108,6 +108,7 @@ export default function RegisScreen(props) {
         onChangeText={setPassword2}
         secureTextEntry={true}
       ></TextInput>
+      {/* Test */}
 
       <TouchableOpacity onPress={RegisterAcc}>
         <View style={styles.button}>
