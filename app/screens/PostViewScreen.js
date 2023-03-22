@@ -10,6 +10,7 @@ import {
   Pressable,
   Text,
   Alert,
+  Clipboard,
 } from "react-native";
 import { Button } from "react-native-paper";
 import AccountsAPI from "../api/AccountsAPI";
@@ -19,7 +20,7 @@ import CommentsContainer from "../components/CommentsContainer";
 import PostContainer from "../components/PostContainer";
 import LoadingContainer from "../components/LoadingContainer";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Clipboard from "@react-native-community/clipboard";
+//import Clipboard from "@react-native-community/clipboard";
 
 // Allow for navigation to this screen from a nested stack navigator
 export default function PostViewScreen({ route, navigation }) {
@@ -67,7 +68,7 @@ export default function PostViewScreen({ route, navigation }) {
   // Allow users to share a post by copying the link to the post to the clipboard.
   const share = React.useCallback(() => {
     Clipboard.setString(
-      "http://94.173.211.21:8000/page/" + route.params.id + "/"
+      "http://94.173.211.21:8000/page/" + route.params.id 
     );
 
     ToastAndroid.show("Link copied to clipboard", ToastAndroid.SHORT);
