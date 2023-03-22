@@ -124,7 +124,7 @@ export default function MapScreen({ navigation }) {
                     {post.title.substring(0, 20)}
                   </Text>
                   <Text style={styles.bubbleDescription}>
-                    {post.body.substring(0, 50)}
+                    {post.body.substring(0, 255)}
                   </Text>
                   <Text style={styles.bubbleDate}>
                     {/* Convert date created to user's locale, without time */}
