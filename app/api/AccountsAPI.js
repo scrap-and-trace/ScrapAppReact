@@ -117,13 +117,9 @@ export default class AccountsAPI {
     return response.data;
   }
 
-  static async unfollowScrapbook(follower, scrapbook) {
+  static async unfollowScrapbook(scrapbook) {
     const response = await axios.delete(
       "http://94.173.211.21:8000/api/auth/followlist/" + scrapbook + "/",
-      {
-        follower,
-        scrapbook,
-      },
       {
         headers: {
           Authorization: `Token ${await this.getToken()}`,
@@ -223,37 +219,6 @@ export default class AccountsAPI {
     return response.data;
   }
 
-  static async getLikesByUser(userId) {
-    const response = await axios.get(
-      `http://94.173.211.21:8000/api/auth/userlikes/${userId}`
-    );
-    return response.data.results[0];
-  }
-
-  static async getLikesByPage(pageId) {
-    // Count the number of results in the array
-    const response = await axios.get(
-      `http://94.173.211.21:8000/api/auth/likes/${pageId}`
-    );
-    return response.data.results.length;
-  }
-
-  static async createLike(userId, pageId) {
-    const response = await axios.post(
-      `http://94.173.211.21:8000/api/auth/likes/${pageId}/`,
-      {
-        liker: userId,
-        liked_page: pageId,
-      },
-      {
-        headers: {
-          Authorization: `Token ${await this.getToken()}`,
-        },
-      }
-    );
-    return response.data;
-  }
-
   static async changePhoneNum(id, phone) {
     const response = await axios.put(
       "http://94.173.211.21:8000/user/" + id + "/",
@@ -269,29 +234,11 @@ export default class AccountsAPI {
     return response.data;
   }
 
-  static async getLikeById(id) {
-    const response = await axios.get(
-      `http://94.173.211.21:8000/api/auth/likes/${id}`
-    );
-    return response.data;
-  }
-
   static async changeBirthday(id, dob) {
     const response = await axios.put(
       "http://94.173.211.21:8000/user/" + id + "/",
       {
         dob: dob,
-      }
-    );
-    return response.data;
-  }
-  static async deleteLike(id) {
-    const response = await axios.delete(
-      `http://94.173.211.21:8000/api/auth/deletelike/${id}`,
-      {
-        headers: {
-          Authorization: `Token ${await this.getToken()}`,
-        },
       }
     );
     return response.data;
