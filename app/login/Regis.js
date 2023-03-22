@@ -113,11 +113,14 @@ export default function RegisScreen(props) {
       ></PhoneInput>
 
       <TextInput
-        style={styles.input}
+        style={styles.input1}
         placeholder="Set your password"
         onChangeText={setPassword}
         secureTextEntry={true}
       ></TextInput>
+      <Text style={styles.pasrole}>Password must       1.Be minimum of 8 characters long</Text>
+      <Text style={styles.pasrole}>2.Not be similar to first name, last name, or username</Text>
+      <Text style={styles.pasrole1}>3.Not only consist of numbers</Text>
       <TextInput
         style={styles.input}
         placeholder="Enter your password again"
@@ -126,11 +129,6 @@ export default function RegisScreen(props) {
       ></TextInput>
       {/* Test */}
       
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-      />
 
       <TouchableOpacity onPress={RegisterAcc}>
         <View style={styles.button}>
@@ -163,10 +161,23 @@ const styles = StyleSheet.create({
     marginTop: "20%",
     textAlign: "center",
   },
+  pasrole: {
+    color: "#e96b37",
+    fontWeight: "bold",
+    fontSize: 10,
+    textAlign: "center",
+  },
+  pasrole1: {
+    color: "#e96b37",
+    fontWeight: "bold",
+    fontSize: 10,
+    textAlign: "center",
+    marginBottom: "2%",
+  },
   subtitle: {
     color: "#e96b37",
     fontSize: 15,
-    marginBottom: "14%",
+    marginBottom: "11%",
   },
   info1: {
     color: "#e96b37",
@@ -189,8 +200,17 @@ const styles = StyleSheet.create({
     borderColor: "#e96b37",
     borderRadius: 30,
   },
+  input1: {
+    height: 40,
+    marginBottom: "1%",
+    borderWidth: 1,
+    width: 300,
+    padding: 10,
+    borderColor: "#e96b37",
+    borderRadius: 30,
+  },
   button: {
-    marginTop: "10%",
+    marginTop: "5%",
     width: 100,
     height: 50,
     alignItems: "center",
