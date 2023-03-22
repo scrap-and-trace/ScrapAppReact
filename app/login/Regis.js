@@ -41,7 +41,8 @@ export default function RegisScreen(props) {
         .catch((error) => {
           Alert.alert(
             "Account creation failed.",
-            "Please check your details and try again. Error: " + error
+            "Please check your details and try again. \n\nError: " +
+              error.message
           );
         });
     }

@@ -14,7 +14,14 @@ export default function LoginScreen(props) {
   const [Password, setPassword] = useState("");
 
   const LoginAcc = () => {
-    AccountsAPI.login(Email, Password);
+    // Only check for failure here, as the API will redirect to the home screen on success.
+    AccountsAPI.login(Email, Password).catch((error) => {
+      Alert.alert(
+        "Login failed.",
+        "Please check your credentials and try again. \n\nError: " +
+          error.message
+      );
+    });
   };
 
   return (
