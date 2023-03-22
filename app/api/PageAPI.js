@@ -16,20 +16,34 @@ export default class PageAPI {
   }
 
   static async getPages() {
-    const response = await axios.get("http://94.173.211.21:8000/page/");
+    const response = await axios.get("http://94.173.211.21:8000/page/", {
+      headers: {
+        Authorization: "Token " + (await this.getToken()),
+      },
+    });
     return response.data.results;
   }
 
   static async getPage(id) {
     const response = await axios.get(
-      "http://94.173.211.21:8000/page/?id=" + id
+      "http://94.173.211.21:8000/page/?id=" + id,
+      {
+        headers: {
+          Authorization: "Token " + (await this.getToken()),
+        },
+      }
     );
     return response.data.results[0];
   }
 
   static async getComments(id) {
     const response = await axios.get(
-      "http://94.173.211.21:8000/page/?id=" + id
+      "http://94.173.211.21:8000/page/?id=" + id,
+      {
+        headers: {
+          Authorization: "Token " + (await this.getToken()),
+        },
+      }
     );
     return response.data.results[0].comments;
   }
@@ -43,15 +57,23 @@ export default class PageAPI {
     longitude,
     latitude
   ) {
-    const response = await axios.post("http://94.173.211.21:8000/page/", {
-      title,
-      body,
-      scrapbook,
-      image_url,
-      delete_url,
-      longitude,
-      latitude,
-    });
+    const response = await axios.post(
+      "http://94.173.211.21:8000/page/",
+      {
+        title,
+        body,
+        scrapbook,
+        image_url,
+        delete_url,
+        longitude,
+        latitude,
+      },
+      {
+        headers: {
+          Authorization: "Token " + (await this.getToken()),
+        },
+      }
+    );
     return response.data;
   }
 
@@ -68,11 +90,19 @@ export default class PageAPI {
   }
 
   static async createComment(authorid, page, body) {
-    const response = await axios.post("http://94.173.211.21:8000/comment/", {
-      authorid,
-      page,
-      body,
-    });
+    const response = await axios.post(
+      "http://94.173.211.21:8000/comment/",
+      {
+        authorid,
+        page,
+        body,
+      },
+      {
+        headers: {
+          Authorization: "Token " + (await this.getToken()),
+        },
+      }
+    );
     return response.data;
   }
 
@@ -106,22 +136,36 @@ export default class PageAPI {
 
   static async getLikeById(id) {
     const response = await axios.get(
-      `http://94.173.211.21:8000/api/auth/likes/${id}`
+      `http://94.173.211.21:8000/api/auth/likes/${id}`,
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
     );
     return response.data;
   }
 
   static async getLikesByUser(userId) {
     const response = await axios.get(
-      `http://94.173.211.21:8000/api/auth/userlikes/${userId}`
+      `http://94.173.211.21:8000/api/auth/userlikes/${userId}`,
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
     );
     return response.data.results[0];
   }
 
   static async getLikesByPage(pageId) {
-    // Count the number of results in the array
     const response = await axios.get(
-      `http://94.173.211.21:8000/api/auth/likes/${pageId}`
+      `http://94.173.211.21:8000/api/auth/likes/${pageId}`,
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
     );
     return response.data.results.length;
   }

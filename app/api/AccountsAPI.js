@@ -32,6 +32,11 @@ export default class AccountsAPI {
       {
         email,
         password,
+      },
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
       }
     );
     return await SecureStore.setItemAsync("token", response.data.token);
@@ -84,7 +89,12 @@ export default class AccountsAPI {
 
   static async getAllUsers() {
     const response = await axios.get(
-      "http://94.173.211.21:8000/api/auth/searchUsers/"
+      "http://94.173.211.21:8000/api/auth/searchUsers/",
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
+      }
     );
     return response.data.results;
   }
@@ -239,6 +249,11 @@ export default class AccountsAPI {
       "http://94.173.211.21:8000/user/" + id + "/",
       {
         dob: dob,
+      },
+      {
+        headers: {
+          Authorization: `Token ${await this.getToken()}`,
+        },
       }
     );
     return response.data;

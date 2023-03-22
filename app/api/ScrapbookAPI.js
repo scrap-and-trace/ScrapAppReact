@@ -13,21 +13,36 @@ export default class ScrapbookAPI {
 
   static async getScrapbooks() {
     const response = await axios.get(
-      "http://94.173.211.21:8000/api/auth/scrapbooks/"
+      "http://94.173.211.21:8000/api/auth/scrapbooks/",
+      {
+        headers: {
+          Authorization: "Token " + (await this.getToken()),
+        },
+      }
     );
     return response.data.results;
   }
 
   static async getScrapbook(id) {
     const response = await axios.get(
-      "http://94.173.211.21:8000/api/auth/scrapbooks/?id=" + id
+      "http://94.173.211.21:8000/api/auth/scrapbooks/?id=" + id,
+      {
+        headers: {
+          Authorization: "Token " + (await this.getToken()),
+        },
+      }
     );
     return response.data.results[0];
   }
 
   static async getPages(id) {
     const response = await axios.get(
-      "http://94.173.211.21:8000/api/auth/pages/?scrapbook=" + id
+      "http://94.173.211.21:8000/api/auth/pages/?scrapbook=" + id,
+      {
+        headers: {
+          Authorization: "Token " + (await this.getToken()),
+        },
+      }
     );
     return response.data.results.pages;
   }
@@ -39,6 +54,11 @@ export default class ScrapbookAPI {
         title: title,
         author: author,
         friends_only: friends_only,
+      },
+      {
+        headers: {
+          Authorization: "Token " + (await this.getToken()),
+        },
       }
     );
     return response.data;

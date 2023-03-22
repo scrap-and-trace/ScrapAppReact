@@ -119,13 +119,21 @@ export default function PostScreen({ navigation }) {
   // Navigate to the scrapbook selection screen and pass all the data to the state.
   const selectScrapbook = () => {
     getLocation();
-    navigation.navigate("Select Scrapbook", {
-      title: title,
-      body: body,
-      imgBase64: imgBase64,
-      latitude: latitude,
-      longitude: longitude,
-    });
+    if (title && body && image && longitude && latitude) {
+      navigation.navigate("Select Scrapbook", {
+        title: title,
+        body: body,
+        imgBase64: imgBase64,
+        latitude: latitude,
+        longitude: longitude,
+      });
+    } else {
+      ToastAndroid.show(
+        "Please fill in all fields.",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      );
+    }
   };
 
   // Remove the image from the state.
