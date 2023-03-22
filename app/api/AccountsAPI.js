@@ -32,11 +32,6 @@ export default class AccountsAPI {
       {
         email,
         password,
-      },
-      {
-        headers: {
-          Authorization: `Token ${await this.getToken()}`,
-        },
       }
     );
     return await SecureStore.setItemAsync("token", response.data.token);
