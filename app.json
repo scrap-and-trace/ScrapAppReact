@@ -18,10 +18,7 @@
       }
     },
     "ios": {
-      "bundleIdentifier": "com.scrapandtrace.scrapappreact",
-      "config": {
-        "googleMapApiKey": "AIzaSyCXCEmVb19_7_fbtjBWw43JXAEcg9elIaY"
-      }
+      "bundleIdentifier": "com.scrapandtrace.scrapappreact"
     }
   },
   "name": "scrapappreact"
