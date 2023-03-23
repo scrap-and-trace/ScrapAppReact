@@ -191,7 +191,7 @@ export default function ManageAccountScreen() {
       });
   };
 
-  const changePassword= async () => {
+  const changePassword = async () => {
     AccountsAPI.changePassword(id1, old_password, password, password2)
       .then((response) => {
         Alert.alert("Your password has been changed.");
@@ -277,10 +277,10 @@ export default function ManageAccountScreen() {
           activeOpacity={0.7}
         />
         <MaterialIcons
-              name="edit" 
-              color="#7c7c7c"
-              style={styles.chgicon1}
-              onPress={changePic}
+          name="edit"
+          color="#7c7c7c"
+          style={styles.chgicon1}
+          onPress={changePic}
         />
       </View>
       <Text style={styles.line}></Text>
@@ -369,8 +369,8 @@ export default function ManageAccountScreen() {
             onPress={changeBirthday}
           />
         </View>
-        </View>
-        <View style={styles.account1}>
+      </View>
+      <View style={styles.account1}>
         <Text style={styles.line1}></Text>
         <View style={styles.row}>
           <Text style={styles.info1}>Old Password</Text>
@@ -389,7 +389,7 @@ export default function ManageAccountScreen() {
           ></TextInput>
         </View>
         <View style={styles.row}>
-          <Text style={styles.info1}>Enter Agian</Text>
+          <Text style={styles.info1}>Enter Again</Text>
           <TextInput
             style={styles.chginfo1}
             onChangeText={setPassword2}
@@ -403,7 +403,6 @@ export default function ManageAccountScreen() {
           <Text style={styles.buttonText}>Change Password</Text>
         </TouchableOpacity>
       </View>
-      
     </View>
   );
 }
