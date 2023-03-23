@@ -7,6 +7,7 @@ import Login from "./app/login/Login";
 import Main from "./app/login/Main";
 import Regis from "./app/login/Regis";
 import AccountsAPI from "./app/api/AccountsAPI";
+import { LogBox } from "react-native";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -19,6 +20,9 @@ export default function App() {
       setLoggedIn(loggedIn);
     });
   }, []);
+
+  LogBox.ignoreLogs(["Warning: ..."]);
+  LogBox.ignoreAllLogs();
 
   // Constantly check if the user is logged in.
   React.useEffect(() => {

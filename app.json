@@ -10,12 +10,7 @@
       }
     },
     "android": {
-      "package": "com.scrapandtrace.scrapappreact",
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyCXCEmVb19_7_fbtjBWw43JXAEcg9elIaY"
-        }
-      }
+      "package": "com.scrapandtrace.scrapappreact"
     },
     "ios": {
       "bundleIdentifier": "com.scrapandtrace.scrapappreact"
