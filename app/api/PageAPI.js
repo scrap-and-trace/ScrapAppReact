@@ -16,7 +16,7 @@ export default class PageAPI {
   }
 
   static async getPages() {
-    const response = await axios.get("http://13.41.14.97:8000/page/", {
+    const response = await axios.get("http://51.104.46.39:8000/page/", {
       headers: {
         Authorization: "Token " + (await this.getToken()),
       },
@@ -25,20 +25,26 @@ export default class PageAPI {
   }
 
   static async getPage(id) {
-    const response = await axios.get("http://13.41.14.97:8000/page/?id=" + id, {
-      headers: {
-        Authorization: "Token " + (await this.getToken()),
-      },
-    });
+    const response = await axios.get(
+      "http://51.104.46.39:8000/page/?id=" + id,
+      {
+        headers: {
+          Authorization: "Token " + (await this.getToken()),
+        },
+      }
+    );
     return response.data.results[0];
   }
 
   static async getComments(id) {
-    const response = await axios.get("http://13.41.14.97:8000/page/?id=" + id, {
-      headers: {
-        Authorization: "Token " + (await this.getToken()),
-      },
-    });
+    const response = await axios.get(
+      "http://51.104.46.39:8000/page/?id=" + id,
+      {
+        headers: {
+          Authorization: "Token " + (await this.getToken()),
+        },
+      }
+    );
     return response.data.results[0].comments;
   }
 
@@ -52,7 +58,7 @@ export default class PageAPI {
     latitude
   ) {
     const response = await axios.post(
-      "http://13.41.14.97:8000/page/",
+      "http://51.104.46.39:8000/page/",
       {
         title,
         body,
@@ -73,7 +79,7 @@ export default class PageAPI {
 
   static async deletePage(id) {
     const response = await axios.delete(
-      "http://13.41.14.97:8000/page/" + id + "/",
+      "http://51.104.46.39:8000/page/" + id + "/",
       {
         headers: {
           Authorization: "Token " + (await this.getToken()),
@@ -85,7 +91,7 @@ export default class PageAPI {
 
   static async createComment(authorid, page, body) {
     const response = await axios.post(
-      "http://13.41.14.97:8000/comment/",
+      "http://51.104.46.39:8000/comment/",
       {
         authorid,
         page,
@@ -102,7 +108,7 @@ export default class PageAPI {
 
   static async createLike(userId, pageId) {
     const response = await axios.post(
-      `http://13.41.14.97:8000/api/auth/likes/${pageId}/`,
+      `http://51.104.46.39:8000/api/auth/likes/${pageId}/`,
       {
         liker: userId,
         liked_page: pageId,
@@ -118,7 +124,7 @@ export default class PageAPI {
 
   static async deleteLike(pageId) {
     const response = await axios.delete(
-      `http://13.41.14.97:8000/api/auth/deletelike/${pageId}/`,
+      `http://51.104.46.39:8000/api/auth/deletelike/${pageId}/`,
       {
         headers: {
           Authorization: `Token ${await this.getToken()}`,
@@ -130,7 +136,7 @@ export default class PageAPI {
 
   static async getLikeById(id) {
     const response = await axios.get(
-      `http://13.41.14.97:8000/api/auth/likes/${id}`,
+      `http://51.104.46.39:8000/api/auth/likes/${id}`,
       {
         headers: {
           Authorization: `Token ${await this.getToken()}`,
@@ -142,7 +148,7 @@ export default class PageAPI {
 
   static async getLikesByUser(userId) {
     const response = await axios.get(
-      `http://13.41.14.97:8000/api/auth/userlikes/${userId}`,
+      `http://51.104.46.39:8000/api/auth/userlikes/${userId}`,
       {
         headers: {
           Authorization: `Token ${await this.getToken()}`,
@@ -154,7 +160,7 @@ export default class PageAPI {
 
   static async getLikesByPage(pageId) {
     const response = await axios.get(
-      `http://13.41.14.97:8000/api/auth/likes/${pageId}`,
+      `http://51.104.46.39:8000/api/auth/likes/${pageId}`,
       {
         headers: {
           Authorization: `Token ${await this.getToken()}`,

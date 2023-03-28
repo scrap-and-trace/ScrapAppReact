@@ -67,9 +67,7 @@ export default function PostViewScreen({ route, navigation }) {
 
   // Allow users to share a post by copying the link to the post to the clipboard.
   const share = React.useCallback(() => {
-    Clipboard.setString(
-      "http://13.41.14.97:8000/page/" + route.params.id
-    );
+    Clipboard.setString("http://51.104.46.39:8000/page/" + route.params.id);
 
     ToastAndroid.show("Link copied to clipboard", ToastAndroid.SHORT);
   }, [route.params.id]);

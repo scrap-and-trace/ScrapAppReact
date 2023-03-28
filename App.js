@@ -21,6 +21,7 @@ export default function App() {
     });
   }, []);
 
+  // In actual production, we wouldn't actually do this, but we're doing this just for the expo so that its easier to fix something if anything goes wrong.
   LogBox.ignoreLogs(["Warning: ..."]);
   LogBox.ignoreAllLogs();
 
