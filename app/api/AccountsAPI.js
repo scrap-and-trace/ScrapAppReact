@@ -12,7 +12,7 @@ export default class AccountsAPI {
     password
   ) {
     const response = await axios.post(
-      "http://51.104.46.39:8000/api/auth/register/",
+      "http://192.168.0.20:8000/api/auth/register/",
       {
         username,
         first_name,
@@ -28,7 +28,7 @@ export default class AccountsAPI {
 
   static async login(email, password) {
     const response = await axios.post(
-      "http://51.104.46.39:8000/api/auth/login/",
+      "http://192.168.0.20:8000/api/auth/login/",
       {
         email,
         password,
@@ -55,7 +55,7 @@ export default class AccountsAPI {
 
   static async getAccount() {
     const response = await axios.get(
-      "http://51.104.46.39:8000/api/auth/user/",
+      "http://192.168.0.20:8000/api/auth/user/",
       {
         headers: {
           Authorization: `Token ${await this.getToken()}`,
@@ -65,7 +65,7 @@ export default class AccountsAPI {
     return response.data;
   }
   static async getAccountById(id) {
-    const response = await axios.get("http://51.104.46.39:8000/user/" + id, {
+    const response = await axios.get("http://192.168.0.20:8000/user/" + id, {
       headers: {
         Authorization: `Token ${await this.getToken()}`,
       },
@@ -74,7 +74,7 @@ export default class AccountsAPI {
   }
 
   static async getFollowing(id) {
-    const response = await axios.get("http://51.104.46.39:8000/user/" + id, {
+    const response = await axios.get("http://192.168.0.20:8000/user/" + id, {
       headers: {
         Authorization: `Token ${await this.getToken()}`,
       },
@@ -84,7 +84,7 @@ export default class AccountsAPI {
 
   static async getAllUsers() {
     const response = await axios.get(
-      "http://51.104.46.39:8000/api/auth/searchUsers/",
+      "http://192.168.0.20:8000/api/auth/searchUsers/",
       {
         headers: {
           Authorization: `Token ${await this.getToken()}`,
@@ -96,7 +96,7 @@ export default class AccountsAPI {
 
   static async searchUsers(query) {
     const response = await axios.get(
-      "http://51.104.46.39:8000/api/auth/searchUsers/?search=" + query,
+      "http://192.168.0.20:8000/api/auth/searchUsers/?search=" + query,
       {
         headers: {
           Authorization: `Token ${await this.getToken()}`,
@@ -108,7 +108,7 @@ export default class AccountsAPI {
 
   static async followScrapbook(follower, scrapbook) {
     const response = await axios.post(
-      "http://51.104.46.39:8000/api/auth/followlist/" + scrapbook + "/",
+      "http://192.168.0.20:8000/api/auth/followlist/" + scrapbook + "/",
       {
         follower,
         scrapbook,
@@ -124,7 +124,7 @@ export default class AccountsAPI {
 
   static async unfollowScrapbook(scrapbook) {
     const response = await axios.delete(
-      "http://51.104.46.39:8000/api/auth/followlist/" + scrapbook + "/",
+      "http://192.168.0.20:8000/api/auth/followlist/" + scrapbook + "/",
       {
         headers: {
           Authorization: `Token ${await this.getToken()}`,
@@ -136,7 +136,7 @@ export default class AccountsAPI {
 
   static async changeUsername(id, username) {
     const response = await axios.put(
-      "http://51.104.46.39:8000/user/" + id + "/",
+      "http://192.168.0.20:8000/user/" + id + "/",
       {
         username: username,
       },
@@ -151,7 +151,7 @@ export default class AccountsAPI {
 
   static async changeFirstName(id, first_name) {
     const response = await axios.put(
-      "http://51.104.46.39:8000/user/" + id + "/",
+      "http://192.168.0.20:8000/user/" + id + "/",
       {
         first_name: first_name,
       },
@@ -166,7 +166,7 @@ export default class AccountsAPI {
 
   static async changeLastName(id, last_name) {
     const response = await axios.put(
-      "http://51.104.46.39:8000/user/" + id + "/",
+      "http://192.168.0.20:8000/user/" + id + "/",
       {
         last_name: last_name,
       },
@@ -181,7 +181,7 @@ export default class AccountsAPI {
 
   static async changePhoneNum(id, phone) {
     const response = await axios.put(
-      "http://51.104.46.39:8000/user/" + id + "/",
+      "http://192.168.0.20:8000/user/" + id + "/",
       {
         phone: phone,
       },
@@ -196,7 +196,7 @@ export default class AccountsAPI {
 
   static async changeBirthday(id, dob) {
     const response = await axios.put(
-      "http://51.104.46.39:8000/user/" + id + "/",
+      "http://192.168.0.20:8000/user/" + id + "/",
       {
         dob: dob,
       },
@@ -211,7 +211,7 @@ export default class AccountsAPI {
 
   static async changeProfilePic(id, image_url) {
     const response = await axios.put(
-      "http://51.104.46.39:8000/user/" + id + "/",
+      "http://192.168.0.20:8000/user/" + id + "/",
       {
         image_url: image_url,
       },
@@ -226,7 +226,7 @@ export default class AccountsAPI {
 
   static async changePhoneNum(id, phone) {
     const response = await axios.put(
-      "http://51.104.46.39:8000/user/" + id + "/",
+      "http://192.168.0.20:8000/user/" + id + "/",
       {
         phone: phone,
       },
@@ -241,7 +241,7 @@ export default class AccountsAPI {
 
   static async changeBirthday(id, dob) {
     const response = await axios.put(
-      "http://51.104.46.39:8000/user/" + id + "/",
+      "http://192.168.0.20:8000/user/" + id + "/",
       {
         dob: dob,
       },
@@ -256,7 +256,7 @@ export default class AccountsAPI {
 
   static async changePassword(id, old_password, password, password2) {
     const response = await axios.post(
-      "http://51.104.46.39:8000/user/" + id + "/set_password/",
+      "http://192.168.0.20:8000/user/" + id + "/set_password/",
       {
         old_password: old_password,
         password: password,

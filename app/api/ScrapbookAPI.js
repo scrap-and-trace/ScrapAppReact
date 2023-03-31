@@ -13,7 +13,7 @@ export default class ScrapbookAPI {
 
   static async getScrapbooks() {
     const response = await axios.get(
-      "http://51.104.46.39:8000/api/auth/scrapbooks/",
+      "http://192.168.0.20:8000/api/auth/scrapbooks/",
       {
         headers: {
           Authorization: "Token " + (await this.getToken()),
@@ -25,7 +25,7 @@ export default class ScrapbookAPI {
 
   static async getScrapbook(id) {
     const response = await axios.get(
-      "http://51.104.46.39:8000/api/auth/scrapbooks/?id=" + id,
+      "http://192.168.0.20:8000/api/auth/scrapbooks/?id=" + id,
       {
         headers: {
           Authorization: "Token " + (await this.getToken()),
@@ -37,7 +37,7 @@ export default class ScrapbookAPI {
 
   static async getPages(id) {
     const response = await axios.get(
-      "http://51.104.46.39:8000/api/auth/pages/?scrapbook=" + id,
+      "http://192.168.0.20:8000/api/auth/pages/?scrapbook=" + id,
       {
         headers: {
           Authorization: "Token " + (await this.getToken()),
@@ -49,7 +49,7 @@ export default class ScrapbookAPI {
 
   static async createScrapbook(title, author, friends_only) {
     const response = await axios.post(
-      "http://51.104.46.39:8000/api/auth/scrapbooks/",
+      "http://192.168.0.20:8000/api/auth/scrapbooks/",
       {
         title: title,
         author: author,
@@ -66,7 +66,7 @@ export default class ScrapbookAPI {
 
   static async deleteScrapbook(id) {
     const response = await axios.delete(
-      "http://51.104.46.39:8000/api/auth/deletescrapbook/" + id + "/",
+      "http://192.168.0.20:8000/api/auth/deletescrapbook/" + id + "/",
       {
         headers: {
           Authorization: "Token " + (await this.getToken()),
