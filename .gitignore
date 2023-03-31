@@ -11,3 +11,5 @@ npm-debug.*
 web-build/
 # macOS
 .DS_Store
+.env
+app/json/imgbb-key.json
